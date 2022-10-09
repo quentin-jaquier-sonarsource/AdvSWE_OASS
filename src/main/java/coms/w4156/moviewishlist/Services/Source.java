@@ -1,5 +1,8 @@
 package coms.w4156.moviewishlist.Services;
 
+/**
+ * Class to represent a WatchMode streaming source
+ */
 public class Source {
     private int source_id;
     private String name;

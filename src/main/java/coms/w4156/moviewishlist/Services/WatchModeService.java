@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service class to abstract away the logic related to getting information from the WatchMode API
+ */
 @Service
 public class WatchModeService {
 
