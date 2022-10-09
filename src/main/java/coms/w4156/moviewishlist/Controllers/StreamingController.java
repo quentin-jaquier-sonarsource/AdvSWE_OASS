@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StreamingController {
 
-    WatchModeService wms = new WatchModeService();
+    WatchModeService wms = new WatchModeService("prod");
 
     @GetMapping("/available")
     public String streaming_services() {
