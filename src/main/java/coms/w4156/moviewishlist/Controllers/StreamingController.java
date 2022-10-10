@@ -13,7 +13,7 @@ public class StreamingController {
     WatchModeService wms = new WatchModeService("prod");
 
     @GetMapping("/available")
-    public String streaming_services() {
+    public String[] streaming_services() {
 
         return wms.getResponse();
 

@@ -19,6 +19,10 @@ public class Source {
     public Source() {
     }
 
+    public boolean isFreeWithSubscription() {
+        return this.type.equals("sub");
+    }
+
     public int getSource_id() {
         return source_id;
     }

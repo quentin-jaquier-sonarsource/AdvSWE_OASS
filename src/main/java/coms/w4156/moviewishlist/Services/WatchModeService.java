@@ -17,7 +17,9 @@ public class WatchModeService {
 
     Config config = new Config();
     private final String test_host = "https://yesno.wtf/api";
-    private final String watchmode_url = "https://api.watchmode.com/v1/title/1586594/sources/?apiKey="+config.getAPIKey();
+    private final String parasiteId = "1295258";
+    private final String elCaminoId = "1586594 ";
+    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+parasiteId+"/sources/?apiKey="+config.getAPIKey();
     private final String charset = "UTF-8";
     String mode;
 
@@ -32,23 +34,24 @@ public class WatchModeService {
     /**
      * @return response from the api
      */
-    public String getResponse() {
+    public String[] getResponse() {
         RestTemplate restTemplate = new RestTemplate();
 
 
         if (this.mode == "test") {
             YesNo result = restTemplate.getForObject(test_host, YesNo.class);
-            return result.getAnswer();
+            return new String[] {result.getAnswer()};
         }
         else {
             ResponseEntity<Source[]> responseEntity = restTemplate.getForEntity(watchmode_url, Source[].class);
             Source[] sources = responseEntity.getBody();
 
             List<String> sourceNameList = Arrays.stream(sources)
+                    .filter(Source::isFreeWithSubscription)
                     .map(Source::getName)
                     .collect(Collectors.toList());
 
-            return "There were "+sources.length+" many sources. The first one is "+sourceNameList.get(0);
+            return sourceNameList.toArray(new String[0]);
         }
     }
 
