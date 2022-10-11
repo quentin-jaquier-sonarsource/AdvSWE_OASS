@@ -1,6 +1,7 @@
 package coms.w4156.moviewishlist.Services;
 
 import coms.w4156.moviewishlist.utils.Config;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +20,10 @@ public class WatchModeService {
     private final String test_host = "https://yesno.wtf/api";
     private final String parasiteId = "1295258";
     private final String elCaminoId = "1586594 ";
-    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+parasiteId+"/sources/?apiKey="+config.getAPIKey();
+    private final String hostID = "1616666 ";
+    private final String skyfallId = "1350564";
+    private final String annhilationId = "130381";
+    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+skyfallId+"/sources/?apiKey="+config.getAPIKey();
     private final String charset = "UTF-8";
     String mode;
 
@@ -31,12 +35,14 @@ public class WatchModeService {
         this.mode = mode;
     }
 
+
+    RestTemplate restTemplate = new RestTemplate();
+
+
     /**
      * @return response from the api
      */
     public String[] getResponse() {
-        RestTemplate restTemplate = new RestTemplate();
-
 
         if (this.mode == "test") {
             YesNo result = restTemplate.getForObject(test_host, YesNo.class);
