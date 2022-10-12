@@ -19,14 +19,16 @@ public class WishlistController {
     WishlistService wlService;
     
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public @ResponseBody Wishlist createNewWishlist(@RequestParam("name") String name, @RequestParam("userId") Long userId) {
-        Wishlist wl = new Wishlist(name , userId);
+    public @ResponseBody Wishlist createNewWishlist(@RequestParam("name") String name, @RequestParam("userId") String userId) {
+        Long userIdLong = Long.parseLong(userId, 10);
+        Wishlist wl = new Wishlist(name , userIdLong);
 
         return wl;
     }
 
     @GetMapping(value = "/{id}")
-    public @ResponseBody Wishlist getWishlistById(@PathVariable Long id) {
-        return wlService.findById(id);
+    public @ResponseBody Wishlist getWishlistById(@PathVariable String id) {
+        Long idLong = Long.parseLong(id, 10);
+        return wlService.findById(idLong);
     }
 }
