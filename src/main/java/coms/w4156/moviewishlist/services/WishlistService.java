@@ -1,5 +1,9 @@
 package coms.w4156.moviewishlist.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +20,27 @@ public class WishlistService {
         this.wlRepository = repo;
     }
 
-    public Wishlist findById(long id) {
+    public Optional<Wishlist> findById(long id) {
         return this.wlRepository.findById(id);
     }
 
-    public Wishlist createWishlist(String name, Long userId){
+    public List<Wishlist> getAll() {
+        List<Wishlist> wlList = new ArrayList<Wishlist>();
+        
+        this.wlRepository.findAll().forEach(wlList::add);
+        return wlList;
+    }
+
+    public Wishlist create(String name, Long userId) {
         return this.wlRepository.save(new Wishlist(name, userId));
+    }
+
+    public void deleteAll() {
+        this.wlRepository.deleteAll();
+    }
+
+    public void deleteById(Long id) {
+        this.wlRepository.deleteById(id);
     }
     
 }
