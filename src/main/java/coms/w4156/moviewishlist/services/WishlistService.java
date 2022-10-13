@@ -9,15 +9,19 @@ import coms.w4156.moviewishlist.repository.WishlistRepository;
 @Service
 public class WishlistService {
 
-    private final WishlistRepository repo;
+    private final WishlistRepository wlRepository;
 
     @Autowired
     public WishlistService(final WishlistRepository repo) {
-        this.repo = repo;
+        this.wlRepository = repo;
     }
 
     public Wishlist findById(long id) {
-        return this.repo.findById(id);
+        return this.wlRepository.findById(id);
+    }
+
+    public Wishlist createWishlist(String name, Long userId){
+        return this.wlRepository.save(new Wishlist(name, userId));
     }
     
 }

@@ -19,9 +19,10 @@ public class WishlistController {
     WishlistService wlService;
     
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public @ResponseBody Wishlist createNewWishlist(@RequestParam("name") String name, @RequestParam("userId") String userId) {
+    public @ResponseBody Wishlist createWishlist(@RequestParam("name") String name, @RequestParam("userId") String userId) {
         Long userIdLong = Long.parseLong(userId, 10);
-        Wishlist wl = new Wishlist(name , userIdLong);
+        
+        Wishlist wl = wlService.createWishlist(name, userIdLong);
 
         return wl;
     }
