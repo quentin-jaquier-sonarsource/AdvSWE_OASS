@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controller for all endpoints that have to do with accessing the WatchMode API.
+ * Controller for all endpoints that have to do with accessing
+ * the WatchMode API.
  */
 @RestController
 public class StreamingController {
