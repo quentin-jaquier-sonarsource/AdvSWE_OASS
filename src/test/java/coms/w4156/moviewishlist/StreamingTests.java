@@ -19,7 +19,7 @@ public class StreamingTests {
 
     Config config = new Config();
     private final String skyfallId = "1350564";
-    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+skyfallId+"/sources/?apiKey="+config.getAPIKey();
+    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+skyfallId+"/sources/?apiKey="+config.getApikey();
 
 
     @Mock

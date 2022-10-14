@@ -42,7 +42,7 @@ public class WatchModeService {
      */
     private final String watchmodeTestURL =
             "https://api.watchmode.com/v1/title/" + skyfallId
-                    + "/sources/?apiKey=" + config.getAPIKey();
+                    + "/sources/?apiKey=" + config.getApikey();
 
     /**
      * The character set for making API queries.
@@ -117,7 +117,7 @@ public class WatchModeService {
 
     private String makeURL(final String watchModeID) {
         return watchModeSourceBaseEndpoint + watchModeID
-                + "/sources/?apiKey=" + config.getAPIKey();
+                + "/sources/?apiKey=" + config.getApikey();
     }
 
 
