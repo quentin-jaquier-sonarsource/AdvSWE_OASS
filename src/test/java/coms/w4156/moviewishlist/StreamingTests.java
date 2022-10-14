@@ -1,6 +1,5 @@
 package coms.w4156.moviewishlist;
 
-import coms.w4156.moviewishlist.Controllers.StreamingController;
 import coms.w4156.moviewishlist.Services.Source;
 import coms.w4156.moviewishlist.Services.WatchModeService;
 import coms.w4156.moviewishlist.utils.Config;
@@ -11,11 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +49,7 @@ public class StreamingTests {
                 .when(restTemplate.getForEntity(watchmode_url, Source[].class))
                 .thenReturn(new ResponseEntity(allSources, HttpStatus.OK));
 
-        String[] returnedSources = wms.getResponse();
+        String[] returnedSources = wms.testResponse();
 
         Assertions.assertEquals(2, returnedSources.length);
     }
