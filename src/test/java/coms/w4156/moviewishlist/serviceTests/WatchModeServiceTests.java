@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist;
+package coms.w4156.moviewishlist.serviceTests;
 
 import coms.w4156.moviewishlist.Services.Source;
 import coms.w4156.moviewishlist.Services.WatchModeService;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
-public class StreamingTests {
+public class WatchModeServiceTests {
 
     Config config = new Config();
     private final String skyfallId = "1350564";
@@ -26,7 +26,7 @@ public class StreamingTests {
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private WatchModeService wms = new WatchModeService("prod");
+    private WatchModeService wms = new WatchModeService();
 
     @Test
     public void testAvailable() {
