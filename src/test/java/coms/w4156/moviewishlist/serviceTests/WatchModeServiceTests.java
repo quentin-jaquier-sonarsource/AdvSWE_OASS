@@ -42,12 +42,12 @@ public class WatchModeServiceTests {
         vudu.setName("VUDU");
         vudu.setType("buy");
 
-        Source[] sourcesAvailableFreeWithSubscription = new Source[]{netflix, amazon};
+        // Source[] sourcesAvailableFreeWithSubscription = new Source[]{netflix, amazon};
         Source[] allSources = new Source[]{netflix, amazon, vudu};
 
         Mockito
                 .when(restTemplate.getForEntity(watchmode_url, Source[].class))
-                .thenReturn(new ResponseEntity(allSources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<>(allSources, HttpStatus.OK));
 
         String[] returnedSources = wms.testResponse();
 

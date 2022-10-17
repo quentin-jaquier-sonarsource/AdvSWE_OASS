@@ -1,5 +1,6 @@
 package coms.w4156.moviewishlist.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import coms.w4156.moviewishlist.models.Wishlist;
@@ -26,22 +26,15 @@ public class WishlistController {
     @Autowired
     WishlistService wlService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Wishlist>> getAllWishlists() {
         List<Wishlist> wlList = wlService.getAll();
-
-        if (wlList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
         return new ResponseEntity<>(wlList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Wishlist> getWishlistById(@PathVariable String id) {
-        Long idLong = Long.parseLong(id, 10);
-
-        Optional<Wishlist> wl = wlService.findById(idLong);
+    public ResponseEntity<Wishlist> getWishlistById(@PathVariable long id) {
+        Optional<Wishlist> wl = wlService.findById(id);
 
         if (!wl.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -51,35 +44,33 @@ public class WishlistController {
         }
     }
     
-    @PostMapping("/")
-    public ResponseEntity<Wishlist> createWishlist(@RequestParam("name") String name, @RequestParam("userId") String userId) {
-        Long userIdLong = Long.parseLong(userId, 10);
-    
-        Wishlist wl = wlService.create(name, userIdLong);
-        return new ResponseEntity<>(wl, HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<Wishlist> createWishlist(@RequestBody Wishlist wishlist) {
+        wlService.create(wishlist);
+        return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Wishlist> updateWishlist(@PathVariable String id, @RequestBody Wishlist wl) {
-        Long idLong = Long.parseLong(id, 10);
+    public ResponseEntity<Wishlist> updateWishlist(@PathVariable long id, @RequestBody Wishlist wl) {
+        Optional<Wishlist> wlData = wlService.findById(id);
 
-        Optional<Wishlist> wlData = wlService.findById(idLong);
-
-        if (!wlData.isPresent()) {
+        if (wlData.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            Wishlist _wl = wlData.get();
-            _wl.setName(wl.getName());
-            _wl.setUserId(wl.getUserId());
-            return new ResponseEntity<>(_wl, HttpStatus.OK);
         }
+
+        Wishlist wishlist = wlData.get();
+        wishlist.setName(wl.getName());
+        wishlist.setUserId(wl.getUserId());
+        wlService.update(wishlist);
+
+        return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<HttpStatus> deleteAllWishlists() {
+    @DeleteMapping
+    public ResponseEntity<List<Wishlist>> deleteAllWishlists() {
         try {
             wlService.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -87,17 +78,17 @@ public class WishlistController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteWishlist(@PathVariable String id) {
-        Long idLong = Long.parseLong(id, 10);
-
+    public ResponseEntity<Wishlist> deleteWishlist(@PathVariable long id) {
         try {
-            wlService.deleteById(idLong);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Optional<Wishlist> wishlist = wlService.deleteById(id);
+            if (wishlist.isPresent()) {
+                return new ResponseEntity<>(wishlist.get(), HttpStatus.OK);    
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
-    
 }

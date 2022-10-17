@@ -13,22 +13,26 @@ import coms.w4156.moviewishlist.repository.WishlistRepository;
 @Service
 public class WishlistService {
 
-    private final WishlistRepository wlRepository;
-
     @Autowired
-    public WishlistService(final WishlistRepository repo) {
-        this.wlRepository = repo;
-    }
+    private WishlistRepository wlRepository;
 
-    public Optional<Wishlist> findById(long id) {
+    public Optional<Wishlist> findById(Long id) {
         return this.wlRepository.findById(id);
     }
 
     public List<Wishlist> getAll() {
         List<Wishlist> wlList = new ArrayList<Wishlist>();
-        
+
         this.wlRepository.findAll().forEach(wlList::add);
         return wlList;
+    }
+    
+    public Wishlist create(Wishlist wishlist) {
+        return this.wlRepository.save(wishlist);
+    }
+
+    public Wishlist update(Wishlist wishlist) {
+        return this.wlRepository.save(wishlist);
     }
 
     public Wishlist create(String name, Long userId) {
@@ -39,8 +43,14 @@ public class WishlistService {
         this.wlRepository.deleteAll();
     }
 
-    public void deleteById(Long id) {
-        this.wlRepository.deleteById(id);
+    public Optional<Wishlist> deleteById(Long id) {
+        Optional<Wishlist> wishlist = this.wlRepository.findById(id);
+
+        if (wishlist.isPresent()) {
+            this.wlRepository.deleteById(id);
+        }
+
+        return wishlist;
     }
     
 }
