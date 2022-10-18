@@ -7,13 +7,17 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
-public class User {
+@ToString
+public class User implements ModelInterface<String> {
     @Id
     @Getter
     private String username;
+
+    @ToString.Exclude
     private String password;
 
     protected User() {}
@@ -23,13 +27,18 @@ public class User {
         this.password = hashPassword(password);
     }
 
-    @Override
-    public String toString() {
-        return String.format("User(username='%s')", username);
-    }
-
     public Boolean checkPassword(String comparePassword) {
         return hashPassword(comparePassword).equals(hashPassword(this.password));
+    }
+
+    @Override
+    public String getId() {
+        return this.getUsername();
+    }
+
+    public User setPassword(String newPassword) {
+        this.password = hashPassword(newPassword);
+        return this;
     }
 
     private String hashPassword(String plainPassword) {

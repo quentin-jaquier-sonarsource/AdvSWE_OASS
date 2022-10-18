@@ -12,10 +12,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "wishlists")
-public class Wishlist {
+@ToString
+public class Wishlist implements ModelInterface<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -36,14 +38,6 @@ public class Wishlist {
     public Wishlist(@JsonProperty String name, @JsonProperty Long userId) {
         this.name = name;
         this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-            "Wishlist[id=%d, name='%s', userId=%d]",
-            id, name, userId
-        );
     }
 }
 

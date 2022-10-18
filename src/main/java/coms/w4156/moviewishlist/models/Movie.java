@@ -10,12 +10,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "movies")
-public class Movie {
+@ToString
+public class Movie implements ModelInterface<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Getter
     private Long id;
 
     @Getter
@@ -25,17 +28,11 @@ public class Movie {
     @Setter
     private Integer releaseYear;
 
-    protected Movie() {
-    }
+    protected Movie() {}
 
     public Movie(@JsonProperty String title, @JsonProperty Integer releaseYear) {
         this.title = title;
         this.releaseYear = releaseYear;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("User(title='%s', year:%d)", title, releaseYear);
     }
 
 }
