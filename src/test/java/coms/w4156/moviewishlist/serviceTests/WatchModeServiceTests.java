@@ -3,6 +3,9 @@ package coms.w4156.moviewishlist.serviceTests;
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.utils.Config;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,9 +52,9 @@ public class WatchModeServiceTests {
                 .when(restTemplate.getForEntity(watchmode_url, Source[].class))
                 .thenReturn(new ResponseEntity<>(allSources, HttpStatus.OK));
 
-        String[] returnedSources = wms.testResponse();
+        List<String> returnedSources = wms.testResponse();
 
-        Assertions.assertEquals(2, returnedSources.length);
+        Assertions.assertEquals(2, returnedSources.size());
     }
 
 }

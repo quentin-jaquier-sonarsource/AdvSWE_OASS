@@ -1,8 +1,10 @@
 package coms.w4156.moviewishlist.services;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,10 @@ public class WishlistService {
     }
 
     public List<Wishlist> getAll() {
-        List<Wishlist> wlList = new ArrayList<Wishlist>();
-
-        this.wlRepository.findAll().forEach(wlList::add);
-        return wlList;
+        return StreamSupport
+            .stream(this.wlRepository.findAll().spliterator(), false)
+            .sorted(Comparator.comparing(Wishlist::getId))
+            .collect(Collectors.toList());
     }
     
     public Wishlist create(Wishlist wishlist) {

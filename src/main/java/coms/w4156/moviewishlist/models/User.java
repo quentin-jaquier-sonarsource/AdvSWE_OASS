@@ -6,10 +6,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @Getter
     private String username;
     private String password;
 
@@ -23,10 +26,6 @@ public class User {
     @Override
     public String toString() {
         return String.format("User(username='%s')", username);
-    }
-
-    public String getUsername() {
-        return this.username;
     }
 
     public Boolean checkPassword(String comparePassword) {

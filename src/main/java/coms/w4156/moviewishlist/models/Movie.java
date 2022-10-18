@@ -8,6 +8,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "movies")
 public class Movie {
@@ -15,7 +18,11 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Getter
     private String title;
+
+    @Getter
+    @Setter
     private Integer releaseYear;
 
     protected Movie() {
