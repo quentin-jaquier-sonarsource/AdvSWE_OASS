@@ -1,29 +1,44 @@
 package coms.w4156.moviewishlist.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "users")
 @ToString
+@EqualsAndHashCode
+@NoArgsConstructor
 public class User implements ModelInterface<String> {
     @Id
     @Getter
-    private String username;
+    private String email;
+
+    @Getter
+    @Setter
+    private String name;
 
     @ToString.Exclude
     private String password;
 
-    protected User() {}
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Wishlist> wishlists;
     
-    public User(@JsonProperty String username, @JsonProperty String password) {
-        this.username = username;
+    public User(@JsonProperty String email, @JsonProperty String name, @JsonProperty String password) {
+        this.email = email;
+        this.name = name;
         this.password = hashPassword(password);
     }
 
@@ -33,7 +48,13 @@ public class User implements ModelInterface<String> {
 
     @Override
     public String getId() {
-        return this.getUsername();
+        return this.getEmail();
+    }
+
+    public List<Long> getWishlistIds() {
+        return this.wishlists.stream()
+            .map(wishlist -> wishlist.getId())
+            .toList();
     }
 
     public User setPassword(String newPassword) {
@@ -46,4 +67,5 @@ public class User implements ModelInterface<String> {
         // Or we can find a better way to do auth
         return plainPassword;
     }
+
 }

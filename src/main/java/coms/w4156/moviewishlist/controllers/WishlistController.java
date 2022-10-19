@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.Wishlist;
+import coms.w4156.moviewishlist.services.UserService;
 import coms.w4156.moviewishlist.services.WishlistService;
 
 @RequestMapping(value = "/wishlists")
@@ -26,6 +28,9 @@ public class WishlistController {
     @Autowired
     WishlistService wlService;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping
     public ResponseEntity<List<Wishlist>> getAllWishlists() {
         List<Wishlist> wlList = wlService.getAll();
@@ -34,61 +39,46 @@ public class WishlistController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Wishlist> getWishlistById(@PathVariable long id) {
-        Optional<Wishlist> wl = wlService.findById(id);
-
-        if (!wl.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            Wishlist _wl = wl.get();
-            return new ResponseEntity<>(_wl, HttpStatus.OK);
-        }
+        return wlService.findById(id)
+            .map(wishlist -> new ResponseEntity<>(wishlist, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
     
     @PostMapping
     public ResponseEntity<Wishlist> createWishlist(@RequestBody Wishlist wishlist) {
-        wlService.create(wishlist);
-        return new ResponseEntity<>(wishlist, HttpStatus.OK);
+        return new ResponseEntity<>(wlService.create(wishlist), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Wishlist> updateWishlist(@PathVariable long id, @RequestBody Wishlist wl) {
-        Optional<Wishlist> wlData = wlService.findById(id);
-
-        if (wlData.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        Wishlist wishlist = wlData.get();
-        wishlist.setName(wl.getName());
-        wishlist.setUserId(wl.getUserId());
-        wlService.update(wishlist);
-
-        return new ResponseEntity<>(wishlist, HttpStatus.OK);
+        return wlService.findById(id)
+            .map(wishlist -> {
+                String name = wl.getName();
+                String userID = wl.getUserId();
+                Optional<User> user = userService.findById(userID);
+                if (name != null) {
+                    wishlist.setName(name);
+                }
+                if (user.isPresent()) {
+                    wishlist.setUser(user.get());
+                }
+                return new ResponseEntity<>(wlService.update(wishlist), HttpStatus.OK);
+            })
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @DeleteMapping
     public ResponseEntity<List<Wishlist>> deleteAllWishlists() {
-        try {
-            wlService.deleteAll();
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        wlService.deleteAll();
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Wishlist> deleteWishlist(@PathVariable long id) {
-        try {
-            Optional<Wishlist> wishlist = wlService.deleteById(id);
-            if (wishlist.isPresent()) {
-                return new ResponseEntity<>(wishlist.get(), HttpStatus.OK);    
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return wlService.deleteById(id)
+            .map(deletedWishlist -> new ResponseEntity<>(deletedWishlist, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
 }
