@@ -2,11 +2,17 @@ package coms.w4156.moviewishlist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan
 @SpringBootApplication
 public class MovieWishlistApplication {
 
-    public static void main(String[] args) {
+    /**
+     * Runs the service.
+     * @param args Command line arguments.
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(MovieWishlistApplication.class, args);
     }
 
