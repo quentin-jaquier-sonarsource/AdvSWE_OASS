@@ -54,6 +54,21 @@ public class WatchModeServiceTests {
     @InjectMocks
     private WatchModeService wms = new WatchModeService();
 
+    /**
+     * Returns the concatenation of two Source arrays
+     * @param arr1 first Source array
+     * @param arr2 second Source array
+     * @return the concatenation
+     */
+    private static Source[] concatArrays(Source[] arr1, Source[] arr2) {
+
+        Source[] ret = Stream.concat(Arrays.stream(arr1), Arrays.stream(arr2))
+                .toArray(size -> (Source[]) Array.newInstance(arr1.getClass().getComponentType(), size));
+
+        return ret;
+
+    }
+
     @BeforeAll
     public static void setUp() {
 
@@ -123,6 +138,8 @@ public class WatchModeServiceTests {
 
        rentAndBuySources = Stream.concat(Arrays.stream(allBuy), Arrays.stream(allRent))
                 .toArray(size -> (Source[]) Array.newInstance(allBuy.getClass().getComponentType(), size));
+
+       allSources = concatArrays(rentAndBuySources, allSub);
         // TODO
         // Abstract this out into a method and create an array for all sources.
     }
@@ -252,6 +269,42 @@ public class WatchModeServiceTests {
         for(Source subSource : allSub) {
             Assertions.assertTrue(returnedSources.contains(subSource.getName()));
         }
+    }
+
+    @Test
+    public void testGetFreeWithSubAllSources() {
+        String movie000000URL = wms.makeURL("000000");
+
+        Mockito
+                .when(restTemplate.getForEntity(movie000000URL, Source[].class))
+                .thenReturn(new ResponseEntity(allSources, HttpStatus.OK));
+
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
+
+        // Assert all sources expected
+        Assertions.assertEquals(allSub.length, returnedSources.size());
+
+        for(Source subSource : allSub) {
+            Assertions.assertTrue(returnedSources.contains(subSource.getName()));
+        }
+    }
+
+    /**
+     * Test when a movie is only available to rent or buy on all services where
+     * a movie can be rented or bought
+     */
+    @Test
+    public void testGetFreeWithSubAllRentBuy() {
+        String movie000000URL = wms.makeURL("000000");
+
+        Mockito
+                .when(restTemplate.getForEntity(movie000000URL, Source[].class))
+                .thenReturn(new ResponseEntity(allRent, HttpStatus.OK));
+
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
+
+        // Movie cannot be streamed for free
+        Assertions.assertEquals(0, returnedSources.size());
     }
 
     /************End Test getFreeWithSubscription function **************/
