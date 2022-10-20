@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
@@ -145,11 +146,11 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(watchmode_url, Source[].class))
-                .thenReturn(new ResponseEntity(allSources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<>(allSources, HttpStatus.OK));
 
-        String[] returnedSources = wms.testResponse();
+        List<String> returnedSources = wms.testResponse();
 
-        Assertions.assertEquals(2, returnedSources.length);
+        Assertions.assertEquals(2, returnedSources.size());
     }
 
     /************Test getFreeWithSubscription function **************/
@@ -171,18 +172,16 @@ public class WatchModeServiceTests {
                 .when(restTemplate.getForEntity(movie1URL, Source[].class))
                 .thenReturn(new ResponseEntity(movie1Sources, HttpStatus.OK));
 
-        String[] returnedSources = wms.getFreeWithSubSourcesById("1");
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("1");
 
         // Assert only 1 source returned
-        Assertions.assertEquals(1, returnedSources.length);
+        Assertions.assertEquals(1, returnedSources.size());
 
         // Assert that source is netflix
-        Assertions.assertTrue(Arrays.asList(returnedSources)
-                .contains(netflix.getName()));
+        Assertions.assertTrue(returnedSources.contains(netflix.getName()));
 
         // Assert that the source is NOT vudu
-        Assertions.assertFalse(Arrays.asList(returnedSources)
-                .contains(vuduBuy.getName()));
+        Assertions.assertFalse(returnedSources.contains(vuduBuy.getName()));
     }
 
     /**
@@ -203,10 +202,10 @@ public class WatchModeServiceTests {
                 .when(restTemplate.getForEntity(movie2URL, Source[].class))
                 .thenReturn(new ResponseEntity(movie2Sources, HttpStatus.OK));
 
-        String[] returnedSources = wms.getFreeWithSubSourcesById("2");
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("2");
 
         // Assert no sources expected
-        Assertions.assertEquals(0, returnedSources.length);
+        Assertions.assertEquals(0, returnedSources.size());
     }
 
     /**
@@ -226,10 +225,10 @@ public class WatchModeServiceTests {
                 .when(restTemplate.getForEntity(movie3URL, Source[].class))
                 .thenReturn(new ResponseEntity(movie3Sources, HttpStatus.OK));
 
-        String[] returnedSources = wms.getFreeWithSubSourcesById("3");
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
         // Assert no sources expected
-        Assertions.assertEquals(0, returnedSources.length);
+        Assertions.assertEquals(0, returnedSources.size());
     }
 
     /**
@@ -245,14 +244,13 @@ public class WatchModeServiceTests {
                 .when(restTemplate.getForEntity(movie3URL, Source[].class))
                 .thenReturn(new ResponseEntity(allSub, HttpStatus.OK));
 
-        String[] returnedSources = wms.getFreeWithSubSourcesById("3");
+        List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
         // Assert all sources expected
-        Assertions.assertEquals(allSub.length, returnedSources.length);
+        Assertions.assertEquals(allSub.length, returnedSources.size());
 
         for(Source subSource : allSub) {
-            Assertions.assertTrue(Arrays.asList(returnedSources)
-                    .contains(subSource.getName()));
+            Assertions.assertTrue(returnedSources.contains(subSource.getName()));
         }
     }
 

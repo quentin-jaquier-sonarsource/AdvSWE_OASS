@@ -59,19 +59,17 @@ public class WatchModeService {
      * A test response that fetches a hardcoded movie.
      * @return response from the api
      */
-    public String[] testResponse() {
+    public List<String> testResponse() {
 
         ResponseEntity<Source[]> responseEntity = restTemplate
                 .getForEntity(watchmodeTestURL, Source[].class);
 
         Source[] sources = responseEntity.getBody();
 
-        List<String> sourceNameList = Arrays.stream(sources)
+        return Arrays.stream(sources)
                 .filter(Source::isFreeWithSubscription)
                 .map(Source::getName)
                 .collect(Collectors.toList());
-
-        return sourceNameList.toArray(new String[0]);
     }
 
 
@@ -82,17 +80,14 @@ public class WatchModeService {
      * @param watchModeID the ID for the movie in the watchmode API
      * @return an array of Strings which are the source names
      */
-    public String[] getFreeWithSubSourcesById(final String watchModeID) {
+    public List<String> getFreeWithSubSourcesById(final String watchModeID) {
 
         Source[] allSources = getSources(watchModeID);
 
-        String[] filteredSources = Arrays.stream(allSources)
+        return Arrays.stream(allSources)
                 .filter(Source::isFreeWithSubscription)
                 .map(Source::getName)
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
-
-        return filteredSources;
+                .collect(Collectors.toList());
 
     }
 
