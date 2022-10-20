@@ -42,6 +42,8 @@ There are two endpoints where you can test the connection to WatchMode is correc
     - 1350564 -> Skyfall (amazon prime)
     - 130381 -> Annihilation (Paramount+)
 
+## Removing Database Info from application.properties file
+Create a 'secrets.properties' file in the src/main/resource folder. Copy paste the database url, username and password for the local instance in this file.
 
 ## Working on this project
 
