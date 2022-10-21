@@ -9,6 +9,28 @@ It will be able to:
 3. Fetch and fill information about movies from an external API such as IMDB
 4. Collect statistics regarding the popularity of each movie on the service.
 
+## Integrating Postgres
+
+### Step 1: Set up postgres on your machine
+https://www.postgresql.org/download/
+
+### Step 2: Create a database called testdb
+In the postgres shell, run:
+```sh
+CREATE DATABASE testdb
+```
+
+### Step 3: Update application.properties
+In `src/main/resources`, edit the application.properties file to have the following lines:
+
+```sh
+spring.datasource.username=<YOUR POSTGRES USER NAME HERE>
+spring.datasource.url=<POSTGRES URL HERE>
+```
+
+Replacing with your username and the proper url. I believe postgres runs on port 5432 by default so the proper URL is usually
+`jdbc:postgresql://localhost:5432/testdb`
+
 ## Setup for streaming endpoints
 
 ### Step 1: Get a watchmode API key
