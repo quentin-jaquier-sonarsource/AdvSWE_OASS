@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.services.DummyService;
 import lombok.Getter;
 import lombok.Setter;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
