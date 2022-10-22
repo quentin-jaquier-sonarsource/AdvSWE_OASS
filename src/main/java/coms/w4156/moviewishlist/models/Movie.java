@@ -10,21 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "movies")
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Movie implements ModelInterface<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

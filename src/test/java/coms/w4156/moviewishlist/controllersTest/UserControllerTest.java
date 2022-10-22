@@ -88,7 +88,7 @@ public class UserControllerTest {
                 userTwo, userThree, userFour, userFive, userSix,
                 userSeven, userEight, userNine, userTen));
 
-        Mockito.when(userService.findAll()).thatReturn(users);
+        Mockito.when(userService.getAll()).thatReturn(users);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/users")

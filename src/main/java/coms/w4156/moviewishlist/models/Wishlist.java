@@ -14,14 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(
@@ -30,6 +26,7 @@ import lombok.ToString;
 )
 @ToString
 @EqualsAndHashCode
+@Builder
 public class Wishlist implements ModelInterface<Long> {
 
     @Id
