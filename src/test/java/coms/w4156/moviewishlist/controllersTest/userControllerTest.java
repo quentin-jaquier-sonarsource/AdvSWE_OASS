@@ -62,8 +62,23 @@ public class userControllerTest {
     @Test
     public void createUser() throws Exception{
         User user = User.builder()
-                    .
+                    .email("test@gmail.com")
+                    .name("test name")
+                    .password("hjgT48582%%")
+                    .build();
 
+        Mockito.when(userService.create(user)).thenReturn(user);
+        String content = objectWriter.writeValueAsString(user);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name", is("test name")));
     }
 
 
