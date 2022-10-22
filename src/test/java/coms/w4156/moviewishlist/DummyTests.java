@@ -28,15 +28,6 @@ public class DummyTests {
     DummyService ds;
 
     @Test
-    public void numTest() throws Exception {
-        this.mockMvc.perform(get("/num"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(
-                        "5")))
-                .andDo(print());
-    }
-    @Disabled
-    @Test
     public void mockNumTest() throws Exception {
 
         Mockito.when(ds.getNum()).thenReturn("4");
