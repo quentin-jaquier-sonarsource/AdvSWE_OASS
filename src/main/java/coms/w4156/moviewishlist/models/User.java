@@ -10,17 +10,14 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@Builder
 public class User implements ModelInterface<String> {
     /**
      * Email of the user.
