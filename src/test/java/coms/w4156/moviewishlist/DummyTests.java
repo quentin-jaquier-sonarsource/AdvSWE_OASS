@@ -2,9 +2,6 @@ package coms.w4156.moviewishlist;
 
 import coms.w4156.moviewishlist.controllers.DummyController;
 import coms.w4156.moviewishlist.services.DummyService;
-import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.UserService;
-import coms.w4156.moviewishlist.services.WishlistService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
