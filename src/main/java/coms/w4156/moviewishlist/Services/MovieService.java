@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.repository.MovieRepository;
+import coms.w4156.moviewishlist.services.ServiceForRepository;
 
 @Service
 public class MovieService extends ServiceForRepository<Long, Movie, MovieRepository> {
