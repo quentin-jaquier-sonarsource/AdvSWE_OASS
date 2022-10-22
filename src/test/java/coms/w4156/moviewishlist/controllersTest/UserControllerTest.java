@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import coms.w4156.moviewishlist.controllers.UserController;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,15 +36,19 @@ public class UserControllerTest {
     ObjectWriter objectWriter = objectMapper.writer();
 
     //Mock user repo
-    @Mock
+    @MockBean
     private UserService userService;
 
     @InjectMocks
     private UserController userController;
 
+    //should pass
     User userOne = new User("omniyyah@gmail.com", "omniyyah", "123456");
+    //should not pass
     User userTwo = new User("userTwo", "usertwo", "nycjfk");
+    //should not pass
     User userThree = new User("", "", "");
+    //should not pass
     User userFour = new User("iio@hotmail", "", "nycjfk");
     User userFive = new User("", "userFive", "nycjfk");
     User userSix = new User("userSix@gmail.com", "userSix", "");
@@ -94,8 +99,8 @@ public class UserControllerTest {
                 .get("/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(10)))
-                .andExpect(jsonPath("$[9].email", is("userNine@gmail.com")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].email", is("omniyyah@gmail.com")));
     }
 
     @Test

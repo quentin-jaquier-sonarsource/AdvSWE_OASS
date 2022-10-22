@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import coms.w4156.moviewishlist.controllers.MovieController;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,8 +36,8 @@ public class MovieControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
     ObjectWriter objectWriter = objectMapper.writer();
 
-    //Mock user repo
-    @Mock
+    //Mock movie repo
+    @MockBean
     private MovieService movieService;
 
     @InjectMocks
@@ -90,7 +91,7 @@ public class MovieControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(7)))
-                .andExpect(jsonPath("$[1].movie2", is("movie2")));
+                .andExpect(jsonPath("$[1].title", is("movie2")));
     }
 
 
