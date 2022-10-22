@@ -44,6 +44,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newData) {
+        //TODO: Need to check if user exists before updating the record
         return userService.findById(id)
             .map(user -> {
                 user.setName(newData.getName());
