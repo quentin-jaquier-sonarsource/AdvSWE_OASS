@@ -59,10 +59,10 @@ public class MovieControllerTest {
 
 
     @Test
-    public void createMovie() throws Exception{
+    public void createMovie_success() throws Exception{
         Movie movie = Movie.builder()
                 .title("test title")
-                .releaseYear("test releaseYear")
+                .releaseYear(1995)
                 .build();
 
         Mockito.when(movieService.create(movie)).thenReturn(movie);
@@ -77,6 +77,25 @@ public class MovieControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.releaseYear", is("test releaseYear")));
+    }
+
+    @Test
+    public void createMovie_fail() throws Exception{
+        Movie movie = Movie.builder()
+                .title("")
+                .releaseYear("test releaseYear")
+                .build();
+
+        Mockito.when(movieService.create(movie)).thenReturn(movie);
+        String content = objectWriter.writeValueAsString(movie);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/movies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest());
     }
 
     @Test

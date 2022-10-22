@@ -69,7 +69,7 @@ public class WishlistControllerTest {
     }
 
     @Test
-    public void createWishlist() throws Exception{
+    public void createWishlist_success() throws Exception{
         Wishlist wishlist = Wishlist.builder()
                 .name("test wishlist")
                 .user(user)
@@ -87,6 +87,26 @@ public class WishlistControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name", is("test wishlist")));
+
+    }
+
+    @Test
+    public void createWishlist_fail() throws Exception{
+        Wishlist wishlist = Wishlist.builder()
+                .name("test wishlist")
+                .user(user3)
+                .build();
+
+        Mockito.when(wishlistService.create(wishlist)).thenReturn(wishlist);
+        String content = objectWriter.writeValueAsString(wishlist);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/wishlists")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest());
 
     }
 

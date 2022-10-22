@@ -55,7 +55,7 @@ public class UserControllerTest {
     User userSeven = new User("userSeven@gmail.com", "userSeven", "");
     User userEight = new User("userEight@gmail.com", "", "9283gh");
     User userNine = new User("userNine@gmail", "userNine", "nycjfk");
-    User userTen = new User("userNine@gmail.com", "userTen", "nycjfkGG48#%");
+    User userTen = new User("userTen@gmail.com", "userTen", "nycjfkGG48#%");
 
     @Before
     public void setUp(){
@@ -65,7 +65,7 @@ public class UserControllerTest {
 
 
     @Test
-    public void createUser() throws Exception{
+    public void createUser_success() throws Exception{
         User user = User.builder()
                     .email("test@gmail.com")
                     .name("test name")
@@ -88,6 +88,27 @@ public class UserControllerTest {
 
 
     @Test
+    public void createUser_fail() throws Exception{
+        User user = User.builder()
+                .email("test")
+                .name("test name")
+                .password("hjgT48582%%")
+                .build();
+
+        Mockito.when(userService.create(user)).thenReturn(user);
+        String content = objectWriter.writeValueAsString(user);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
     public void getAll() throws Exception{
         List<User> users = new ArrayList<>(Arrays.asList(userOne,
                 userTwo, userThree, userFour, userFive, userSix,
@@ -99,7 +120,7 @@ public class UserControllerTest {
                 .get("/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].email", is("omniyyah@gmail.com")));
     }
 
