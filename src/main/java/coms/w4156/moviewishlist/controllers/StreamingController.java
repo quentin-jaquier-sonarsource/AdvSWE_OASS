@@ -1,6 +1,7 @@
 package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.services.WatchModeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class StreamingController {
      * Instance of the WatchModeService used to execute logic related to
      * querying the WatchMode API.
      */
+    @Autowired
     private WatchModeService wms = new WatchModeService();
 
     /**
