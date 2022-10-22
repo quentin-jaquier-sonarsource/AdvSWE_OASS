@@ -30,15 +30,6 @@ public class DummyTests {
     @MockBean
     DummyService ds;
 
-    @MockBean
-    MovieService ms;
-
-    @MockBean
-    UserService us;
-
-    @MockBean
-    WishlistService wls;
-
     @Test
     public void numTest() throws Exception {
         this.mockMvc.perform(get("/num"))
