@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Movie implements ModelInterface<Long> {
     /**
      * ID of the movie.
@@ -51,6 +53,7 @@ public class Movie implements ModelInterface<Long> {
      */
     @ManyToMany(mappedBy = "movies")
     @Setter
+    @Builder.Default
     private List<Wishlist> wishlists = new ArrayList<>();
 
     /**
@@ -64,6 +67,26 @@ public class Movie implements ModelInterface<Long> {
     ) {
         this.title = title;
         this.releaseYear = releaseYear;
+    }
+
+    /**
+     * Create a new Movie object.
+     *
+     * @param id - ID of the movie
+     * @param title - Title of the movie
+     * @param releaseYear - The year when the movie came out
+     * @param wishlists - The wishlists that contain this movie
+     */
+    public Movie(
+            Long id,
+            String title,
+            Integer releaseYear,
+            List<Wishlist> wishlists
+    ) {
+        this.id = id;
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.wishlists = wishlists;
     }
 
     /**

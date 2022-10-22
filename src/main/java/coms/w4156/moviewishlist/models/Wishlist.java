@@ -18,6 +18,7 @@ import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@Builder
 public class Wishlist implements ModelInterface<Long> {
 
     /**
@@ -82,6 +84,26 @@ public class Wishlist implements ModelInterface<Long> {
     ) {
         this.name = name;
         this.user = user;
+    }
+
+    /**
+     * Add a movie to this wishlist.
+     *
+     * @param id - ID of the wishlist
+     * @param name - Name of the wishlist
+     * @param user - The user that this wishlist belongs to
+     * @param movies - The movies within this wishlist
+     */
+    public Wishlist(
+        @JsonProperty final Long id,
+        @JsonProperty final String name,
+        @JsonProperty final User user,
+        @JsonProperty final List<Movie> movies
+    ) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.movies = movies;
     }
 
     /**
