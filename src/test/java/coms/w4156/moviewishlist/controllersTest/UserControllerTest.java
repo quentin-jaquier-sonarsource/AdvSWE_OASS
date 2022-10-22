@@ -134,12 +134,16 @@ public class UserControllerTest {
 
     @Test
     public void deleteAllUsers() throws Exception{
-
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/users")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 
     @Test
     public void deleteWishlist() throws Exception{
+
 
     }
 
