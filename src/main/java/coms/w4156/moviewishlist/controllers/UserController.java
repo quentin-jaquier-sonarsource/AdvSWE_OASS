@@ -74,6 +74,7 @@ public class UserController {
         @PathVariable final String id,
         @RequestBody final User newData
     ) {
+        //TODO: Need to check if user exists before updating the record
         return userService.findById(id)
             .map(user -> {
                 user.setName(newData.getName());

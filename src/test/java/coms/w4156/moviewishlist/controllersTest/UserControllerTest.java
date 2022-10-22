@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class userControllerTest {
+public class UserControllerTest {
 
     private MockMvc mockMvc;
 
@@ -54,7 +54,7 @@ public class userControllerTest {
 
     @Before
     public void setUp(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
@@ -107,6 +107,27 @@ public class userControllerTest {
 
     @Test
     public void updateUser() throws Exception{
+
+        User updatedUser = User.builder()
+                .email("testupdate@gmail.com")
+                .name("test update name")
+                .password("hjgT48582%%")
+                .build();
+
+        Mockito.when(userService.findById(updatedUser.getId())).thenReturn(java.util.Optional.of(updatedUser));
+        Mockito.when(userService.update(updatedUser)).thenReturn(updatedUser);
+
+        String content = objectWriter.writeValueAsString(updatedUser);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name", is("test update name")));
 
     }
 
