@@ -10,10 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-// import org.springframework.security.core.userdetails.User;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -43,15 +40,15 @@ public class User implements ModelInterface<Long> {
     @ToString.Exclude
     @Getter
     @Setter
-    private String encryptedPassword;
+    private String encodedPassword;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Wishlist> wishlists;
     
-    public User(@JsonProperty String email, @JsonProperty String username, @JsonProperty String encryptedPassword) {
+    public User(@JsonProperty String email, @JsonProperty String username, @JsonProperty String encodedPassword) {
         this.email = email;
         this.username = username;
-        this.encryptedPassword = encryptedPassword;
+        this.encodedPassword = encodedPassword;
     }
 
     public List<Long> getWishlistIds() {

@@ -32,13 +32,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
 
         if(null != authorization && authorization.startsWith("Bearer ")) {
-            System.out.println("voila");
             token = authorization.substring(7);
             username = jwtUtility.getUsernameFromToken(token);
         }
 
         if(null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("voilou");
             UserDetails userDetails
                     = userService.loadUserByUsername(username);
 
@@ -55,7 +53,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
         }
-        System.out.println("adriennn");
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

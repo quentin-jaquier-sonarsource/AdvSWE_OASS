@@ -40,20 +40,14 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> authenticate(@RequestBody JwtRequest request) {
 
-        System.out.println("authenticate");
-
         String username = request.getUsername();
         String password = request.getPassword();
-
-        System.out.println(username);
-        System.out.println(password);
         
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             );
         } catch (BadCredentialsException e) {
-            System.out.println("Bad credentials!!!!");
             return new ResponseEntity<JwtResponse>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
         }
 

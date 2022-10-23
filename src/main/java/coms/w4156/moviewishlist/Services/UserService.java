@@ -30,7 +30,7 @@ public class UserService extends ServiceForRepository<Long, User, UserRepository
 
         if (user.isPresent()) {
             // TODO: make a builder to create a UserDetails from a User
-            return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getEncryptedPassword(), new ArrayList<>());
+            return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getEncodedPassword(), new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("User with username " + username + " not found.");
         }
@@ -38,13 +38,11 @@ public class UserService extends ServiceForRepository<Long, User, UserRepository
 
     public UserDetails createUserAndReturnDetails(String email, String username, String password) {
         // TODO: check if username already exists
-        System.out.println("createUserAndReturn");
-        final String encryptedPassword = passwordEncoder.encode(password);
-        
-        User user = new User(email, username, encryptedPassword);
-        repository.save(user);
 
-        System.out.println("loadUsername");
+        final String encodedPassword = passwordEncoder.encode(password);
+        
+        User user = new User(email, username, encodedPassword);
+        repository.save(user);
 
         UserDetails userDetails = this.loadUserByUsername(user.getUsername());
         
