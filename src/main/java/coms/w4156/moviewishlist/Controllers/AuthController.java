@@ -29,8 +29,8 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtResponse> signUp(@RequestParam("username") String username, @RequestParam("password") String password) {
-        UserDetails userDetails = userService.createUser(username, password);
+    public ResponseEntity<JwtResponse> signUp(@RequestParam("email") String email, @RequestParam("username") String username, @RequestParam("password") String password) {
+        UserDetails userDetails = userService.createUserAndReturnDetails(email, username, password);
 
         final String token = jwtUtility.generateToken(userDetails);
 
@@ -44,14 +44,16 @@ public class AuthController {
 
         String username = request.getUsername();
         String password = request.getPassword();
+
+        System.out.println(username);
+        System.out.println(password);
         
         try {
-            System.out.println("avant");
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
             );
-            System.out.println("apres");
         } catch (BadCredentialsException e) {
+            System.out.println("Bad credentials!!!!");
             return new ResponseEntity<JwtResponse>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
         }
 
