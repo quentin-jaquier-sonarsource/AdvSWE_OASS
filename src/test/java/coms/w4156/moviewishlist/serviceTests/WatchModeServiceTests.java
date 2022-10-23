@@ -1,8 +1,11 @@
 package coms.w4156.moviewishlist.serviceTests;
 
-import coms.w4156.moviewishlist.services.Source;
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.Services.Source;
+import coms.w4156.moviewishlist.Services.WatchModeService;
 import coms.w4156.moviewishlist.utils.Config;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
@@ -158,7 +160,7 @@ public class WatchModeServiceTests {
         vudu.setName("VUDU");
         vudu.setType("buy");
 
-        Source[] sourcesAvailableFreeWithSubscription = new Source[]{netflix, amazon};
+        // Source[] sourcesAvailableFreeWithSubscription = new Source[]{netflix, amazon};
         Source[] allSources = new Source[]{netflix, amazon, vudu};
 
         Mockito

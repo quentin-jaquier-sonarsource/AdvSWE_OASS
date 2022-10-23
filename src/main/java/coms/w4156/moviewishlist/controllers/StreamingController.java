@@ -1,14 +1,15 @@
-package coms.w4156.moviewishlist.controllers;
+package coms.w4156.moviewishlist.Controllers;
 
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.Services.WatchModeService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Controller for all endpoints that have to do with accessing
@@ -33,9 +34,7 @@ public class StreamingController {
      */
     @GetMapping("/available")
     public List<String> streamingServices() {
-
         return wms.testResponse();
-
     }
 
     /**
@@ -49,6 +48,7 @@ public class StreamingController {
     @GetMapping("/freeWithSub/{id}")
     @ResponseBody
     public List<String> getSourcesFreeWithSub(final @PathVariable String id) {
+
         return wms.getFreeWithSubSourcesById(id);
     }
 }

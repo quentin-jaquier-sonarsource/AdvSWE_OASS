@@ -1,8 +1,7 @@
 package coms.w4156.moviewishlist.webLayerTests;
 
-import coms.w4156.moviewishlist.controllers.StreamingController;
-import coms.w4156.moviewishlist.services.DummyService;
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.Controllers.StreamingController;
+import coms.w4156.moviewishlist.Services.WatchModeService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

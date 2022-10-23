@@ -1,6 +1,6 @@
-package coms.w4156.moviewishlist.controllers;
+package coms.w4156.moviewishlist.Controllers;
 
-import coms.w4156.moviewishlist.services.DummyService;
+import coms.w4156.moviewishlist.Services.DummyService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

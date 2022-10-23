@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.services;
+package coms.w4156.moviewishlist.Services;
 
 import coms.w4156.moviewishlist.utils.Config;
 import lombok.Getter;
@@ -51,6 +51,8 @@ public class WatchModeService {
 
     /**
      * RestTemplate used for hitting the API endpoints.
+     * TODO: Should we use "Spring 5 WebClient" instead?
+     * https://www.baeldung.com/spring-5-webclient
      */
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -88,7 +90,6 @@ public class WatchModeService {
                 .filter(Source::isFreeWithSubscription)
                 .map(Source::getName)
                 .collect(Collectors.toList());
-
     }
 
     /**
@@ -102,12 +103,9 @@ public class WatchModeService {
     public Source[] getSources(final String watchModeID) {
         String url = makeURL(watchModeID);
 
-        ResponseEntity<Source[]> responseEntity = restTemplate.getForEntity(url,
-                Source[].class);
-
-        Source[] sources = responseEntity.getBody();
-
-        return sources;
+        return restTemplate
+            .getForEntity(url, Source[].class)
+            .getBody();
     }
 
     /**
