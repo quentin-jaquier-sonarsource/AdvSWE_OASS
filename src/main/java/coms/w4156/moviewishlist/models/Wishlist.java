@@ -14,10 +14,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import lombok.*;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(
@@ -26,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 )
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 @Builder
 public class Wishlist implements ModelInterface<Long> {
 
@@ -53,12 +60,16 @@ public class Wishlist implements ModelInterface<Long> {
     @Setter
     private List<Movie> movies;
 
-    protected Wishlist() {}
-
-
     public Wishlist(@JsonProperty String name, @JsonProperty User user) {
         this.name = name;
         this.user = user;
+    }
+
+    public Wishlist(Long id, String name, User user, List<Movie> movies) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.movies = movies;
     }
 
     public String getUserId() {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.repository.WishlistRepository;
-import coms.w4156.moviewishlist.services.ServiceForRepository;
+
 @Service
 public class WishlistService extends ServiceForRepository<Long, Wishlist, WishlistRepository> {
     @Autowired

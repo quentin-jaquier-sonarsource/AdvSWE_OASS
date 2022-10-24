@@ -10,7 +10,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +42,13 @@ public class User implements ModelInterface<String> {
         this.email = email;
         this.name = name;
         this.password = hashPassword(password);
+    }
+
+    public User(String email, String name, String password, List<Wishlist> wishlists) {
+        this.email = email;
+        this.name = name;
+        this.password = hashPassword(password);
+        this.wishlists = wishlists;
     }
 
     public Boolean checkPassword(String comparePassword) {
