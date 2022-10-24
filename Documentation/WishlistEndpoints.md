@@ -2,22 +2,22 @@
 
 These are endpoints defined in `WishlistController.java`. They are used to interact with the Wishlist API.
 
-## GET wishlists/
+## GET /wishlists/
 Get all wishlists.
 
-## GET wishlists/{id}
+## GET /wishlists/{id}
 Get a wishlist by `id`.
 
-## POST wishlists/
+## POST /wishlists/
 Create a wishlist.
 > Query parameters: name, user
 
-## PUT wishlists/{id}    
+## PUT /wishlists/{id}    
 Update a wishlist.
 > Query parameters: name, user
 
-## DELETE wishlists/
+## DELETE /wishlists/
 Delete all wishlists.
 
-## DELETE wishlists/{id}
+## DELETE /wishlists/{id}
 Delete wishlist by `id`.
