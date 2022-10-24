@@ -41,6 +41,7 @@ public class WishlistControllerTest {
     //Mock wishlist repo
     @MockBean
     private WishlistService wishlistService;
+    @MockBean
     private UserService userService;
 
     @InjectMocks
