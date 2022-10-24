@@ -12,6 +12,8 @@ A `User` object has the following fields:
 
 - **String** _password_: The password of a user. This field is currently stored as plain-text, but will be stored as a secure Hash in the future.
 
+- **List<Wishlist>** wishlists: A list of [Wishlist](/Documentation/WishlistEndpoints.md#wishlist-model) objects that are _owned_ by this user.
+
 ## Endpoints
 
 ### **GET** `/users` (`List<User>`)
