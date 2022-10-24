@@ -1,8 +1,7 @@
 package coms.w4156.moviewishlist;
 
-import coms.w4156.moviewishlist.controllers.DummyController;
-import coms.w4156.moviewishlist.services.DummyService;
-import org.junit.jupiter.api.Disabled;
+import coms.w4156.moviewishlist.Controllers.DummyController;
+import coms.w4156.moviewishlist.Services.DummyService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,6 @@ public class DummyTests {
     @MockBean
     DummyService ds;
 
-    @Test
-    public void numTest() throws Exception {
-        this.mockMvc.perform(get("/num"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(
-                        "5")))
-                .andDo(print());
-    }
-    @Disabled
     @Test
     public void mockNumTest() throws Exception {
 
