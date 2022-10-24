@@ -1,6 +1,7 @@
 package coms.w4156.moviewishlist.controllersTest;
 import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import coms.w4156.moviewishlist.services.MovieService;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import coms.w4156.moviewishlist.controllers.MovieController;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -83,7 +82,7 @@ public class MovieControllerTest {
     public void createMovie_fail() throws Exception{
         Movie movie = Movie.builder()
                 .title("")
-                .releaseYear("test releaseYear")
+                .releaseYear(2009)
                 .build();
 
         Mockito.when(movieService.create(movie)).thenReturn(movie);
@@ -103,7 +102,7 @@ public class MovieControllerTest {
         List<Movie> movies = new ArrayList<>(Arrays.asList(movie1,
                 movie2, movie3, movie4, movie5, movie6, movie7));
 
-        Mockito.when(movieService.getAll()).thatReturn(movies);
+        Mockito.when(movieService.getAll()).thenReturn(movies);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/movies")
@@ -125,7 +124,7 @@ public class MovieControllerTest {
 
         Movie updatedMovie = Movie.builder()
                 .title("test update title")
-                .releaseYear("test update releaseYear")
+                .releaseYear(2018)
                 .build();
 
         Mockito.when(movieService.findById(updatedMovie.getId())).thenReturn(java.util.Optional.of(updatedMovie));

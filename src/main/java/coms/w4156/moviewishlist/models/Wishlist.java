@@ -55,6 +55,7 @@ public class Wishlist implements ModelInterface<Long> {
 
     protected Wishlist() {}
 
+
     public Wishlist(@JsonProperty String name, @JsonProperty User user) {
         this.name = name;
         this.user = user;

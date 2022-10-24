@@ -43,19 +43,37 @@ public class UserControllerTest {
     private UserController userController;
 
     //should pass
-    User userOne = new User("omniyyah@gmail.com", "omniyyah", "123456");
+    User userOne = User.builder()
+                        .email("omniyyah@gmail.com")
+                        .name("omniyyah")
+                        .password("hjgT48582%%")
+                        .build();
+
     //should not pass
-    User userTwo = new User("userTwo", "usertwo", "nycjfk");
+    User userTwo = User.builder()
+                        .email("userTwo")
+                        .name("omniyyah")
+                        .password("hjgT48582%%")
+                        .build();
+
     //should not pass
-    User userThree = new User("", "", "");
-    //should not pass
-    User userFour = new User("iio@hotmail", "", "nycjfk");
-    User userFive = new User("", "userFive", "nycjfk");
-    User userSix = new User("userSix@gmail.com", "userSix", "");
-    User userSeven = new User("userSeven@gmail.com", "userSeven", "");
-    User userEight = new User("userEight@gmail.com", "", "9283gh");
-    User userNine = new User("userNine@gmail", "userNine", "nycjfk");
-    User userTen = new User("userTen@gmail.com", "userTen", "nycjfkGG48#%");
+    User userThree = User.builder()
+                            .email("")
+                            .name("")
+                            .password("")
+                            .build();
+//    //should not pass
+//    User userFour = new User("iio@hotmail", "", "nycjfk");
+//    User userFive = new User("", "userFive", "nycjfk");
+//    User userSix = new User("userSix@gmail.com", "userSix", "");
+//    User userSeven = new User("userSeven@gmail.com", "userSeven", "");
+//    User userEight = new User("userEight@gmail.com", "", "9283gh");
+//    User userNine = new User("userNine@gmail", "userNine", "nycjfk");
+    User userTen = User.builder()
+                        .email("userTen@gmail.com")
+                        .name("userTen")
+                        .password("nycjfkGG48#%")
+                        .build();
 
     @Before
     public void setUp(){
@@ -110,17 +128,22 @@ public class UserControllerTest {
 
     @Test
     public void getAll() throws Exception{
-        List<User> users = new ArrayList<>(Arrays.asList(userOne,
-                userTwo, userThree, userFour, userFive, userSix,
-                userSeven, userEight, userNine, userTen));
 
-        Mockito.when(userService.getAll()).thatReturn(users);
+        List<User> users = new ArrayList<>(Arrays.asList(userOne,
+                userTwo, userThree, userTen));
+
+//        String stringUserOne = objectMapper.writeValueAsString(userOne);
+//        String stringUserTwo = objectMapper.writeValueAsString(userTwo);
+//        String stringUserThree = objectMapper.writeValueAsString(userThree);
+//        String stringUserTen = objectMapper.writeValueAsString(userTen);
+
+        Mockito.when(userService.getAll()).thenReturn(users);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].email", is("omniyyah@gmail.com")));
     }
 
@@ -165,13 +188,5 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-
-    @Test
-    public void deleteWishlist() throws Exception{
-
-
-    }
-
 
 }
