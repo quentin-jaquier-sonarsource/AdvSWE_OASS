@@ -47,19 +47,59 @@ public class WishlistControllerTest {
     private WishlistController wishlistController;
 
 
-    User user = new User("omniyyah@gmail.com", "omniyyah", "12345633002");
-    User user2 = new User("kate@gmail.com", "kate", "fjjfi22");
+    User user = User.builder()
+            .email("omniyyah@gmail.com")
+            .name("omniyyah")
+            .password("hjgT48582%%")
+            .build();
 
-    User user3 = new User("john", "john", "fjjfi22");
+    User user2 = User.builder()
+            .email("kate@gmail.com")
+            .name("kate")
+            .password("fjjfi22")
+            .build();
+
+    User user3 = User.builder()
+            .email("userTwo")
+            .name("omniyyah")
+            .password("hjgT48582%%")
+            .build();
+
+    Wishlist wishlist1 = Wishlist.builder()
+                                .name("wishlist1 for omniyyah")
+                                .user(user)
+                                .build();
+
+
+    Wishlist wishlist2 = Wishlist.builder()
+                                .name("wishlist1 for 2")
+                                .user(user2)
+                                .build();
+
+    Wishlist wishlist3 = Wishlist.builder()
+                                    .name("wishlist1 for 3")
+                                    .user(user2)
+                                    .build();
+
+    Wishlist wishlist4 = Wishlist.builder()
+            .name("")
+            .user(user)
+            .build();
+
+    Wishlist wishlist5 = Wishlist.builder()
+            .name("")
+            .user(user3)
+            .build();
+
 
     //should pass
-    Wishlist wishlist1 = new Wishlist("wishlist1 for omniyyah", user);
-    Wishlist wishlist2 = new Wishlist("wishlist1 for 2", user2);
-    Wishlist wishlist3 = new Wishlist("wishlist2 for 2", user2);
-
-    //should not pass
-    Wishlist wishlist4 = new Wishlist("", user);
-    Wishlist wishlist5 = new Wishlist("wishlist1 for 3", user3);
+//    Wishlist wishlist1 = new Wishlist("wishlist1 for omniyyah", user);
+//    Wishlist wishlist2 = new Wishlist("wishlist1 for 2", user2);
+//    Wishlist wishlist3 = new Wishlist("wishlist2 for 2", user2);
+//
+//    //should not pass
+//    Wishlist wishlist4 = new Wishlist("", user);
+//    Wishlist wishlist5 = new Wishlist("wishlist1 for 3", user3);
 
 
     @Before
@@ -142,7 +182,7 @@ public class WishlistControllerTest {
         List<Wishlist> wishlists = new ArrayList<>(Arrays.asList(wishlist1,
                 wishlist2, wishlist3, wishlist4, wishlist5));
 
-        Mockito.when(wishlistService.getAll()).thatReturn(wishlists);
+        Mockito.when(wishlistService.getAll()).thenReturn(wishlists);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/wishlists")
@@ -163,6 +203,23 @@ public class WishlistControllerTest {
 
     @Test
     public void deleteWishlist() throws Exception{
+        Wishlist deletedWishlist = Wishlist.builder()
+                .name("deleted test wishlist")
+                .user(user)
+                .build();
+
+        Mockito.when(wishlistService.findById(deletedWishlist.getId())).thenReturn(java.util.Optional.of(deletedWishlist));
+        Mockito.when(wishlistService.update(deletedWishlist)).thenReturn(deletedWishlist);
+
+        String content = objectWriter.writeValueAsString(deletedWishlist);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/wishlists")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
 
 
     }
