@@ -189,7 +189,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie1URL, Source[].class))
-                .thenReturn(new ResponseEntity(movie1Sources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(movie1Sources, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("1");
 
@@ -219,7 +219,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie2URL, Source[].class))
-                .thenReturn(new ResponseEntity(movie2Sources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(movie2Sources, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("2");
 
@@ -242,7 +242,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie3URL, Source[].class))
-                .thenReturn(new ResponseEntity(movie3Sources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(movie3Sources, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
@@ -261,7 +261,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie3URL, Source[].class))
-                .thenReturn(new ResponseEntity(allSub, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(allSub, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
@@ -279,7 +279,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie000000URL, Source[].class))
-                .thenReturn(new ResponseEntity(allSources, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(allSources, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
 
@@ -301,7 +301,7 @@ public class WatchModeServiceTests {
 
         Mockito
                 .when(restTemplate.getForEntity(movie000000URL, Source[].class))
-                .thenReturn(new ResponseEntity(allRent, HttpStatus.OK));
+                .thenReturn(new ResponseEntity<Source[]>(allRent, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
 
