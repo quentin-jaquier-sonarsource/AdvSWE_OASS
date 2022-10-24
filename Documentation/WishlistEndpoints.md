@@ -12,7 +12,7 @@ A `Wishlist` object has the following fields:
 
 - **User** _user_: The [user](/Documentation/UserEndpoints.md#user-model) that this wishlist belongs to.
 
-- **List<Movie>** movie: A list of [Movie](/Documentation/MovieEndpoints.md) objects that are within this Wishlist.
+- **`List<Movie>`** movie: A list of [Movie](/Documentation/MovieEndpoints.md) objects that are within this Wishlist.
 
 ## Endpoints
 

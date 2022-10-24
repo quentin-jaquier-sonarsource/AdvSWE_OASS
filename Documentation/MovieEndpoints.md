@@ -12,7 +12,7 @@ A `Movie` object has the following fields:
 
 - **Int** _releaseYear_: The year when the movie was released. Can be updated.
 
-- **List<Wishlist>** _wishlists_: The [wishlists](/Documentation/WishlistEndpoints.md#wishlist-model) that this movie is contained within. (Many-to-many)
+- **`List<Wishlist>`** _wishlists_: The [wishlists](/Documentation/WishlistEndpoints.md#wishlist-model) that this movie is contained within. (Many-to-many)
 
 ## Endpoints
 
