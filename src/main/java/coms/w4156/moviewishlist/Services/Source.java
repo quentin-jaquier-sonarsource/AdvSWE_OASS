@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.services;
+package coms.w4156.moviewishlist.Services;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

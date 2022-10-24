@@ -4,7 +4,7 @@
  */
 @NonNullFields
 @NonNullApi
-package coms.w4156.moviewishlist.controllers;
+package coms.w4156.moviewishlist.Controllers;
 
 import org.springframework.lang.NonNullFields;
 import org.springframework.lang.NonNullApi;

@@ -1,9 +1,9 @@
-package coms.w4156.moviewishlist.controllers;
+package coms.w4156.moviewishlist.Controllers;
 
-import coms.w4156.moviewishlist.services.DummyService;
+import coms.w4156.moviewishlist.Services.DummyService;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +15,8 @@ public class DummyController {
     /**
      * Dummy service.
      */
-    private DummyService ds = new DummyService();
+    @Autowired
+    private DummyService ds;
 
     /**
      * Returns a test message.

@@ -1,11 +1,13 @@
-package coms.w4156.moviewishlist.controllers;
+package coms.w4156.moviewishlist.Controllers;
 
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.Services.WatchModeService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for all endpoints that have to do with accessing
  * the WatchMode API.
  */
+@RequestMapping(value = "/streaming")
 @RestController
 public class StreamingController {
 
@@ -20,6 +23,7 @@ public class StreamingController {
      * Instance of the WatchModeService used to execute logic related to
      * querying the WatchMode API.
      */
+    @Autowired
     private WatchModeService wms = new WatchModeService();
 
     /**
@@ -41,9 +45,10 @@ public class StreamingController {
      * @return A list of all the streaming services this movie is available
      * on for free with subscription.
      */
-    @GetMapping("/freeWithSub")
+    @GetMapping("/freeWithSub/{id}")
     @ResponseBody
-    public List<String> getSourcesFreeWithSub(final @RequestParam String id) {
+    public List<String> getSourcesFreeWithSub(final @PathVariable String id) {
+
         return wms.getFreeWithSubSourcesById(id);
     }
 }

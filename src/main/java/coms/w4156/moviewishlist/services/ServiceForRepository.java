@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.services;
+package coms.w4156.moviewishlist.Services;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.services;
+package coms.w4156.moviewishlist.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
