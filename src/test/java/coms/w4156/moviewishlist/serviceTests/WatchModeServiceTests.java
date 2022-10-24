@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.serviceTests;
 
-import coms.w4156.moviewishlist.Services.Source;
-import coms.w4156.moviewishlist.Services.WatchModeService;
+import coms.w4156.moviewishlist.services.Source;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.utils.Config;
 
 import java.util.List;

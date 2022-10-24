@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.Controllers;
+package coms.w4156.moviewishlist.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import coms.w4156.moviewishlist.models.User;
-import coms.w4156.moviewishlist.Services.UserService;
+import coms.w4156.moviewishlist.services.UserService;
 
 @RequestMapping(value = "/users")
 @RestController
