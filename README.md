@@ -67,3 +67,14 @@ There are two endpoints where you can test the connection to WatchMode is correc
 ## Removing Database Info from application.properties file
 Create a 'secrets.properties' file in the src/main/resources folder. Copy paste the database url, username and password for the local instance in this file.
 
+## Running Checkstyle
+On the command line run
+
+```sh
+mvn site
+```
+
+Or, in Intellij, open up the Maven panel, click on `Lifecycle` and then double click `site`.
+
+The generated reports will the appear under `target/site/project-reports.html`.
+
