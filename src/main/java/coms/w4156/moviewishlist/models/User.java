@@ -10,7 +10,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "users")
@@ -59,6 +64,25 @@ public class User implements ModelInterface<String> {
         this.email = email;
         this.name = name;
         this.password = hashPassword(password);
+    }
+
+    /**
+     * Constructor for the User class.
+     * @param email - Email of the user to be created
+     * @param name - Name of the user
+     * @param password - Password of the user
+     * @param wishlists - List of wishlists owned by the user
+     */
+    public User(
+        @JsonProperty final String email,
+        @JsonProperty final String name,
+        @JsonProperty final String password,
+        @JsonProperty final List<Wishlist> wishlists
+    ) {
+        this.email = email;
+        this.name = name;
+        this.password = hashPassword(password);
+        this.wishlists = wishlists;
     }
 
     /**

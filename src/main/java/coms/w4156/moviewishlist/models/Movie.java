@@ -78,10 +78,10 @@ public class Movie implements ModelInterface<Long> {
      * @param wishlists - The wishlists that contain this movie
      */
     public Movie(
-            Long id,
-            String title,
-            Integer releaseYear,
-            List<Wishlist> wishlists
+        @JsonProperty final Long id,
+        @JsonProperty final String title,
+        @JsonProperty final Integer releaseYear,
+        @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
         this.title = title;
