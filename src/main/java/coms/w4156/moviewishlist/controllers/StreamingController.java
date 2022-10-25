@@ -1,6 +1,6 @@
-package coms.w4156.moviewishlist.Controllers;
+package coms.w4156.moviewishlist.controllers;
 
-import coms.w4156.moviewishlist.Services.WatchModeService;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
