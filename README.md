@@ -78,25 +78,6 @@ mvn clean spring-boot:run
 
 in order to launch the app.
 
-### Step 4: Test the streaming endpoints
-
-There are two endpoints where you can test the connection to WatchMode is correct
-
-1. /available
-
-- Hitting this endpoint queries a hardcoded movie (specifically Skyfall (2012)) and returns the names of all sources where this is available for free
-- I knew a priori that this was available on Amazon Prime so I used it as a sanity check. Sure enough, amazon prime is returned in the list of sources
-
-2. /freeWithSub
-
-- this takes in a WatchMode id and returns all the streaming services where you can watch the movie for free (with subscription to the streaming service)
-- Notably what this does is filter out all the sources where the movie is available to buy or rent and only returns sources where it's free with subscription
-- Some example IDs and where they can be found for free with subscription:
-  - 1586594 -> El Camino (netflix)
-  - 1295258 -> Parasite (hulu)
-  - 1616666 -> Host (shudder)
-  - 1350564 -> Skyfall (amazon prime)
-  - 130381 -> Annihilation (Paramount+)
 
 ## Removing Database Info from application.properties file
 
@@ -113,3 +94,6 @@ mvn site
 Or, in Intellij, open up the Maven panel, click on `Lifecycle` and then double click `site`.
 
 The generated reports will the appear under `target/site/project-reports.html`.
+
+## Documentation
+Documentation for all the endpoints can be found in the  `Documentation` folder
