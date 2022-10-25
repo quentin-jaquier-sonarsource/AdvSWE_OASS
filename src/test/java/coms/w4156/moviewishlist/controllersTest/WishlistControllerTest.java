@@ -47,6 +47,7 @@ public class WishlistControllerTest {
     @InjectMocks
     private WishlistController wishlistController;
 
+    List<Movie> moviesList = new ArrayList<>();
 
     User user = User.builder()
             .email("omniyyah@gmail.com")
@@ -69,38 +70,21 @@ public class WishlistControllerTest {
     Wishlist wishlist1 = Wishlist.builder()
                                 .name("wishlist1 for omniyyah")
                                 .user(user)
+                                .movies(moviesList)
                                 .build();
 
 
     Wishlist wishlist2 = Wishlist.builder()
                                 .name("wishlist1 for 2")
                                 .user(user2)
+                                .movies(moviesList)
                                 .build();
 
     Wishlist wishlist3 = Wishlist.builder()
                                     .name("wishlist1 for 3")
-                                    .user(user2)
+                                    .user(user3)
+                                    .movies(moviesList)
                                     .build();
-
-    Wishlist wishlist4 = Wishlist.builder()
-            .name("")
-            .user(user)
-            .build();
-
-    Wishlist wishlist5 = Wishlist.builder()
-            .name("")
-            .user(user3)
-            .build();
-
-
-    //should pass
-//    Wishlist wishlist1 = new Wishlist("wishlist1 for omniyyah", user);
-//    Wishlist wishlist2 = new Wishlist("wishlist1 for 2", user2);
-//    Wishlist wishlist3 = new Wishlist("wishlist2 for 2", user2);
-//
-//    //should not pass
-//    Wishlist wishlist4 = new Wishlist("", user);
-//    Wishlist wishlist5 = new Wishlist("wishlist1 for 3", user3);
 
 
     @Before
@@ -111,9 +95,26 @@ public class WishlistControllerTest {
 
     @Test
     public void createWishlist_success() throws Exception{
+        List<Movie> moviesList2 = new ArrayList<>();
+        Movie movie = Movie.builder()
+                .id(9L)
+                .title("movie")
+                .releaseYear(2001)
+                .build();
+
+        Movie movie2 = Movie.builder()
+                .id(9L)
+                .title("movie2")
+                .releaseYear(2006)
+                .build();
+        moviesList.add(movie);
+        moviesList.add(movie2);
+
         Wishlist wishlist = Wishlist.builder()
-                .name("test wishlist")
+                .id(9l)
+                .name("wishlist1 for omniyyah")
                 .user(user)
+                .movies(moviesList2)
                 .build();
 
         Mockito.when(wishlistService.create(wishlist)).thenReturn(wishlist);
@@ -133,13 +134,8 @@ public class WishlistControllerTest {
 
     @Test
     public void createWishlist_fail() throws Exception{
-        Wishlist wishlist = Wishlist.builder()
-                .name("test wishlist")
-                .user(user3)
-                .build();
-
-        Mockito.when(wishlistService.create(wishlist)).thenReturn(wishlist);
-        String content = objectWriter.writeValueAsString(wishlist);
+        Mockito.when(wishlistService.create(wishlist3)).thenReturn(wishlist3);
+        String content = objectWriter.writeValueAsString(wishlist3);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/wishlists")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,10 +150,24 @@ public class WishlistControllerTest {
 
     @Test
     public void updateWishlist() throws Exception{
+        Movie movie = Movie.builder()
+                .id(9L)
+                .title("movie")
+                .releaseYear(2001)
+                .build();
+
+        Movie movie2 = Movie.builder()
+                .id(9L)
+                .title("movie2")
+                .releaseYear(2006)
+                .build();
+        moviesList.add(movie);
+        moviesList.add(movie2);
 
         Wishlist updatedWishlist = Wishlist.builder()
                 .name("updated test wishlist")
                 .user(user)
+                .movies(moviesList)
                 .build();
 
         Mockito.when(wishlistService.findById(updatedWishlist.getId())).thenReturn(java.util.Optional.of(updatedWishlist));
@@ -165,7 +175,7 @@ public class WishlistControllerTest {
 
         String content = objectWriter.writeValueAsString(updatedWishlist);
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/wishlists")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/wishlists/"+ 9l)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content);
@@ -181,7 +191,7 @@ public class WishlistControllerTest {
     @Test
     public void getAllWishlists() throws Exception{
         List<Wishlist> wishlists = new ArrayList<>(Arrays.asList(wishlist1,
-                wishlist2, wishlist3, wishlist4, wishlist5));
+                wishlist2, wishlist3));
 
         Mockito.when(wishlistService.getAll()).thenReturn(wishlists);
 
