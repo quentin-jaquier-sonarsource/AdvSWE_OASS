@@ -33,6 +33,7 @@ public class User implements ModelInterface<String> {
     private String name;
 
     @ToString.Exclude
+    @Getter
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

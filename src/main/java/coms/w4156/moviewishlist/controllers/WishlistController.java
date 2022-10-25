@@ -46,6 +46,12 @@ public class WishlistController {
     
     @PostMapping
     public ResponseEntity<Wishlist> createWishlist(@RequestBody Wishlist wishlist) {
+        if (wishlist.getName().isEmpty() ||
+            wishlist.getUserId().isEmpty() ||
+            wishlist.getMovieIds() == null)
+        {
+            return new ResponseEntity<>(wlService.create(wishlist), HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(wlService.create(wishlist), HttpStatus.OK);
     }
 
