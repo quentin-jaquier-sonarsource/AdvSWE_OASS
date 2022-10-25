@@ -36,7 +36,7 @@ public class MovieControllerTest {
     ObjectWriter objectWriter = objectMapper.writer();
 
     //Mock movie repo
-    @MockBean
+    @Mock
     private MovieService movieService;
 
     @InjectMocks
