@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.Services;
+package coms.w4156.moviewishlist.services;
 
 import org.springframework.stereotype.Service;
 
