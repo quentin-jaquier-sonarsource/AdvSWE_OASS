@@ -42,6 +42,7 @@ public class User implements ModelInterface<String> {
      * Hashed Password of the user.
      */
     @ToString.Exclude
+    @Getter
     private String password;
 
     /**

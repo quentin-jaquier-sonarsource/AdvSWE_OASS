@@ -57,6 +57,11 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody final User user) {
+        if (user.getEmail().isEmpty() ||
+            user.getName().isEmpty() ||
+            user.getPassword().isEmpty()) {
+            return new ResponseEntity<>(userService.create(user), HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(userService.create(user), HttpStatus.OK);
     }
 
@@ -74,7 +79,6 @@ public class UserController {
         @PathVariable final String id,
         @RequestBody final User newData
     ) {
-        //TODO: Need to check if user exists before updating the record
         return userService.findById(id)
             .map(user -> {
                 user.setName(newData.getName());

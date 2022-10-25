@@ -60,6 +60,12 @@ public class MovieController {
      */
     @PostMapping
     public ResponseEntity<Movie> createMovie(@RequestBody final Movie movie) {
+        if (movie.getTitle().isEmpty() || movie.getReleaseYear() == null) {
+            return new ResponseEntity<>(
+                movieService.create(movie),
+                HttpStatus.BAD_REQUEST
+            );
+        }
         return new ResponseEntity<>(movieService.create(movie), HttpStatus.OK);
     }
 

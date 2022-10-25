@@ -43,11 +43,13 @@ public class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    List<Wishlist> l = new ArrayList<>();
     //should pass
     User userOne = User.builder()
                         .email("omniyyah@gmail.com")
                         .name("omniyyah")
                         .password("hjgT48582%%")
+                        .wishlists(l)
                         .build();
 
     //should not pass
@@ -55,6 +57,7 @@ public class UserControllerTest {
                         .email("userTwo")
                         .name("omniyyah")
                         .password("hjgT48582%%")
+                        .wishlists(l)
                         .build();
 
     //should not pass
@@ -62,6 +65,7 @@ public class UserControllerTest {
                             .email("")
                             .name("")
                             .password("")
+                            .wishlists(l)
                             .build();
 //    //should not pass
 //    User userFour = new User("iio@hotmail", "", "nycjfk");
@@ -74,6 +78,7 @@ public class UserControllerTest {
                         .email("userTen@gmail.com")
                         .name("userTen")
                         .password("nycjfkGG48#%")
+                        .wishlists(l)
                         .build();
 
     @Before
@@ -85,16 +90,20 @@ public class UserControllerTest {
 
     @Test
     public void createUser_success() throws Exception{
-        List<Wishlist> l = new ArrayList<>()();
         User user = User.builder()
                     .email("test@gmail.com")
-                    .name("test name")
+                    .name("test")
                     .password("hjgT48582%%")
-                    .wishlists()
+                    .wishlists(l)
                     .build();
+
+        List<Wishlist> l = new ArrayList<>();
+        Wishlist w1 = new Wishlist("list name", user);
+        l.add(w1);
 
         Mockito.when(userService.create(user)).thenReturn(user);
         String content = objectWriter.writeValueAsString(user);
+        System.out.println(content);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,16 +113,18 @@ public class UserControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.name", is("test name")));
+                .andExpect(jsonPath("$.email", is("test@gmail.com")));
     }
 
 
     @Test
     public void createUser_fail() throws Exception{
+        List<Wishlist> l = new ArrayList<>();
         User user = User.builder()
                 .email("test")
                 .name("test name")
                 .password("hjgT48582%%")
+                .wishlists(l)
                 .build();
 
         Mockito.when(userService.create(user)).thenReturn(user);
@@ -135,18 +146,13 @@ public class UserControllerTest {
         List<User> users = new ArrayList<>(Arrays.asList(userOne,
                 userTwo, userThree, userTen));
 
-//        String stringUserOne = objectMapper.writeValueAsString(userOne);
-//        String stringUserTwo = objectMapper.writeValueAsString(userTwo);
-//        String stringUserThree = objectMapper.writeValueAsString(userThree);
-//        String stringUserTen = objectMapper.writeValueAsString(userTen);
-
         Mockito.when(userService.getAll()).thenReturn(users);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
                 .andExpect(jsonPath("$[0].email", is("omniyyah@gmail.com")));
     }
 
@@ -159,11 +165,12 @@ public class UserControllerTest {
 
     @Test
     public void updateUser() throws Exception{
-
+        List<Wishlist> l = new ArrayList<>();
         User updatedUser = User.builder()
                 .email("testupdate@gmail.com")
                 .name("test update name")
                 .password("hjgT48582%%")
+                .wishlists(l)
                 .build();
 
         Mockito.when(userService.findById(updatedUser.getId())).thenReturn(java.util.Optional.of(updatedUser));
