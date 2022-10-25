@@ -33,14 +33,16 @@ public class Config {
      */
     public Config() {
 
-        try {
-            File configFile = new File(configFilepath);
-            Scanner myReader = new Scanner(configFile);
-            apikey = myReader.nextLine();
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(errorMsg);
-            e.printStackTrace();
-        }
+        apikey = System.getenv("apikey");
+
+//        try {
+//            File configFile = new File(configFilepath);
+//            Scanner myReader = new Scanner(configFile);
+//            apikey = myReader.nextLine();
+//            myReader.close();
+//        } catch (FileNotFoundException e) {
+//            System.out.println(errorMsg);
+//            e.printStackTrace();
+//        }
     }
 }
