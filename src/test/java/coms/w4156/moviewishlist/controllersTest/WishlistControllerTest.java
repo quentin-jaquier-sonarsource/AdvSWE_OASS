@@ -1,5 +1,4 @@
 package coms.w4156.moviewishlist.controllersTest;
-import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.WishlistService;
@@ -41,6 +40,7 @@ public class WishlistControllerTest {
     //Mock wishlist repo
     @Mock
     private WishlistService wishlistService;
+
     @MockBean
     private UserService userService;
 
@@ -49,48 +49,48 @@ public class WishlistControllerTest {
 
 
     User user = User.builder()
-            .email("omniyyah@gmail.com")
-            .name("omniyyah")
-            .password("hjgT48582%%")
-            .build();
+        .email("omniyyah@gmail.com")
+        .name("omniyyah")
+        .password("hjgT48582%%")
+        .build();
 
     User user2 = User.builder()
-            .email("kate@gmail.com")
-            .name("kate")
-            .password("fjjfi22")
-            .build();
+        .email("kate@gmail.com")
+        .name("kate")
+        .password("fjjfi22")
+        .build();
 
     User user3 = User.builder()
-            .email("userTwo")
-            .name("omniyyah")
-            .password("hjgT48582%%")
-            .build();
+        .email("userTwo")
+        .name("omniyyah")
+        .password("hjgT48582%%")
+        .build();
 
     Wishlist wishlist1 = Wishlist.builder()
-                                .name("wishlist1 for omniyyah")
-                                .user(user)
-                                .build();
+        .name("wishlist1 for omniyyah")
+        .user(user)
+        .build();
 
 
     Wishlist wishlist2 = Wishlist.builder()
-                                .name("wishlist1 for 2")
-                                .user(user2)
-                                .build();
+        .name("wishlist1 for 2")
+        .user(user2)
+        .build();
 
     Wishlist wishlist3 = Wishlist.builder()
-                                    .name("wishlist1 for 3")
-                                    .user(user2)
-                                    .build();
+        .name("wishlist1 for 3")
+        .user(user2)
+        .build();
 
     Wishlist wishlist4 = Wishlist.builder()
-            .name("")
-            .user(user)
-            .build();
+        .name("")
+        .user(user)
+        .build();
 
     Wishlist wishlist5 = Wishlist.builder()
-            .name("")
-            .user(user3)
-            .build();
+        .name("")
+        .user(user3)
+        .build();
 
 
     //should pass
