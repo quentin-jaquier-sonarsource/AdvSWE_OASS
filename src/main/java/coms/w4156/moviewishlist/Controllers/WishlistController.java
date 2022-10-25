@@ -25,18 +25,33 @@ import coms.w4156.moviewishlist.services.WishlistService;
 @RestController
 public class WishlistController {
 
+    /**
+     * Use dependency injection to inject an object of the WishlistService class
+     */
     @Autowired
     WishlistService wlService;
 
+    /**
+     * Use dependency injection to inject an object of the UserService class
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * `/wishlists` will fetch a list of all wishlists in the database
+     * @return a list of wishlist objects
+     */
     @GetMapping
     public ResponseEntity<List<Wishlist>> getAllWishlists() {
         List<Wishlist> wlList = wlService.getAll();
         return new ResponseEntity<>(wlList, HttpStatus.OK);
     }
 
+    /**
+     * Get a particular wishlist to ID. If ID not found, HTTP 204: No Content
+     * @param id - ID of the wishlist to get
+     * @return a single wishlist object
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Wishlist> getWishlistById(@PathVariable long id) {
         return wlService.findById(id)
@@ -44,11 +59,24 @@ public class WishlistController {
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
     
+    /**
+     * POST `/wishlists` will create a new wishlist. The fields for the wishlist object
+     * must be passed in as the RequestBody as json.path
+     * @param wishlist - wishlist object to add to the database.
+     * @return The wishlist object that was just created
+     */
     @PostMapping
     public ResponseEntity<Wishlist> createWishlist(@RequestBody Wishlist wishlist) {
         return new ResponseEntity<>(wlService.create(wishlist), HttpStatus.OK);
     }
 
+    /**
+     * PUT `/wishlists/{id}` will update an existing wishlist with the given ID.
+     * The updated fields for the wishlist should be passed in as the JSON Request Body
+     * @param id - ID of the wishlist to update
+     * @param newData - wishlist data for the updated wishlist. (null fields are ignored)
+     * @return The newly updated wishlist
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Wishlist> updateWishlist(@PathVariable long id, @RequestBody Wishlist wl) {
         return wlService.findById(id)
@@ -67,13 +95,21 @@ public class WishlistController {
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
+    /**
+     * Delete all wishlists
+     * @return The list of wishlists that were just deleted
+     */
     @DeleteMapping
     public ResponseEntity<List<Wishlist>> deleteAllWishlists() {
         wlService.deleteAll();
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
     }
 
-
+    /**
+     * Delete a particular wishlist by ID.
+     * @param id The ID of the wishlist to delete
+     * @return the wishlist that was just deleted
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Wishlist> deleteWishlist(@PathVariable long id) {
         return wlService.deleteById(id)

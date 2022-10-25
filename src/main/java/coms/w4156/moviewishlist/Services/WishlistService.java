@@ -8,6 +8,10 @@ import coms.w4156.moviewishlist.repository.WishlistRepository;
 
 @Service
 public class WishlistService extends ServiceForRepository<Long, Wishlist, WishlistRepository> {
+    /**
+     * Contstructor to set up dependency injection for the WishlistRepository
+     * @param repository - The repository to inject
+     */
     @Autowired
     public WishlistService(WishlistRepository repository) {
         this.repository = repository;

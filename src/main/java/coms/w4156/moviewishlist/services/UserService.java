@@ -8,6 +8,10 @@ import coms.w4156.moviewishlist.repository.UserRepository;
 
 @Service
 public class UserService extends ServiceForRepository<String, User, UserRepository> {
+    /**
+     * Contstructor to set up dependency injection for the UserRepository
+     * @param repository - The repository to inject
+     */
     @Autowired
     public UserService(UserRepository repository) {
         this.repository = repository;

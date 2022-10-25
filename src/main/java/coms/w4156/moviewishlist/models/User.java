@@ -36,32 +36,64 @@ public class User implements ModelInterface<String> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Wishlist> wishlists;
     
+    /**
+     * Constructor for the User class
+     * @param email - Email of the user to be created
+     * @param name - Name of the user
+     * @param password - Password of the user
+     */
     public User(@JsonProperty String email, @JsonProperty String name, @JsonProperty String password) {
         this.email = email;
         this.name = name;
         this.password = hashPassword(password);
     }
 
+    /**
+     * Compare a given password with user's password and check if they are the same.
+     * This is important as the passwords should not be saved as plain text.
+     * So the newly given password will be hashed and compared against the hashed password
+     * saved in this User object
+     * @param comparePassword - The password to compare
+     * @return Did the two password match?
+     */
     public Boolean checkPassword(String comparePassword) {
         return hashPassword(comparePassword).equals(hashPassword(this.password));
     }
 
+    /**
+     * Get the ID of the user whish is the Email of the user
+     * @return the email of the user
+     */
     @Override
     public String getId() {
         return this.getEmail();
     }
 
+    /**
+     * Get the IDs of the list of wishlists that are owned by this user
+     * @return a List of Long ID of wishlists
+     */
     public List<Long> getWishlistIds() {
         return this.wishlists.stream()
             .map(wishlist -> wishlist.getId())
             .toList();
     }
 
+    /**
+     * Update the password of this user
+     * @param newPassword
+     * @return The updated user object
+     */
     public User setPassword(String newPassword) {
         this.password = hashPassword(newPassword);
         return this;
     }
 
+    /**
+     * Take a plain-text password, hash it and retun the hash
+     * @param plainPassword - The plain-text password
+     * @return - the hash of the given password
+     */
     private String hashPassword(String plainPassword) {
         // We can use a hashing function here later
         // Or we can find a better way to do auth
