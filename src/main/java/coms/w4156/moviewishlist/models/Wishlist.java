@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -30,23 +31,36 @@ import lombok.ToString;
 )
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Wishlist implements ModelInterface<Long> {
 
+    /**
+     * ID of the wishlist.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Nullable
     @Getter
     private Long id;
 
+    /**
+     * Name of the wishlist.
+     */
     @Getter
     @Setter
     private String name;
 
+    /**
+     * The user that owns this wishlist.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Setter
     private User user;
 
+    /**
+     * The movies within this wishlist.
+     */
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "wishlist_movies",
@@ -56,17 +70,34 @@ public class Wishlist implements ModelInterface<Long> {
     @Setter
     private List<Movie> movies;
 
-    protected Wishlist() {}
-
-    public Wishlist(@JsonProperty String name, @JsonProperty User user) {
+    /**
+     * Constructor to create a new Wishlist Object.
+     *
+     * @param name - Name of the wishlist
+     * @param user - The user that this wishlist belongs to
+     */
+    public Wishlist(
+        @JsonProperty final String name,
+        @JsonProperty final User user
+    ) {
         this.name = name;
         this.user = user;
     }
 
+    /**
+     * Get the email of the user that owns this wishlist.
+     *
+     * @return the email string
+     */
     public String getUserId() {
         return this.user.getEmail();
     }
 
+    /**
+     * The get list of IDs of the movies that are stored within this wishlist.
+     *
+     * @return A list of Long Ids
+     */
     public List<Long> getMovieIds() {
         return this.movies.stream()
             .map(movie -> movie.getId())

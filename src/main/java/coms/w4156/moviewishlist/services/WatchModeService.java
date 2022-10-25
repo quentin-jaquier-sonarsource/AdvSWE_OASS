@@ -51,7 +51,8 @@ public class WatchModeService {
 
     /**
      * RestTemplate used for hitting the API endpoints.
-     * TODO: Should we use "Spring 5 WebClient" instead?
+     *
+     * Should we use "Spring 5 WebClient" instead?
      * https://www.baeldung.com/spring-5-webclient
      */
     private RestTemplate restTemplate = new RestTemplate();

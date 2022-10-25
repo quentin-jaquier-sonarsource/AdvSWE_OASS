@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 public class DummyService {
     /**
      * Dummy method that simply returns a number.
+     *
      * @return a fixed number
      */
     public String getNum() {

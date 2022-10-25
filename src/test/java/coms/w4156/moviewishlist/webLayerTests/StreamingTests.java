@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -35,9 +34,7 @@ public class StreamingTests {
     @Test
     public void mockAvail() throws Exception {
 
-        List<String> mockList = new ArrayList<>();
-        mockList.add("Hulu");
-        mockList.add("HBO Max");
+        List<String> mockList = List.of("Hulu", "HBO Max");
 
         Mockito.when(wms.testResponse()).thenReturn(mockList);
 
@@ -61,9 +58,7 @@ public class StreamingTests {
     @Test
     public void mockGetFreeSubHappyPath() throws Exception {
 
-        List<String> mockList = new ArrayList<>();
-        mockList.add("Hulu");
-        mockList.add("HBO Max");
+        List<String> mockList = List.of("Hulu", "HBO Max");
 
         Mockito.when(wms.getFreeWithSubSourcesById("0")).thenReturn(mockList);
 
@@ -84,9 +79,7 @@ public class StreamingTests {
     @Test
     public void mockGetFreeSubMissingId() throws Exception {
 
-        List<String> mockList = new ArrayList<>();
-        mockList.add("Hulu");
-        mockList.add("HBO Max");
+        List<String> mockList = List.of("Hulu", "HBO Max");
 
         Mockito.when(wms.getFreeWithSubSourcesById("0")).thenReturn(mockList);
 
