@@ -132,21 +132,28 @@ public class MovieControllerTest {
     @Test
     public void updateMovie() throws Exception{
 
+        Movie movie = Movie.builder()
+                .title("Unmodified Movie")
+                .releaseYear(1995)
+                .build();
+
+        String content = "{\"title\":\"test update title\",\"releaseYear\":2018}";
+
         Movie updatedMovie = Movie.builder()
                 .title("test update title")
                 .releaseYear(2018)
                 .build();
 
-        Mockito.when(movieService.findById(updatedMovie.getId()))
-                .thenReturn(java.util.Optional.of(updatedMovie));
+        Long movieId = 9L;
 
-        Mockito.when(movieService.update(updatedMovie))
+        Mockito.when(movieService.findById(movieId))
+                .thenReturn(java.util.Optional.of(movie));
+
+        Mockito.when(movieService.update(movie))
                 .thenReturn(updatedMovie);
 
-        String content = objectWriter.writeValueAsString(updatedMovie);
-
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put("/movies")
+                .put("/movies/" + movieId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content);
