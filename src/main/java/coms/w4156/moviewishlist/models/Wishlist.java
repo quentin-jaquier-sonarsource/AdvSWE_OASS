@@ -34,21 +34,33 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Wishlist implements ModelInterface<Long> {
 
+    /**
+     * ID of the wishlist.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Nullable
     @Getter
     private Long id;
 
+    /**
+     * Name of the wishlist.
+     */
     @Getter
     @Setter
     private String name;
 
+    /**
+     * The user that owns this wishlist.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Setter
     private User user;
 
+    /**
+     * The movies within this wishlist.
+     */
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "wishlist_movies",
@@ -59,17 +71,22 @@ public class Wishlist implements ModelInterface<Long> {
     private List<Movie> movies;
 
     /**
-     * Constructor to create a new Wishlist Object
+     * Constructor to create a new Wishlist Object.
+     *
      * @param name - Name of the wishlist
      * @param user - The user that this wishlist belongs to
      */
-    public Wishlist(@JsonProperty String name, @JsonProperty User user) {
+    public Wishlist(
+        @JsonProperty final String name,
+        @JsonProperty final User user
+    ) {
         this.name = name;
         this.user = user;
     }
 
     /**
-     * Get the email of the user that owns this wishlist
+     * Get the email of the user that owns this wishlist.
+     *
      * @return the email string
      */
     public String getUserId() {
@@ -77,7 +94,8 @@ public class Wishlist implements ModelInterface<Long> {
     }
 
     /**
-     * The get list of IDs of the movies that are stored within this wishlist
+     * The get list of IDs of the movies that are stored within this wishlist.
+     *
      * @return A list of Long Ids
      */
     public List<Long> getMovieIds() {

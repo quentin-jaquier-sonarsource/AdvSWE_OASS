@@ -23,13 +23,13 @@ import coms.w4156.moviewishlist.services.UserService;
 public class UserController {
 
     /**
-     * Use dependency injection to inject an object of the UserService class
+     * Use dependency injection to inject an object of the UserService class.
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
-     * Fetch a kusr if all users in the database
+     * Fetch a kusr if all users in the database.
      * @return List of User objects
      */
     @GetMapping
@@ -43,32 +43,37 @@ public class UserController {
      * @return A single User object
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
+    public ResponseEntity<User> getUserById(@PathVariable final String id) {
         return userService.findById(id)
             .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
-    
+
     /**
      * POST `/users` will create a new user. The fields for the user object
-     * must be passed in as the RequestBody as json.path
+     * must be passed in as the RequestBody as json.path.
      * @param user - User object to add to the database.
      * @return The user object that was just created
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody final User user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.OK);
     }
 
     /**
      * PUT `/users/{id}` will update an existing user with the given ID.
-     * The updated fields for the user should be passed in as the JSON Request Body
+     * The updated fields for the user should be passed in as the JSON
+     * Request Body.
+     *
      * @param id - email of the user to update
-     * @param newData - user data for the updated user. (null fields are ignored)
+     * @param newData - user data for the updated user.
      * @return The newly updated user
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newData) {
+    public ResponseEntity<User> updateUser(
+        @PathVariable final String id,
+        @RequestBody final User newData
+    ) {
         return userService.findById(id)
             .map(user -> {
                 user.setName(newData.getName());
@@ -79,7 +84,7 @@ public class UserController {
     }
 
     /**
-     * Delete all users
+     * Delete all users.
      * @return The list of users that were just deleted
      */
     @DeleteMapping
@@ -95,10 +100,10 @@ public class UserController {
      * @return the user that was just deleted
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteWishlist(@PathVariable String id) {
+    public ResponseEntity<User> deleteWishlist(@PathVariable final String id) {
         return userService.deleteById(id)
-            .map(deletedUser -> new ResponseEntity<>(deletedUser, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));   
+            .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
 }
