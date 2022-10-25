@@ -1,5 +1,6 @@
 package coms.w4156.moviewishlist.controllersTest;
 import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,10 +85,12 @@ public class UserControllerTest {
 
     @Test
     public void createUser_success() throws Exception{
+        List<Wishlist> l = new ArrayList<>()();
         User user = User.builder()
                     .email("test@gmail.com")
                     .name("test name")
                     .password("hjgT48582%%")
+                    .wishlists()
                     .build();
 
         Mockito.when(userService.create(user)).thenReturn(user);

@@ -75,7 +75,7 @@ public class MovieControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.releaseYear", is("test releaseYear")));
+                .andExpect(jsonPath("$.releaseYear", is(1995)));
     }
 
     @Test
