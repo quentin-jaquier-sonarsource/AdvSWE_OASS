@@ -34,3 +34,6 @@ build/
 
 ### API Key File ###
 config.txt
+
+
+secrets.properties
