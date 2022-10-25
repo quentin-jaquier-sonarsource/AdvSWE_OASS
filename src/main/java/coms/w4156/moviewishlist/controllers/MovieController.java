@@ -47,8 +47,8 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable final Long id) {
         return movieService.findById(id)
-                .map(movie -> new ResponseEntity<>(movie, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+            .map(movie -> new ResponseEntity<>(movie, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     /**
@@ -61,10 +61,7 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<Movie> createMovie(@RequestBody final Movie movie) {
         if (movie.getTitle().isEmpty() || movie.getReleaseYear() == null) {
-            return new ResponseEntity<>(
-                movieService.create(movie),
-                HttpStatus.BAD_REQUEST
-            );
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(movieService.create(movie), HttpStatus.OK);
     }
@@ -84,12 +81,12 @@ public class MovieController {
         @RequestBody final Movie newData
     ) {
         return movieService.findById(id)
-                .map(movie -> {
-                    movie.setTitle(newData.getTitle());
-                    movieService.update(movie);
-                    return new ResponseEntity<>(movie, HttpStatus.OK);
-                })
-                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+            .map(movie -> {
+                movie.setTitle(newData.getTitle());
+                movieService.update(movie);
+                return new ResponseEntity<>(movie, HttpStatus.OK);
+            })
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     /**
@@ -112,10 +109,10 @@ public class MovieController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Movie> deleteMovie(@PathVariable final Long id) {
         return movieService.deleteById(id)
-                .map(deletedMovie ->
-                    new ResponseEntity<>(deletedMovie, HttpStatus.OK)
-                )
-                .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+            .map(deletedMovie ->
+                new ResponseEntity<>(deletedMovie, HttpStatus.OK)
+            )
+            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
 }

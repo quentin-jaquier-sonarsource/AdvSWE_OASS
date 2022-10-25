@@ -60,7 +60,7 @@ public class UserController {
         if (user.getEmail().isEmpty() ||
             user.getName().isEmpty() ||
             user.getPassword().isEmpty()) {
-            return new ResponseEntity<>(userService.create(user), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(userService.create(user), HttpStatus.OK);
     }
