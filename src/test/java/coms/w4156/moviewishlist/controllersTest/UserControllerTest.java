@@ -36,7 +36,7 @@ public class UserControllerTest {
     ObjectWriter objectWriter = objectMapper.writer();
 
     //Mock user repo
-    @MockBean
+    @Mock
     private UserService userService;
 
     @InjectMocks

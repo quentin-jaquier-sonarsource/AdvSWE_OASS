@@ -39,7 +39,7 @@ public class WishlistControllerTest {
     ObjectWriter objectWriter = objectMapper.writer();
 
     //Mock wishlist repo
-    @MockBean
+    @Mock
     private WishlistService wishlistService;
     @MockBean
     private UserService userService;
