@@ -42,13 +42,22 @@ public class MovieControllerTest {
     @InjectMocks
     private MovieController movieController;
 
-    Movie movie1 = new Movie("movie1", 2001);
-    Movie movie2 = new Movie("movie2", 1995);
-    Movie movie3 = new Movie("", 0);
-    Movie movie4 = new Movie("",00);
-    Movie movie5 = new Movie("",000);
-    Movie movie6 = new Movie("",0000);
-    Movie movie7 = new Movie("notoot",103994);
+    Movie movie1 = Movie.builder()
+            .title("movie1")
+            .releaseYear(2001)
+            .build();
+    Movie movie2 = Movie.builder()
+            .title("movie2")
+            .releaseYear(1995)
+            .build();
+    Movie movie3 = Movie.builder()
+            .title("")
+            .releaseYear(2003)
+            .build();
+//    Movie movie4 = new Movie("",00);
+//    Movie movie5 = new Movie("",000);
+//    Movie movie6 = new Movie("",0000);
+//    Movie movie7 = new Movie("notoot",103994);
 
     @Before
     public void setUp(){
@@ -100,7 +109,7 @@ public class MovieControllerTest {
     @Test
     public void getAll() throws Exception{
         List<Movie> movies = new ArrayList<>(Arrays.asList(movie1,
-                movie2, movie3, movie4, movie5, movie6, movie7));
+                movie2, movie3));
 
         Mockito.when(movieService.getAll()).thenReturn(movies);
 
@@ -108,7 +117,7 @@ public class MovieControllerTest {
                 .get("/movies")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(7)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[1].title", is("movie2")));
     }
 
