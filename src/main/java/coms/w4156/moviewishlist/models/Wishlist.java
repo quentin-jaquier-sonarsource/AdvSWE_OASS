@@ -43,6 +43,7 @@ public class Wishlist implements ModelInterface<Long> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Nullable
     @Getter
+    @Setter
     private Long id;
 
     /**

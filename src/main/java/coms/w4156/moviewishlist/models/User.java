@@ -29,6 +29,7 @@ public class User implements ModelInterface<String> {
      */
     @Id
     @Getter
+    @Setter
     private String email;
 
     /**

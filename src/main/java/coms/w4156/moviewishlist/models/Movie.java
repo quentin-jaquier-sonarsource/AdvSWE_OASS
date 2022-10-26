@@ -32,6 +32,7 @@ public class Movie implements ModelInterface<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Getter
+    @Setter
     private Long id;
 
     /**
