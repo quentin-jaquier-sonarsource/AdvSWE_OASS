@@ -10,211 +10,236 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import coms.w4156.moviewishlist.services.UserService;
 import coms.w4156.moviewishlist.controllers.WishlistController;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.*;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
 import org.springframework.http.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class WishlistControllerTest {
 
+    /**
+     * Mocks MVC for testing endpoints.
+     */
     private MockMvc mockMvc;
 
-    //we need to convert from json to string and vice versa
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectWriter objectWriter = objectMapper.writer();
 
-    //Mock wishlist repo
+    /**
+     * Mocks the wishlist service.
+     */
     @Mock
     private WishlistService wishlistService;
 
+    /**
+     * Mocks the user service.
+     */
     @MockBean
     private UserService userService;
 
+    /**
+     * Injects the wishlist controller with the mocked services.
+     */
     @InjectMocks
     private WishlistController wishlistController;
 
 
-    User user = User.builder()
+    /**
+     * Mock data for Testing.
+     */
+    private User user = User.builder()
         .email("omniyyah@gmail.com")
         .name("omniyyah")
         .password("hjgT48582%%")
         .build();
 
-    User user2 = User.builder()
-        .email("kate@gmail.com")
-        .name("kate")
-        .password("fjjfi22")
-        .build();
-
-    User user3 = User.builder()
+    /**
+     * Mock data for Testing.
+     */
+    private User user3 = User.builder()
         .email("userTwo")
         .name("omniyyah")
         .password("hjgT48582%%")
         .build();
 
-    Wishlist wishlist1 = Wishlist.builder()
+    /**
+     * Mock data for Testing.
+     */
+    private Wishlist wishlist1 = Wishlist.builder()
         .name("wishlist1 for omniyyah")
         .user(user)
         .build();
 
-
-    Wishlist wishlist2 = Wishlist.builder()
-        .name("wishlist1 for 2")
-        .user(user2)
-        .build();
-
-    Wishlist wishlist3 = Wishlist.builder()
-        .name("wishlist1 for 3")
-        .user(user2)
-        .build();
-
-    Wishlist wishlist4 = Wishlist.builder()
-        .name("")
-        .user(user)
-        .build();
-
-    Wishlist wishlist5 = Wishlist.builder()
-        .name("")
-        .user(user3)
-        .build();
-
-
-    //should pass
-//    Wishlist wishlist1 = new Wishlist("wishlist1 for omniyyah", user);
-//    Wishlist wishlist2 = new Wishlist("wishlist1 for 2", user2);
-//    Wishlist wishlist3 = new Wishlist("wishlist2 for 2", user2);
-//
-//    //should not pass
-//    Wishlist wishlist4 = new Wishlist("", user);
-//    Wishlist wishlist5 = new Wishlist("wishlist1 for 3", user3);
-
-
+    /**
+     * Setup for testing.
+     */
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(wishlistController).build();
+        this.mockMvc = MockMvcBuilders
+            .standaloneSetup(wishlistController)
+            .build();
     }
 
+    /**
+     * Test for creating a wishlist.
+     * @throws Exception if there is an error.
+     */
     @Test
-    public void createWishlist_success() throws Exception{
+    public void shouldSuccessfullyCreateAWishlist() throws Exception {
         Wishlist wishlist = Wishlist.builder()
-                .name("test wishlist")
-                .user(user)
-                .build();
+            .name("test wishlist")
+            .user(user)
+            .build();
 
-        Mockito.when(wishlistService.create(wishlist)).thenReturn(wishlist);
-        String content = "{\"name\":\"test wishlist\", \"user\": {\"email\":\"" + user.getEmail() + "\"}, \"movies\": []}";
+        Mockito
+            .when(wishlistService.create(wishlist))
+            .thenReturn(wishlist);
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/wishlists")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(content);
+        final String content =
+            String.format(
+                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "test wishlist",
+                user.getEmail()
+            );
 
-        mockMvc.perform(request)
-                .andExpect(status().isOk());
-                // .andExpect(jsonPath("$", notNullValue()))
-                // .andExpect(jsonPath("$.name", is("test wishlist")));
-
-    }
-
-    @Test
-    public void createWishlist_fail() throws Exception{
-        Wishlist wishlist = Wishlist.builder()
-                .name("test wishlist")
-                .user(user3)
-                .build();
-
-        Mockito.when(wishlistService.create(wishlist)).thenReturn(wishlist);
-//        String content = objectWriter.writeValueAsString(wishlist);
-        String content = "{\"name\":\"\", \"user\": {\"email\":\"" + user3.getEmail() + "\"}, \"movies\": []}";
-
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/wishlists")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(content);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post("/wishlists")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
 
         mockMvc.perform(request)
-                .andExpect(status().isBadRequest());
+            .andExpect(status().isOk());
+            // .andExpect(jsonPath("$", notNullValue()))
+            // .andExpect(jsonPath("$.name", is("test wishlist")));
 
     }
 
-
+    /**
+     * Test for creating a wishlist with an invalid user.
+     * @throws Exception if there is an error.
+     */
     @Test
-    public void updateWishlist() throws Exception{
+    public void shouldFailTryingToCreateAnInvalidUser() throws Exception {
+        final Wishlist wishlist = Wishlist.builder()
+            .name("test wishlist")
+            .user(user3)
+            .build();
 
-        Wishlist updatedWishlist = Wishlist.builder()
-                .name("updated test wishlist")
-                .user(user)
-                .build();
+        Mockito
+            .when(wishlistService.create(wishlist))
+            .thenReturn(wishlist);
 
-        Mockito.when(wishlistService.findById(updatedWishlist.getId())).thenReturn(java.util.Optional.of(updatedWishlist));
-        Mockito.when(wishlistService.update(updatedWishlist)).thenReturn(updatedWishlist);
+        final String content =
+            String.format(
+                "{\"name\":\"\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                user3.getEmail()
+            );
 
-//        String content = objectWriter.writeValueAsString(updatedWishlist);
-        String content = "{\"name\":\"updated test wishlist\", \"user\": {\"email\":\"" + user.getEmail()  + "\"}, \"movies\": []}";
-        long wishlistID = 9l;
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/wishlists/" + wishlistID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(content);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post("/wishlists")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
 
         mockMvc.perform(request)
-                .andExpect(status().isNoContent());
+            .andExpect(status().isBadRequest());
 
     }
 
+    /**
+     * Test for Updating a wishlist.
+     * @throws Exception if there is an error.
+     */
     @Test
-    public void getWishlistById() throws Exception{
-        Mockito.when(wishlistService.findById(wishlist1.getId()))
-                .thenReturn(java.util.Optional.of(wishlist1));
+    public void shouldUpdateWishlist() throws Exception {
 
-    }
+        final Wishlist updatedWishlist = Wishlist.builder()
+            .name("updated test wishlist")
+            .user(user)
+            .build();
 
+        Mockito
+            .when(wishlistService.findById(updatedWishlist.getId()))
+            .thenReturn(java.util.Optional.of(updatedWishlist));
 
-    @Test
-    public void deleteWishlist() throws Exception{
-//        Wishlist deletedWishlist = Wishlist.builder()
-//                .name("deleted test wishlist")
-//                .user(user)
-//                .build();
-//
-//        Mockito.when(wishlistService.findById(deletedWishlist.getId())).thenReturn(java.util.Optional.of(deletedWishlist));
-//        Mockito.when(wishlistService.update(deletedWishlist)).thenReturn(deletedWishlist);
+        Mockito
+            .when(wishlistService.update(updatedWishlist))
+            .thenReturn(updatedWishlist);
 
-//        String content = objectWriter.writeValueAsString(deletedWishlist);
-          String content = "{\"name\":\"delete test wishlist\", \"user\": {\"email\":\"" + user.getEmail()  + "\"}, \"movies\": []}";
+        final String content =
+            String.format(
+                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "updated test wishlist",
+                user3.getEmail()
+            );
 
-        long wlid =9l;
+        final long wishlistId = 9L;
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/wishlists/" + wlid)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(content);
+        final MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .put(String.format("/wishlists/%d", wishlistId))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
 
         mockMvc.perform(request)
-                .andExpect(status().isNoContent());
+            .andExpect(status().isNoContent());
+    }
+
+    /**
+     * Test for fetching a wishlist by ID.
+     * @throws Exception if there is an error.
+     */
+    @Test
+    public void getWishlistById() throws Exception {
+        Mockito
+            .when(wishlistService.findById(wishlist1.getId()))
+            .thenReturn(java.util.Optional.of(wishlist1));
 
     }
 
+    /**
+     * Test for deleting a wishlist.
+     * @throws Exception if there is an error.
+     */
     @Test
-    public void deleteAllWishlists() throws Exception{
+    public void deleteWishlist() throws Exception {
+        final String content =
+            String.format(
+                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "delete test wishlist",
+                user.getEmail()
+            );
+
+        final Long wishlistId = 9L;
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .delete(String.format("/wishlists/%d", wishlistId))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(content);
+
+        mockMvc.perform(request)
+            .andExpect(status().isNoContent());
+
+    }
+
+    /**
+     * Test for deleting all wishlists.
+     * @throws Exception if there is an error.
+     */
+    @Test
+    public void deleteAllWishlists() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/wishlists")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+            .delete("/wishlists")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
 }

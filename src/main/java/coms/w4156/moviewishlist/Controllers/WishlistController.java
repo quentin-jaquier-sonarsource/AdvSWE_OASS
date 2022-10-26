@@ -74,9 +74,9 @@ public class WishlistController {
     public ResponseEntity<Wishlist> createWishlist(
         @RequestBody final Wishlist wishlist
     ) {
-        if (wishlist.getName().isEmpty() ||
-            wishlist.getUserId().isEmpty() ||
-            wishlist.getMovieIds() == null) {
+        if (wishlist.getName().isEmpty()
+            || wishlist.getUserId().isEmpty()
+            || wishlist.getMovieIds() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(wlService.create(wishlist), HttpStatus.OK);
