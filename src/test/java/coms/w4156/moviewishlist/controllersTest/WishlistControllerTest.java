@@ -1,4 +1,5 @@
 package coms.w4156.moviewishlist.controllersTest;
+
 import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.WishlistService;
@@ -119,7 +120,6 @@ public class WishlistControllerTest {
             .andExpect(status().isOk());
             // .andExpect(jsonPath("$", notNullValue()))
             // .andExpect(jsonPath("$.name", is("test wishlist")));
-
     }
 
     /**

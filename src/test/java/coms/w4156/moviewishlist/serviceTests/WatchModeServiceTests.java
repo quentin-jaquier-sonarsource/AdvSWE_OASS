@@ -25,9 +25,14 @@ import java.util.stream.Stream;
 @ExtendWith(MockitoExtension.class)
 public class WatchModeServiceTests {
 
-    Config config = new Config();
+    private Config config = new Config();
+
     private final String skyfallId = "1350564";
-    private final String watchmode_url = "https://api.watchmode.com/v1/title/"+skyfallId+"/sources/?apiKey="+config.getApikey();
+    private final String watchmodeUrl = String.format(
+        "https://api.watchmode.com/v1/title/%s/sources/?apiKey=%s",
+        skyfallId,
+        config.getApikey()
+    );
 
     private static Source netflix;
     private static Source amazonPrime;
@@ -57,24 +62,31 @@ public class WatchModeServiceTests {
     private WatchModeService wms = new WatchModeService();
 
     /**
-     * Returns the concatenation of two Source arrays
+     * Returns the concatenation of two Source arrays.
      * @param arr1 first Source array
      * @param arr2 second Source array
      * @return the concatenation
      */
-    private static Source[] concatArrays(Source[] arr1, Source[] arr2) {
-
-        Source[] ret = Stream.concat(Arrays.stream(arr1), Arrays.stream(arr2))
-                .toArray(size -> (Source[]) Array.newInstance(arr1.getClass().getComponentType(), size));
-
-        return ret;
-
+    private static Source[] concatArrays(
+        final Source[] arr1,
+        final Source[] arr2
+    ) {
+        return Stream.concat(Arrays.stream(arr1), Arrays.stream(arr2))
+            .toArray(size ->
+                (Source[]) Array.newInstance(
+                    arr1.getClass().getComponentType(),
+                    size
+                )
+            );
     }
 
+    /**
+     * Sets up the mock data for testing.
+     */
     @BeforeAll
     public static void setUp() {
 
-        /** Init all services that subscription based */
+        // Init all services that subscription based.
 
         netflix = new Source();
         netflix.setName("Netflix");
@@ -90,13 +102,13 @@ public class WatchModeServiceTests {
 
         allSub = new Source[]{netflix, amazonPrime, hulu, shudder};
 
-        for(Source subService : allSub) {
+        for (Source subService : allSub) {
             subService.setType("sub");
         }
 
-        /** End init'ing all services that are subscription based*/
+        // End init'ing all services that are subscription based
 
-        /** Begin init'ing all services for buying movies*/
+        // Begin init'ing all services for buying movies
 
         vuduBuy = new Source();
         vuduBuy.setName("VUDU- to buy");
@@ -112,13 +124,14 @@ public class WatchModeServiceTests {
 
         allBuy = new Source[]{vuduBuy, appleTVBuy, amazonVideoBuy, iTunesBuy};
 
-        for(Source buyService : allBuy) {
+        for (Source buyService : allBuy) {
             buyService.setType("buy");
         }
 
-        /** End init'ing all services for buying movies*/
+        // End init'ing all services for buying movies
 
-        /** End init'ing all services for renting  movies*/
+        // End init'ing all services for renting  movies
+
         vuduRent = new Source();
         vuduRent.setName("VUDU- to rent");
 
@@ -131,21 +144,29 @@ public class WatchModeServiceTests {
         iTunesRent = new Source();
         iTunesRent.setName("iTunes - to rent");
 
-        allRent = new Source[]{vuduRent, appleTVRent, amazonVideoRent, iTunesRent};
+        allRent = new Source[] {
+            vuduRent,
+            appleTVRent,
+            amazonVideoRent,
+            iTunesRent
+        };
 
-        for(Source rentService : allRent) {
+        for (Source rentService : allRent) {
             rentService.setType("rent");
         }
-        /** End init'ing all services for renting movies*/
+        // End init'ing all services for renting movies
 
-       rentAndBuySources = Stream.concat(Arrays.stream(allBuy), Arrays.stream(allRent))
-                .toArray(size -> (Source[]) Array.newInstance(allBuy.getClass().getComponentType(), size));
+        rentAndBuySources = concatArrays(allBuy, allRent);
 
-       allSources = concatArrays(rentAndBuySources, allSub);
-        // TODO
+        allSources = concatArrays(rentAndBuySources, allSub);
+
         // Abstract this out into a method and create an array for all sources.
     }
 
+    /**
+     * Tests that the getSources method returns the correct sources for a movie
+     * that is available on all services.
+     */
     @Test
     public void testAvailable() {
         Source netflix = new Source();
@@ -160,11 +181,10 @@ public class WatchModeServiceTests {
         vudu.setName("VUDU");
         vudu.setType("buy");
 
-        // Source[] sourcesAvailableFreeWithSubscription = new Source[]{netflix, amazon};
         Source[] allSources = new Source[]{netflix, amazon, vudu};
 
         Mockito
-                .when(restTemplate.getForEntity(watchmode_url, Source[].class))
+                .when(restTemplate.getForEntity(watchmodeUrl, Source[].class))
                 .thenReturn(new ResponseEntity<>(allSources, HttpStatus.OK));
 
         List<String> returnedSources = wms.testResponse();
@@ -172,24 +192,24 @@ public class WatchModeServiceTests {
         Assertions.assertEquals(2, returnedSources.size());
     }
 
-    /************Test getFreeWithSubscription function **************/
 
     /**
-     * Test that we can filter at least one not free source
+     * Test that we can filter at least one not free source.
      */
     @Test
     public void testGetFreeWithSubSourcesById() {
 
-        /** Let's say that movie 1 is available to buy on Vudu and to stream on
-         * Netflix
-         */
+        // Let's say that movie 1 is available to buy on Vudu and to stream on
+        // Netflix
 
-        Source [] movie1Sources = new Source[] {netflix, vuduBuy};
+        Source[] movie1Sources = new Source[] {netflix, vuduBuy};
         String movie1URL = wms.makeURL("1");
 
         Mockito
-                .when(restTemplate.getForEntity(movie1URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(movie1Sources, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie1URL, Source[].class))
+            .thenReturn(
+                new ResponseEntity<Source[]>(movie1Sources, HttpStatus.OK)
+            );
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("1");
 
@@ -205,21 +225,28 @@ public class WatchModeServiceTests {
 
     /**
      * Test that when a movie is only available to rent or buy, this method
-     * will return an empty array
+     * will return an empty array.
      */
     @Test
     public void testGetFreeWithSubSourcesByIdNoneReturned() {
 
-        /** Let's say that movie 2 is only available on sources for renting and
-         * buying
-         */
+        // Let's say that movie 2 is only available on sources for renting and
+        // buying
 
-        Source [] movie2Sources = new Source[] {vuduRent, vuduBuy, iTunesBuy, amazonVideoBuy};
+        Source[] movie2Sources = new Source[] {
+            vuduRent,
+            vuduBuy,
+            iTunesBuy,
+            amazonVideoBuy
+        };
+
         String movie2URL = wms.makeURL("2");
 
         Mockito
-                .when(restTemplate.getForEntity(movie2URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(movie2Sources, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie2URL, Source[].class))
+            .thenReturn(
+                new ResponseEntity<Source[]>(movie2Sources, HttpStatus.OK)
+            );
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("2");
 
@@ -229,20 +256,21 @@ public class WatchModeServiceTests {
 
     /**
      * Test that when this movie is available nowhere, that this method
-     * returns an empty array
+     * returns an empty array.
      */
     @Test
     public void testGetFreeWithSubSourcesByIdNoneReturned2() {
 
-        /** Let's say that movie 3 isn't available anywhere
-         */
+        // Let's say that movie 3 isn't available anywhere.
 
-        Source [] movie3Sources = new Source[] {};
+        Source[] movie3Sources = new Source[] {};
         String movie3URL = wms.makeURL("3");
 
         Mockito
-                .when(restTemplate.getForEntity(movie3URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(movie3Sources, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie3URL, Source[].class))
+            .thenReturn(
+                new ResponseEntity<Source[]>(movie3Sources, HttpStatus.OK)
+            );
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
@@ -252,7 +280,7 @@ public class WatchModeServiceTests {
 
     /**
      * Test that when this movie is available only on all streaming sites,
-     * that all streaming sites are returned
+     * that all streaming sites are returned.
      */
     @Test
     public void testGetFreeWithSubSourcesAllSub() {
@@ -260,55 +288,63 @@ public class WatchModeServiceTests {
         String movie3URL = wms.makeURL("3");
 
         Mockito
-                .when(restTemplate.getForEntity(movie3URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(allSub, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie3URL, Source[].class))
+            .thenReturn(new ResponseEntity<Source[]>(allSub, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("3");
 
         // Assert all sources expected
         Assertions.assertEquals(allSub.length, returnedSources.size());
 
-        for(Source subSource : allSub) {
-            Assertions.assertTrue(returnedSources.contains(subSource.getName()));
+        for (Source subSource : allSub) {
+            Assertions.assertTrue(
+                returnedSources.contains(subSource.getName())
+            );
         }
     }
 
+    /**
+     * Test that when this movie is available only on all buy sites,
+     * that all buy sites are returned.
+     */
     @Test
     public void testGetFreeWithSubAllSources() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
-                .when(restTemplate.getForEntity(movie000000URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(allSources, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie000000URL, Source[].class))
+            .thenReturn(
+                new ResponseEntity<Source[]>(allSources, HttpStatus.OK)
+            );
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
 
         // Assert all sources expected
         Assertions.assertEquals(allSub.length, returnedSources.size());
 
-        for(Source subSource : allSub) {
-            Assertions.assertTrue(returnedSources.contains(subSource.getName()));
+        for (Source subSource : allSub) {
+            Assertions.assertTrue(
+                returnedSources.contains(subSource.getName())
+            );
         }
     }
 
     /**
      * Test when a movie is only available to rent or buy on all services where
-     * a movie can be rented or bought
+     * a movie can be rented or bought.
      */
     @Test
     public void testGetFreeWithSubAllRentBuy() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
-                .when(restTemplate.getForEntity(movie000000URL, Source[].class))
-                .thenReturn(new ResponseEntity<Source[]>(allRent, HttpStatus.OK));
+            .when(restTemplate.getForEntity(movie000000URL, Source[].class))
+            .thenReturn(new ResponseEntity<Source[]>(allRent, HttpStatus.OK));
 
         List<String> returnedSources = wms.getFreeWithSubSourcesById("000000");
 
         // Movie cannot be streamed for free
         Assertions.assertEquals(0, returnedSources.size());
     }
-
-    /************End Test getFreeWithSubscription function **************/
 
 }

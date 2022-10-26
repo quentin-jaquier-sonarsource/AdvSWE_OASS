@@ -99,13 +99,25 @@ On the command line run
 mvn site
 ```
 
-Here are the results of the latest test run:
-
-![**SUCCESS**: 14 Tests. 0 Failures. 0 Skipped](/Documentation/Test-Result-Screenshots/latest.png)
-
 Or, in Intellij, open up the Maven panel, click on `Lifecycle` and then double click `site`.
 
 The generated reports will the appear under `target/site/project-reports.html`.
+
+Here are the results of the latest checkstyle run:
+
+![**SUCCESS**](/Documentation/checkstyle-result-screenshots/latest.png)
+
+## Running Tests
+
+Run
+
+```sh
+mvn test
+```
+
+Here are the results of the latest test run:
+
+![**SUCCESS**: 14 Tests. 0 Failures. 0 Skipped](/Documentation/Test-Result-Screenshots/latest.png)
 
 ## Documentation
 
