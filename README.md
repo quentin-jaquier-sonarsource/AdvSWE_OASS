@@ -25,35 +25,44 @@ CREATE DATABASE testdb
 ```
 
 ### Step 3: Adding environment variables
+
 ### For mac:
+
 1. Open a terminal and open the .bash_profile file by running:
+
 ```sh
 open -e ~/.bash_profile
 ```
 
 2. Scroll down to the end of the file and add the the following:
+
 ```sh
 export DB_USER_NAME=<YOUR POSTGRES USER NAME HERE>
 export DB_USER_PASSWORD=<YOUR POSTGRES PASSWORD HERE>
 export DATABASE_URL=<POSTGRES URL HERE>
 ```
+
 3. Save the file by pressing command+s and then close the file
 4. Execute the file either by opening a new terminal window or by running the command :
+
 ```sh
 source ~/.bash_profile
 ```
+
 ### For windows:
+
 1. In the control panel, search for environment variable in the search bar
 2. Click on "Edit the system environment variables' and then on the Environment Variables button
 3. In the system vairiables, add the following variables and their respective values:
+
 ```sh
 DB_USER_NAME=<YOUR POSTGRES USER NAME HERE>
 DB_USER_PASSWORD=<YOUR POSTGRES PASSWORD HERE>
 DATABASE_URL=<POSTGRES URL HERE>
 ```
+
 4. Click OK and apply the changes
 5. Open a new terminal for the changes to apply
-
 
 Replacing with your username, password and the proper url. I believe postgres runs on port 5432 by default so the proper URL is usually
 `jdbc:postgresql://localhost:5432/testdb`
@@ -78,7 +87,6 @@ mvn clean spring-boot:run
 
 in order to launch the app.
 
-
 ## Removing Database Info from application.properties file
 
 Create a 'secrets.properties' file in the src/main/resources folder. Copy paste the database url, username and password for the local instance in this file.
@@ -91,9 +99,14 @@ On the command line run
 mvn site
 ```
 
+Here are the results of the latest test run:
+
+![**SUCCESS**: 14 Tests. 0 Failures. 0 Skipped](/Documentation/Test-Result-Screenshots/latest.png)
+
 Or, in Intellij, open up the Maven panel, click on `Lifecycle` and then double click `site`.
 
 The generated reports will the appear under `target/site/project-reports.html`.
 
 ## Documentation
-Documentation for all the endpoints can be found in the  `Documentation` folder
+
+Documentation for all the endpoints can be found in the `Documentation` folder
