@@ -122,3 +122,30 @@ Here are the results of the latest test run:
 ## Documentation
 
 Documentation for all the endpoints can be found in the `Documentation` folder
+
+
+## SonarQube - Locally
+
+In order to run SonarQube locally, you need to install SonarQube locally. 
+Follow the instructions in the link below. There are two options, to install
+from a zip or from a Docker image. On Windows, I found it easier to use the
+Docker image as the zip file gave me some issues.
+
+[SonarQube Instructions](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/#:~:text=Install%20SonarQube%20documentation.-,Installing%20a%20local%20instance%20of%20SonarQube,-You%20can%20evaluate)
+
+Once you have SonarQube running go to http://localhost:9000 and login with
+admin credentials: login=admin and password=admin.
+
+Follow [these](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/#:~:text=password%3A%20admin-,Analyzing%20a%20Project,-Now%20that%20you%27re)
+instructions on how to set up the project to be analyzed locally.
+
+After you have set up the project, it should give you a command that you can
+copy paste in order to run analysis. My command looks like this:
+
+```sh
+mvn clean verify sonar:sonar -Dsonar.projectKey=demo -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<GENERATED_KEY>
+```
+
+The pom.xml is set up so that this should just work and give coverage reports.
+If the tests are running but coverage is somehow 0%, something is wrong with the
+Jacoco configuration.
