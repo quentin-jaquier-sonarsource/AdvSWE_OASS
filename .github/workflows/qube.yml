@@ -1,8 +1,9 @@
 name: Qube
 on:
   push:
-    branches:
-      - sonar-qube # just to test it works
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
 
 jobs:
   build:
