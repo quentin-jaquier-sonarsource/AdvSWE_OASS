@@ -17,7 +17,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Run Coverage
-        run: mvn -B site && ls ${{ github.workspace }}/target && ls ${{ github.workspace }}target/site/jacoco
+        run: mvn -B verify
 
       - name: Add coverage to PR
         id: jacoco
