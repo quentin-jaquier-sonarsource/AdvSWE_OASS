@@ -2,7 +2,8 @@ name: Measure coverage
 
 on:
   pull_request:
-  push: sonar-qube #for testing
+  push:
+    branches: sonar-qube #for testing
 
 jobs:
   build:
