@@ -149,3 +149,13 @@ mvn clean verify sonar:sonar -Dsonar.projectKey=demo -Dsonar.host.url=http://loc
 The pom.xml is set up so that this should just work and give coverage reports.
 If the tests are running but coverage is somehow 0%, something is wrong with the
 Jacoco configuration.
+
+## JaCoCo
+SonarQube is very verbose, if all you are interested in is code coverage, then
+JaCoCo should suffice. Run 
+```shell
+mvn site
+```
+
+and then open `target/site/jacoco/index.html` in a browser to view coverage
+reports.
