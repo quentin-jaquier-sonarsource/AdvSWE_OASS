@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist;
 
-import coms.w4156.moviewishlist.Controllers.DummyController;
-import coms.w4156.moviewishlist.Services.DummyService;
+import coms.w4156.moviewishlist.controllers.DummyController;
+import coms.w4156.moviewishlist.services.DummyService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
