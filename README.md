@@ -140,11 +140,13 @@ Follow [these](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/#:~
 instructions on how to set up the project to be analyzed locally.
 
 After you have set up the project, it should give you a command that you can
-copy paste in order to run analysis. My command looks like this:
+copy-paste in order to run analysis. My command looks like this:
 
 ```sh
 mvn clean verify sonar:sonar -Dsonar.projectKey=demo -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<GENERATED_KEY>
 ```
+
+**On Windows, this has to be run in the command shell NOT powershell**
 
 The pom.xml is set up so that this should just work and give coverage reports.
 If the tests are running but coverage is somehow 0%, something is wrong with the
@@ -154,7 +156,7 @@ Jacoco configuration.
 SonarQube is very verbose, if all you are interested in is code coverage, then
 JaCoCo should suffice. Run 
 ```shell
-mvn site
+mvn clean verify
 ```
 
 and then open `target/site/jacoco/index.html` in a browser to view coverage
