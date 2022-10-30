@@ -7,6 +7,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.EqualsAndHashCode;
 
+import static coms.w4156.moviewishlist.utils.StreamingConstants.BUY_TYPE;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.RENT_TYPE;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.SUBSCRIPTION_TYPE;
+
 /**
  * Class to represent a WatchMode streaming source. A streaming source can be
  * something like Netflix, VUDU, AppleTV, Amazon Prime, etc. A movie is either
@@ -53,9 +57,25 @@ public class Source {
 
     /**
      * This function is designed to be used with the filter function.
-     * @return True if the given source is of type "sub", false otherwise.
+     * @return True if the given source is subscription based.
      */
     public boolean isFreeWithSubscription() {
-        return this.type.equals("sub");
+        return this.type.equals(SUBSCRIPTION_TYPE);
+    }
+
+    /**
+     * This function is designed to be used with the filter function.
+     * @return True if the given source is one where you rent movies.
+     */
+    public boolean isRentSource() {
+        return this.type.equals(RENT_TYPE);
+    }
+
+    /**
+     * This function is designed to be used with the filter function.
+     * @return True if the given source is one where you buy movies.
+     */
+    public boolean isBuySource() {
+        return this.type.equals(BUY_TYPE);
     }
 }
