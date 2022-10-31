@@ -75,7 +75,7 @@ public class WishlistController {
         @RequestBody final Wishlist wishlist
     ) {
         if (wishlist.getName().isEmpty()
-            || wishlist.getUserId().isEmpty()
+            || wishlist.getUserId() == null
             || wishlist.getMovieIds() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

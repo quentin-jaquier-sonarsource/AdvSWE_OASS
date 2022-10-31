@@ -43,16 +43,13 @@ public class UserController {
      * @return A single User object
      */
     @GetMapping("/{id}")
-<<<<<<< HEAD:src/main/java/coms/w4156/moviewishlist/Controllers/UserController.java
     public ResponseEntity<User> getUserById(@PathVariable long id) {
-=======
-    public ResponseEntity<User> getUserById(@PathVariable final String id) {
->>>>>>> main:src/main/java/coms/w4156/moviewishlist/controllers/UserController.java
         return userService.findById(id)
             .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
+    // TODO: MERGE AUTHCONTROLLER AND USERCONTROLLER
     /**
      * POST `/users` will create a new user. The fields for the user object
      * must be passed in as the RequestBody as json.path.
@@ -62,8 +59,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody final User user) {
         if  (user.getEmail().isEmpty()
-            || user.getName().isEmpty()
-            || user.getPassword().isEmpty()) {
+            || user.getUsername().isEmpty()
+            || user.getEncodedPassword().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(userService.create(user), HttpStatus.OK);
@@ -79,14 +76,10 @@ public class UserController {
      * @return The newly updated user
      */
     @PutMapping("/{id}")
-<<<<<<< HEAD:src/main/java/coms/w4156/moviewishlist/Controllers/UserController.java
-    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User newData) {
-=======
     public ResponseEntity<User> updateUser(
-        @PathVariable final String id,
+        @PathVariable final long id,
         @RequestBody final User newData
     ) {
->>>>>>> main:src/main/java/coms/w4156/moviewishlist/controllers/UserController.java
         return userService.findById(id)
             .map(user -> {
                 user.setUsername(newData.getUsername());
@@ -113,11 +106,7 @@ public class UserController {
      * @return the user that was just deleted
      */
     @DeleteMapping("/{id}")
-<<<<<<< HEAD:src/main/java/coms/w4156/moviewishlist/Controllers/UserController.java
     public ResponseEntity<User> deleteWishlist(@PathVariable long id) {
-=======
-    public ResponseEntity<User> deleteWishlist(@PathVariable final String id) {
->>>>>>> main:src/main/java/coms/w4156/moviewishlist/controllers/UserController.java
         return userService.deleteById(id)
             .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
