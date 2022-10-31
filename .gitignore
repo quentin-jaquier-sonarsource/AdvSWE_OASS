@@ -37,3 +37,4 @@ config.txt
 
 
 secrets.properties
+.DS_Store

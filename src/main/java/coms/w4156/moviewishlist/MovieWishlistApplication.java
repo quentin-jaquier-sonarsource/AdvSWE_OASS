@@ -13,5 +13,4 @@ public class MovieWishlistApplication {
     public static void main(final String[] args) {
         SpringApplication.run(MovieWishlistApplication.class, args);
     }
-
 }

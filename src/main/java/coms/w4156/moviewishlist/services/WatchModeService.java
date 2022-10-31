@@ -1,9 +1,9 @@
 package coms.w4156.moviewishlist.services;
 
-import coms.w4156.moviewishlist.utils.Config;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,10 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class WatchModeService {
 
-    /**
-     * The config object for getting the API key.
-     */
-    private Config config = new Config();
 
     /**
      * A test ID for the movie Skyfall.
@@ -40,9 +36,10 @@ public class WatchModeService {
      * A test endpoint call to see what sources the movie Skyfall is available
      * on.
      */
-    private final String watchmodeTestURL =
-            "https://api.watchmode.com/v1/title/" + skyfallId
-                    + "/sources/?apiKey=" + config.getApikey();
+
+    @Value("${apiKey}")
+    private String apiKey;
+
 
     /**
      * The character set for making API queries.
@@ -51,7 +48,8 @@ public class WatchModeService {
 
     /**
      * RestTemplate used for hitting the API endpoints.
-     * TODO: Should we use "Spring 5 WebClient" instead?
+     *
+     * Should we use "Spring 5 WebClient" instead?
      * https://www.baeldung.com/spring-5-webclient
      */
     private RestTemplate restTemplate = new RestTemplate();
@@ -64,7 +62,7 @@ public class WatchModeService {
     public List<String> testResponse() {
 
         ResponseEntity<Source[]> responseEntity = restTemplate
-                .getForEntity(watchmodeTestURL, Source[].class);
+                .getForEntity(getWatchmodeTestURL(), Source[].class);
 
         Source[] sources = responseEntity.getBody();
 
@@ -77,9 +75,9 @@ public class WatchModeService {
 
     /**
      * Function to return a list of sources that are free with subscription by
-     * the Watchmode ID.
+     * the WatchMode ID.
      *
-     * @param watchModeID the ID for the movie in the watchmode API
+     * @param watchModeID the ID for the movie in the WatchMode API
      * @return an array of Strings which are the source names
      */
     public List<String> getFreeWithSubSourcesById(final String watchModeID) {
@@ -89,8 +87,44 @@ public class WatchModeService {
         return Arrays.stream(allSources)
                 .filter(Source::isFreeWithSubscription)
                 .map(Source::getName)
-                        .collect(Collectors.toList());
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
+    /**
+     * Function to return a list of sources that rent the given movie by defined
+     * by the WatchMode ID.
+     *
+     * @param watchModeID the ID for the movie in the WatchMode API
+     * @return an array of Strings which are the source names
+     */
+    public List<String> getRentSourcesById(final String watchModeID) {
+
+        Source[] allSources = getSources(watchModeID);
+
+        return Arrays.stream(allSources)
+                .filter(Source::isRentSource)
+                .map(Source::getName)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Function to return a list of sources that sell the given movie defined by
+     * the WatchMode ID.
+     *
+     * @param watchModeID the ID for the movie in the WatchMode API
+     * @return an array of Strings which are the source names
+     */
+    public List<String> getBuySourcesById(final String watchModeID) {
+
+        Source[] allSources = getSources(watchModeID);
+
+        return Arrays.stream(allSources)
+                .filter(Source::isBuySource)
+                .map(Source::getName)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -101,7 +135,7 @@ public class WatchModeService {
      * @param watchModeID the ID for the movie in the Watchmode API
      * @return the entire array of Source objects returned by the API
      */
-    private Source[] getSources(final String watchModeID) {
+    public Source[] getSources(final String watchModeID) {
         String url = makeURL(watchModeID);
 
         return restTemplate
@@ -109,10 +143,19 @@ public class WatchModeService {
             .getBody();
     }
 
-    private String makeURL(final String watchModeID) {
+    /**
+     * Creates a url to query WatchMode given a WatchMode movie id.
+     * @param watchModeID the id we want to query about its sources.
+     * @return A url to query.
+     */
+    public String makeURL(final String watchModeID) {
         return watchModeSourceBaseEndpoint + watchModeID
-                + "/sources/?apiKey=" + config.getApikey();
+                + "/sources/?apiKey=" + apiKey;
     }
 
 
+    public String getWatchmodeTestURL() {
+        return "https://api.watchmode.com/v1/title/" + skyfallId
+                + "/sources/?apiKey=" + apiKey;
+    }
 }
