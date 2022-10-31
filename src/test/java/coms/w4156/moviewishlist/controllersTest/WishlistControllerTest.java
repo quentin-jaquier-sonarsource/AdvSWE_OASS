@@ -56,8 +56,8 @@ public class WishlistControllerTest {
      */
     private User user = User.builder()
         .email("omniyyah@gmail.com")
-        .name("omniyyah")
-        .password("hjgT48582%%")
+        .username("omniyyah")
+        .encodedPassword("hjgT48582%%")
         .build();
 
     /**
@@ -65,8 +65,8 @@ public class WishlistControllerTest {
      */
     private User user3 = User.builder()
         .email("userTwo")
-        .name("omniyyah")
-        .password("hjgT48582%%")
+        .username("omniyyah")
+        .encodedPassword("hjgT48582%%")
         .build();
 
     /**
@@ -119,7 +119,7 @@ public class WishlistControllerTest {
         mockMvc.perform(request)
             .andExpect(status().isOk());
             // .andExpect(jsonPath("$", notNullValue()))
-            // .andExpect(jsonPath("$.name", is("test wishlist")));
+            // .andExpect(jsonPath("$.username", is("test wishlist")));
     }
 
     /**

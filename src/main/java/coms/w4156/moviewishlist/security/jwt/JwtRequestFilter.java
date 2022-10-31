@@ -20,7 +20,7 @@ import coms.w4156.moviewishlist.services.UserService;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtTokenUtil jwtUtility;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     private UserService userService;
@@ -33,14 +33,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if(null != authorization && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
-            username = jwtUtility.getUsernameFromToken(token);
+            username = jwtTokenUtil.getUsernameFromToken(token);
         }
 
         if(null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails
                     = userService.loadUserByUsername(username);
 
-            if(jwtUtility.validateToken(token,userDetails)) {
+            if(jwtTokenUtil.validateToken(token,userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                         = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());

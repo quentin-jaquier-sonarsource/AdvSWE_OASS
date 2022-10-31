@@ -47,31 +47,31 @@ public class UserControllerTest {
     //should pass
     private User userOne = User.builder()
         .email("omniyyah@gmail.com")
-        .name("omniyyah")
-        .password("hjgT48582%%")
+        .username("omniyyah")
+        .encodedPassword("hjgT48582%%")
         .wishlists(l)
         .build();
 
     //should not pass
     private User userTwo = User.builder()
         .email("userTwo")
-        .name("omniyyah")
-        .password("hjgT48582%%")
+        .username("omniyyah")
+        .encodedPassword("hjgT48582%%")
         .wishlists(l)
         .build();
 
     //should not pass
     private User userThree = User.builder()
         .email("")
-        .name("")
-        .password("")
+        .username("")
+        .encodedPassword("")
         .wishlists(l)
         .build();
 
     private User userTen = User.builder()
         .email("userTen@gmail.com")
-        .name("userTen")
-        .password("nycjfkGG48#%")
+        .username("userTen")
+        .encodedPassword("nycjfkGG48#%")
         .wishlists(l)
         .build();
 
@@ -92,8 +92,8 @@ public class UserControllerTest {
     public void shouldCreateUser() throws Exception {
         User user = User.builder()
             .email("test@gmail.com")
-            .name("test")
-            .password("hjgT48582%%")
+            .username("test")
+            .encodedPassword("hjgT48582%%")
             .wishlists(List.of())
             .build();
 
@@ -103,8 +103,8 @@ public class UserControllerTest {
         String content = String.format(
             "{%s,%s,%s,%s}",
             String.format("\"email\":\"%s\"", user.getEmail()),
-            String.format("\"name\":\"%s\"", user.getName()),
-            String.format("\"password\":\"%s\"", user.getPassword()),
+            String.format("\"name\":\"%s\"", user.getUsername()),
+            String.format("\"password\":\"%s\"", user.getEncodedPassword()),
             "\"wishlists\": []"
         );
 
@@ -132,8 +132,8 @@ public class UserControllerTest {
         List<Wishlist> l = List.of();
         User user = User.builder()
             .email("test")
-            .name("test name")
-            .password("hjgT48582%%")
+            .username("test name")
+            .encodedPassword("hjgT48582%%")
             .wishlists(l)
             .build();
 
@@ -193,15 +193,15 @@ public class UserControllerTest {
 
         User origUser = User.builder()
             .email("test@gmail.com")
-            .name("test name")
-            .password("hjgT48582%%")
+            .username("test name")
+            .encodedPassword("hjgT48582%%")
             .wishlists(l)
             .build();
 
         User updatedUser = User.builder()
             .email("test@gmail.com")
-            .name("test update name")
-            .password("hjgT48582%%")
+            .username("test update name")
+            .encodedPassword("hjgT48582%%")
             .wishlists(l)
             .build();
 
@@ -214,7 +214,7 @@ public class UserControllerTest {
             .thenReturn(updatedUser);
 
         String content = "{\"name\":\"test update name\"}";
-        String userId = origUser.getId();
+        Long userId = origUser.getId();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .put("/users/" + userId)
@@ -225,7 +225,7 @@ public class UserControllerTest {
         mockMvc.perform(request)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", notNullValue()))
-            .andExpect(jsonPath("$.name", is("test update name")));
+            .andExpect(jsonPath("$.username", is("test update name")));
 
     }
 
