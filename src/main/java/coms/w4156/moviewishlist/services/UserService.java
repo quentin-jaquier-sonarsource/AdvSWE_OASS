@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import coms.w4156.moviewishlist.exceptions.UserAlreadyExistsException;
 import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.repository.UserRepository;
@@ -45,8 +46,12 @@ public class UserService extends ServiceForRepository<
         }
     }
 
-    public UserDetails createUserAndReturnDetails(String email, String username, String password) {
-        // TODO: check if username already exists
+    public UserDetails createUserAndReturnDetails(String email, String username, String password) throws UserAlreadyExistsException {
+        Optional<User> alreadyExistingUser = this.getRepository().findFirstByEmail(email);
+
+        if (alreadyExistingUser.isPresent()) {
+            throw new UserAlreadyExistsException("A user with email " + email + " already exists");
+        }
 
         final String encodedPassword = passwordEncoder.encode(password);
 

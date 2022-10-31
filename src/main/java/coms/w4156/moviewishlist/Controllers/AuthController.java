@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import coms.w4156.moviewishlist.exceptions.UserAlreadyExistsException;
 
-import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
 import coms.w4156.moviewishlist.security.jwt.JwtRequest;
 import coms.w4156.moviewishlist.security.jwt.JwtResponse;
+import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
 import coms.w4156.moviewishlist.services.UserService;
 
 @RestController
@@ -30,14 +31,22 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<JwtResponse> signUp(@RequestParam("email") String email, @RequestParam("username") String username, @RequestParam("password") String password) {
-        UserDetails userDetails = userService.createUserAndReturnDetails(email, username, password);
+        System.out.println("signUpEndpoint");
+        UserDetails userDetails;
+        try {
+            System.out.println("before userDetails");
+            userDetails = userService.createUserAndReturnDetails(email, username, password);
+            System.out.println("after userDetails");
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<JwtResponse>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
+        }
 
         final String token = jwtUtility.generateToken(userDetails);
 
         return new ResponseEntity<JwtResponse>(new JwtResponse(token), HttpStatus.OK);
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticate(@RequestBody JwtRequest request) {
 
         String username = request.getUsername();
