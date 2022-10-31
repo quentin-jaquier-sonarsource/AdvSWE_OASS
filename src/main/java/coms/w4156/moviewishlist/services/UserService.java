@@ -47,10 +47,11 @@ public class UserService extends ServiceForRepository<
     }
 
     public UserDetails createUserAndReturnDetails(String email, String username, String password) throws UserAlreadyExistsException {
-        Optional<User> alreadyExistingUser = this.getRepository().findFirstByEmail(email);
+        Optional<User> alreadyExistingUserEmail = this.getRepository().findByEmail(email);
+        Optional<User> alreadyExistingUserUsername = this.getRepository().findByUsername(username);
 
-        if (alreadyExistingUser.isPresent()) {
-            throw new UserAlreadyExistsException("A user with email " + email + " already exists");
+        if (alreadyExistingUserEmail.isPresent() || alreadyExistingUserUsername.isPresent()) {
+            throw new UserAlreadyExistsException("A user with email " + email + "and username " + username + " already exists");
         }
 
         final String encodedPassword = passwordEncoder.encode(password);

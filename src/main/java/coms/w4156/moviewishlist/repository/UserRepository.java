@@ -11,7 +11,7 @@ import coms.w4156.moviewishlist.models.User;
 public interface UserRepository extends CrudRepository<User, Long> {
     public Optional<User> findByUsername(String username);
 
-    public Optional<User> findFirstByEmail(String email);
+    public Optional<User> findByEmail(String email);
 
     public Optional<User> findById(Long id);
 }

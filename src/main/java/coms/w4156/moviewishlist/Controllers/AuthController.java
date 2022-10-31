@@ -31,12 +31,9 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<JwtResponse> signUp(@RequestParam("email") String email, @RequestParam("username") String username, @RequestParam("password") String password) {
-        System.out.println("signUpEndpoint");
         UserDetails userDetails;
         try {
-            System.out.println("before userDetails");
             userDetails = userService.createUserAndReturnDetails(email, username, password);
-            System.out.println("after userDetails");
         } catch (UserAlreadyExistsException e) {
             return new ResponseEntity<JwtResponse>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
         }
