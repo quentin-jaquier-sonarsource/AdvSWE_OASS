@@ -2,7 +2,6 @@ package coms.w4156.moviewishlist.serviceTests;
 
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
-import coms.w4156.moviewishlist.utils.Config;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -27,14 +27,7 @@ import static coms.w4156.moviewishlist.utils.StreamingConstants.*;
 @ExtendWith(MockitoExtension.class)
 public class WatchModeServiceTests {
 
-    private Config config = new Config();
-
     private final String skyfallId = "1350564";
-    private final String watchmodeUrl = String.format(
-        "https://api.watchmode.com/v1/title/%s/sources/?apiKey=%s",
-        skyfallId,
-        config.getApikey()
-    );
 
     private static Source netflix;
     private static Source amazonPrime;
@@ -56,6 +49,9 @@ public class WatchModeServiceTests {
     private static Source[] allBuy;
     private static Source[] rentAndBuySources;
     private static Source[] allSources;
+
+    @Value("${apiKey}")
+    private String apiKey;
 
     @Mock
     private RestTemplate restTemplate;
@@ -175,7 +171,7 @@ public class WatchModeServiceTests {
         Source[] allSources = new Source[]{netflix, amazonPrime, vuduRent};
 
         Mockito
-                .when(restTemplate.getForEntity(watchmodeUrl, Source[].class))
+                .when(restTemplate.getForEntity(getWatchmode_url(), Source[].class))
                 .thenReturn(new ResponseEntity<>(allSources, HttpStatus.OK));
 
         List<String> returnedSources = wms.testResponse();
@@ -339,6 +335,11 @@ public class WatchModeServiceTests {
     }
 
     /************End Test getFreeWithSubscription function **************/
+
+
+    public String getWatchmode_url(){
+        return "https://api.watchmode.com/v1/title/"+skyfallId+"/sources/?apiKey="+apiKey;
+    }
 
     /********************Test getBuySourcesById function***********************/
 
