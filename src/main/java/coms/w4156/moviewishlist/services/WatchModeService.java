@@ -48,7 +48,8 @@ public class WatchModeService {
 
     /**
      * RestTemplate used for hitting the API endpoints.
-     * TODO: Should we use "Spring 5 WebClient" instead?
+     *
+     * Should we use "Spring 5 WebClient" instead?
      * https://www.baeldung.com/spring-5-webclient
      */
     private RestTemplate restTemplate = new RestTemplate();
@@ -74,9 +75,9 @@ public class WatchModeService {
 
     /**
      * Function to return a list of sources that are free with subscription by
-     * the Watchmode ID.
+     * the WatchMode ID.
      *
-     * @param watchModeID the ID for the movie in the watchmode API
+     * @param watchModeID the ID for the movie in the WatchMode API
      * @return an array of Strings which are the source names
      */
     public List<String> getFreeWithSubSourcesById(final String watchModeID) {
@@ -86,6 +87,43 @@ public class WatchModeService {
         return Arrays.stream(allSources)
                 .filter(Source::isFreeWithSubscription)
                 .map(Source::getName)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Function to return a list of sources that rent the given movie by defined
+     * by the WatchMode ID.
+     *
+     * @param watchModeID the ID for the movie in the WatchMode API
+     * @return an array of Strings which are the source names
+     */
+    public List<String> getRentSourcesById(final String watchModeID) {
+
+        Source[] allSources = getSources(watchModeID);
+
+        return Arrays.stream(allSources)
+                .filter(Source::isRentSource)
+                .map(Source::getName)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Function to return a list of sources that sell the given movie defined by
+     * the WatchMode ID.
+     *
+     * @param watchModeID the ID for the movie in the WatchMode API
+     * @return an array of Strings which are the source names
+     */
+    public List<String> getBuySourcesById(final String watchModeID) {
+
+        Source[] allSources = getSources(watchModeID);
+
+        return Arrays.stream(allSources)
+                .filter(Source::isBuySource)
+                .map(Source::getName)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
