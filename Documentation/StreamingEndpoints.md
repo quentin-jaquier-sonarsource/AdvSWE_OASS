@@ -23,3 +23,13 @@ Some example IDs and where they can be found for free with subscription:
   - 1616666 -> Host (2020) (shudder)
   - 1350564 -> Skyfall (2012) (amazon prime)
   - 130381 -> Annihilation (2018) (Paramount+)
+
+## `/streaming/availToRent/{id}`
+This endpoint queries the WatchMode API using the WatchMode `id` of a movie and
+returns the names all streaming services where one can rent the given movie.
+
+## `/streaming/availToBuy/{id}`
+This endpoint queries the WatchMode API using the WatchMode `id` of a movie and
+returns the names all streaming services where one can buy the given movie.
+
+
