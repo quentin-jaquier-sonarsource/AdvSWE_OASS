@@ -1,15 +1,15 @@
 package coms.w4156.moviewishlist.services;
 
+import static coms.w4156.moviewishlist.utils.StreamingConstants.BUY_TYPE;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.RENT_TYPE;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.SUBSCRIPTION_TYPE;
+
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.EqualsAndHashCode;
-
-import static coms.w4156.moviewishlist.utils.StreamingConstants.BUY_TYPE;
-import static coms.w4156.moviewishlist.utils.StreamingConstants.RENT_TYPE;
-import static coms.w4156.moviewishlist.utils.StreamingConstants.SUBSCRIPTION_TYPE;
 
 /**
  * Class to represent a WatchMode streaming source. A streaming source can be
@@ -17,9 +17,14 @@ import static coms.w4156.moviewishlist.utils.StreamingConstants.SUBSCRIPTION_TYP
  * available for free on a source (so long as you have bought a subscription to
  * that streaming service) or it could be available to buy or rent.
  */
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@ToString @EqualsAndHashCode
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Source {
+
     /** The WatchMode given id for the source. */
     private int sourceId;
 
