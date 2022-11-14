@@ -1,16 +1,14 @@
 package coms.w4156.moviewishlist.services;
 
+import coms.w4156.moviewishlist.models.ModelInterface;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import org.springframework.data.repository.CrudRepository;
-
-import coms.w4156.moviewishlist.models.ModelInterface;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * An abstract class that implements the methods for all services.
@@ -20,10 +18,11 @@ import lombok.Setter;
  * @param <Repository> - The type of the Repository storing this model
  */
 public abstract class ServiceForRepository<
-        ID extends Comparable<ID>,
-        Model extends ModelInterface<ID>,
-        Repository extends CrudRepository<Model, ID>
+    ID extends Comparable<ID>,
+    Model extends ModelInterface<ID>,
+    Repository extends CrudRepository<Model, ID>
 > {
+
     /**
      * The repository that stores the data for given model.
      * This reposity will be Autowired in the subclasses.
@@ -98,5 +97,4 @@ public abstract class ServiceForRepository<
 
         return wishlist;
     }
-
 }

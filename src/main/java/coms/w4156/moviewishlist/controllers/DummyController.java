@@ -1,17 +1,18 @@
 package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.services.DummyService;
+import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
-
 @RestController
-@Getter @Setter
+@Getter
+@Setter
 public class DummyController {
+
     /**
      * Dummy service.
      */
@@ -46,6 +47,4 @@ public class DummyController {
     String five() {
         return ds.getNum();
     }
-
-
 }
