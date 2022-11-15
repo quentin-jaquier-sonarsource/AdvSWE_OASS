@@ -1,8 +1,8 @@
 package coms.w4156.moviewishlist.utils;
 
 public final class StreamingConstants {
-    private StreamingConstants() {
-    }
+
+    private StreamingConstants() {}
 
     /*                      DEFINE SOURCE TYPES                               */
 
@@ -64,7 +64,6 @@ public final class StreamingConstants {
 
     /** Relative endpoint of the rent by id endpoint.*/
     public static final String STREAMING_RENT_ENDPOINT = "/availToRent";
-
     /*                  END DEFINE SOURCE ENDPOINTS                           */
 
 }

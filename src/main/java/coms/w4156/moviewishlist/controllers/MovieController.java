@@ -1,8 +1,9 @@
 package coms.w4156.moviewishlist.controllers;
 
+import coms.w4156.moviewishlist.models.Movie;
+import coms.w4156.moviewishlist.services.MovieService;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.services.MovieService;
 
 @RequestMapping(value = "/movies")
 @RestController
@@ -46,7 +44,8 @@ public class MovieController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable final Long id) {
-        return movieService.findById(id)
+        return movieService
+            .findById(id)
             .map(movie -> new ResponseEntity<>(movie, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
@@ -80,7 +79,8 @@ public class MovieController {
         @PathVariable final Long id,
         @RequestBody final Movie newData
     ) {
-        return movieService.findById(id)
+        return movieService
+            .findById(id)
             .map(movie -> {
                 movie.setTitle(newData.getTitle());
                 movieService.update(movie);
@@ -108,11 +108,11 @@ public class MovieController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Movie> deleteMovie(@PathVariable final Long id) {
-        return movieService.deleteById(id)
+        return movieService
+            .deleteById(id)
             .map(deletedMovie ->
                 new ResponseEntity<>(deletedMovie, HttpStatus.OK)
             )
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
-
 }

@@ -1,15 +1,12 @@
 package coms.w4156.moviewishlist.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 public class User implements ModelInterface<String> {
+
     /**
      * Email of the user.
      */
@@ -50,12 +48,14 @@ public class User implements ModelInterface<String> {
      * The list of wishlists owned by this user.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Getter
     private List<Wishlist> wishlists;
 
     /**
      * Constructor for the User class.
-     * @param email - Email of the user to be created
-     * @param name - Name of the user
+     *
+     * @param email    - Email of the user to be created
+     * @param name     - Name of the user
      * @param password - Password of the user
      */
     public User(
@@ -70,9 +70,10 @@ public class User implements ModelInterface<String> {
 
     /**
      * Constructor for the User class.
-     * @param email - Email of the user to be created
-     * @param name - Name of the user
-     * @param password - Password of the user
+     *
+     * @param email     - Email of the user to be created
+     * @param name      - Name of the user
+     * @param password  - Password of the user
      * @param wishlists - List of wishlists owned by the user
      */
     public User(
@@ -146,5 +147,4 @@ public class User implements ModelInterface<String> {
         // Or we can find a better way to do auth
         return plainPassword;
     }
-
 }

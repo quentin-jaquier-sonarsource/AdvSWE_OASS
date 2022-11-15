@@ -1,20 +1,18 @@
 package coms.w4156.moviewishlist.controllers;
 
+import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_BUY_ENDPOINT;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_RENT_ENDPOINT;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_SUB_ENDPOINT;
+import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_TEST_ENDPOINT;
+
 import coms.w4156.moviewishlist.services.WatchModeService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_BUY_ENDPOINT;
-import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_RENT_ENDPOINT;
-import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_SUB_ENDPOINT;
-import static coms.w4156.moviewishlist.utils.StreamingConstants.STREAMING_TEST_ENDPOINT;
 
 /**
  * Controller for all endpoints that have to do with accessing
@@ -53,7 +51,6 @@ public class StreamingController {
     @GetMapping(STREAMING_SUB_ENDPOINT + "/{id}")
     @ResponseBody
     public List<String> getSourcesFreeWithSub(final @PathVariable String id) {
-
         return wms.getFreeWithSubSourcesById(id);
     }
 
@@ -67,7 +64,6 @@ public class StreamingController {
     @GetMapping(STREAMING_RENT_ENDPOINT + "/{id}")
     @ResponseBody
     public List<String> getSourcesRent(final @PathVariable String id) {
-
         return wms.getRentSourcesById(id);
     }
 
@@ -81,7 +77,6 @@ public class StreamingController {
     @GetMapping(STREAMING_BUY_ENDPOINT + "/{id}")
     @ResponseBody
     public List<String> getSourcesBuy(final @PathVariable String id) {
-
         return wms.getBuySourcesById(id);
     }
 }
