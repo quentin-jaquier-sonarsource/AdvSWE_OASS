@@ -63,4 +63,9 @@ public class UserService extends ServiceForRepository<
 
         return userDetails;
     }
+
+    public Optional<User> findByEmail(String email) throws Error {
+        Optional<User> user = this.getRepository().findByEmail(email);
+        return user;
+    }
 }

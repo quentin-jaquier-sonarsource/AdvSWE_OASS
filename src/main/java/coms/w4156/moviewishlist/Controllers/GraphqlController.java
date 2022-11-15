@@ -52,7 +52,7 @@ public class GraphqlController {
     @QueryMapping
     public Optional<User> userByEmail(@Argument final String email) {
         System.out.print(email);
-        return userService.findById(email);
+        return userService.findByEmail(email);
     }
 
     /**
