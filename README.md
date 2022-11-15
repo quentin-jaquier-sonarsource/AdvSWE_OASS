@@ -26,6 +26,63 @@ CREATE DATABASE testdb
 
 ### Step 3: Adding environment variables
 
+### For VS Code
+
+This is the simplest way to set environment variables on your local machine that work for both Windows and Mac
+as long as you're using [Visual Studio Code](https://code.visualstudio.com)
+
+Open the "Run and Debug" sidebar. (It's the Play Icon with a Bug on it.)
+
+You should see a big "Run and Debug" button with the following text below:
+
+> To customize Run and Debug **create a launch.json file**.
+
+Click that "create a launch.json file" link. It'll create a new JSON file which will be used to run the Java project from within
+VS Code.
+
+The JSON file should look like this:
+
+```json
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch Current File",
+      "request": "launch",
+      "mainClass": "${file}",
+      "env": {
+        "DB_USER_NAME": "postgres",
+        "DATABASE_URL": "jdbc:postgresql://localhost:5432/testdb",
+        "API_KEY": "<your_api_key_here>"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Launch MovieWishlistApplication",
+      "request": "launch",
+      "mainClass": "coms.w4156.moviewishlist.MovieWishlistApplication",
+      "projectName": "MovieWishlist",
+      "env": {
+        "DB_USER_NAME": "postgres",
+        "DATABASE_URL": "jdbc:postgresql://localhost:5432/testdb",
+        "API_KEY": "<your_api_key_here>"
+      }
+    }
+  ]
+}
+```
+
+If you have any problem creating this file, you can create the file manually at `./vscode/launch.json` at the root of the project folder.
+
+Once this is done, you can use the "Run and Debug" section to choose between the two commands and click the Play button.
+It will automatically use the environment variables you defined.
+
+If this technique doesn't work, or if you prefer to run commands from the terminal, you can use the instructions below
+
 ### For mac:
 
 1. Open a terminal and open the .bash_profile file by running:
@@ -75,7 +132,7 @@ I (Sachin) can dm you mine on Slack or you can sign up for one here https://api.
 
 ### Step 2: Connect API key to the API
 
-In order for the API to make queries to WatchMode based off of your API key, you need to add the 'apikey' as a system environment variable in the same way you added the postgres database url, username and password. It is set up like this so we never have to push API keys to the git repo
+In order for the API to make queries to WatchMode based off of your API key, you need to add the 'API_KEY' as a system environment variable in the same way you added the postgres database url, username and password. It is set up like this so we never have to push API keys to the git repo
 
 ### Step 3: Launch the API
 
@@ -122,3 +179,42 @@ Here are the results of the latest test run:
 ## Documentation
 
 Documentation for all the endpoints can be found in the `Documentation` folder
+
+
+## SonarQube - Locally
+
+In order to run SonarQube locally, you need to install SonarQube locally. 
+Follow the instructions in the link below. There are two options, to install
+from a zip or from a Docker image. On Windows, I found it easier to use the
+Docker image as the zip file gave me some issues.
+
+[SonarQube Instructions](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/#:~:text=Install%20SonarQube%20documentation.-,Installing%20a%20local%20instance%20of%20SonarQube,-You%20can%20evaluate)
+
+Once you have SonarQube running go to http://localhost:9000 and login with
+admin credentials: login=admin and password=admin.
+
+Follow [these](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/#:~:text=password%3A%20admin-,Analyzing%20a%20Project,-Now%20that%20you%27re)
+instructions on how to set up the project to be analyzed locally.
+
+After you have set up the project, it should give you a command that you can
+copy-paste in order to run analysis. My command looks like this:
+
+```sh
+mvn clean verify sonar:sonar -Dsonar.projectKey=demo -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<GENERATED_KEY>
+```
+
+**On Windows, this has to be run in the command shell NOT powershell**
+
+The pom.xml is set up so that this should just work and give coverage reports.
+If the tests are running but coverage is somehow 0%, something is wrong with the
+Jacoco configuration.
+
+## JaCoCo
+SonarQube is very verbose, if all you are interested in is code coverage, then
+JaCoCo should suffice. Run 
+```shell
+mvn clean verify
+```
+
+and then open `target/site/jacoco/index.html` in a browser to view coverage
+reports.

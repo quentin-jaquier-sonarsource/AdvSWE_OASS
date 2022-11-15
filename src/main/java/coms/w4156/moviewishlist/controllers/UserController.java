@@ -1,8 +1,9 @@
 package coms.w4156.moviewishlist.controllers;
 
+import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import coms.w4156.moviewishlist.models.User;
-import coms.w4156.moviewishlist.services.UserService;
 
 @RequestMapping(value = "/users")
 @RestController
@@ -30,6 +28,7 @@ public class UserController {
 
     /**
      * Fetch a kusr if all users in the database.
+     *
      * @return List of User objects
      */
     @GetMapping
@@ -39,6 +38,7 @@ public class UserController {
 
     /**
      * Get a particular use by ID. If not found HTTP 204: NO Content response.
+     *
      * @param id - The email address of the user
      * @return A single User object
      */
@@ -53,6 +53,7 @@ public class UserController {
     /**
      * POST `/users` will create a new user. The fields for the user object
      * must be passed in as the RequestBody as json.path.
+     *
      * @param user - User object to add to the database.
      * @return The user object that was just created
      */
@@ -71,7 +72,7 @@ public class UserController {
      * The updated fields for the user should be passed in as the JSON
      * Request Body.
      *
-     * @param id - email of the user to update
+     * @param id      - email of the user to update
      * @param newData - user data for the updated user.
      * @return The newly updated user
      */
@@ -80,7 +81,8 @@ public class UserController {
         @PathVariable final long id,
         @RequestBody final User newData
     ) {
-        return userService.findById(id)
+        return userService
+            .findById(id)
             .map(user -> {
                 user.setUsername(newData.getUsername());
                 userService.update(user);
@@ -91,6 +93,7 @@ public class UserController {
 
     /**
      * Delete all users.
+     *
      * @return The list of users that were just deleted
      */
     @DeleteMapping
@@ -99,9 +102,9 @@ public class UserController {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
     }
 
-
     /**
      * Delete a particular user by ID.
+     *
      * @param id The email of the user to delete
      * @return the user that was just deleted
      */
@@ -111,5 +114,4 @@ public class UserController {
             .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
-
 }

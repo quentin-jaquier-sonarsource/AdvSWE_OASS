@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,9 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -59,12 +56,51 @@ public class User implements ModelInterface<Long> {
      * The list of wishlists owned by this user.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Getter
     private List<Wishlist> wishlists;
-    
+<<<<<<< HEAD
+
     public User(@JsonProperty String email, @JsonProperty String username, @JsonProperty String encodedPassword, @JsonProperty final List<Wishlist> wishlists) {
         this.email = email;
         this.username = username;
         this.encodedPassword = encodedPassword;
+=======
+
+    /**
+     * Constructor for the User class.
+     *
+     * @param email    - Email of the user to be created
+     * @param name     - Name of the user
+     * @param password - Password of the user
+     */
+    public User(
+        @JsonProperty final String email,
+        @JsonProperty final String name,
+        @JsonProperty final String password
+    ) {
+        this.email = email;
+        this.name = name;
+        this.password = hashPassword(password);
+    }
+
+    /**
+     * Constructor for the User class.
+     *
+     * @param email     - Email of the user to be created
+     * @param name      - Name of the user
+     * @param password  - Password of the user
+     * @param wishlists - List of wishlists owned by the user
+     */
+    public User(
+        @JsonProperty final String email,
+        @JsonProperty final String name,
+        @JsonProperty final String password,
+        @JsonProperty final List<Wishlist> wishlists
+    ) {
+        this.email = email;
+        this.name = name;
+        this.password = hashPassword(password);
+>>>>>>> main
         this.wishlists = wishlists;
     }
 
@@ -86,4 +122,30 @@ public class User implements ModelInterface<Long> {
             .map(wishlist -> wishlist.getId())
             .toList();
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Update the password of this user.
+     *
+     * @param newPassword
+     * @return The updated user object
+     */
+    public User setPassword(final String newPassword) {
+        this.password = hashPassword(newPassword);
+        return this;
+    }
+
+    /**
+     * Take a plain-text password, hash it and retun the hash.
+     *
+     * @param plainPassword - The plain-text password
+     * @return - the hash of the given password
+     */
+    private String hashPassword(final String plainPassword) {
+        // We can use a hashing function here later
+        // Or we can find a better way to do auth
+        return plainPassword;
+    }
+>>>>>>> main
 }

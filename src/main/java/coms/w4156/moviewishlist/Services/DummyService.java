@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DummyService {
+
     /**
      * Dummy method that simply returns a number.
      *

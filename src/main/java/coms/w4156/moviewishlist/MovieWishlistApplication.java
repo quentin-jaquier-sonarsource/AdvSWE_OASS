@@ -8,6 +8,7 @@ public class MovieWishlistApplication {
 
     /**
      * Runs the service.
+     *
      * @param args Command line arguments.
      */
     public static void main(final String[] args) {
