@@ -7,18 +7,12 @@ jobs:
     docker:
       - image: cimg/openjdk:19.0.1
         environment:
+          PGHOST: localhost
           # I think this is picked up by the application.properties file
-          DATABASE_URL: postgresql://postgres@localhost/testdb
+#          DATABASE_URL: postgresql://postgres@localhost/testdb
 
       # Service container image
       - image: cimg/postgres:14.0
-        environment:
-          PGHOST: localhost
-          PGUSER: postgres
-          # Unsure if this needs to be called POSTGRES_USER to work
-          POSTGRES_USER: postgres
-          POSTGRES_DB: testdb
-          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
       - run:
@@ -33,9 +27,7 @@ jobs:
             whoami
       - run:
           name: Create Test DB
-          command: |
-            psql \
-            CREATE DATABASE testdb \
+          command: psql -U postgres -c "CREATE DATABASE testdb;"
           
 
       - run:
