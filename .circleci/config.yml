@@ -2,10 +2,29 @@ version: 2.1
 
 jobs:
   build:
+
+    # Primary container where our tests are run
     docker:
       - image: cimg/openjdk:19.0.1
+        environment:
+          # Should automatically create the testdb database we need
+          # I hope this also is picked up by the application.properties file
+          DATABASE_URL: postgresql://postgres@localhost/testdb
+
+      # Service container image
+      - image: cimg/postgres:14.0
+        environment:
+          # Unsure if this needs to be called POSTGRES_USER to work
+          POSTGRES_USER: postgres
     steps:
       - checkout
+      - run:
+          # This step not necessary since we are not creating any tables
+          name: Setup Postgres Service Container
+          command: |
+            sudo apt-get update \
+            sudo apt-get install postgresql-client \
+            whoami \
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -Dsonar.projectKey=omniyyahOS1_AdvSWE_OASS
