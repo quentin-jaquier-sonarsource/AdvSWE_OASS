@@ -183,7 +183,7 @@ Documentation for all the endpoints can be found in the `Documentation` folder
 
 ## SonarQube - Locally
 
-In order to run SonarQube locally, you need to install SonarQube locally. 
+In order to run SonarQube locally, you need to install SonarQube locally.
 Follow the instructions in the link below. There are two options, to install
 from a zip or from a Docker image. On Windows, I found it easier to use the
 Docker image as the zip file gave me some issues.
@@ -211,10 +211,16 @@ Jacoco configuration.
 
 ## JaCoCo
 SonarQube is very verbose, if all you are interested in is code coverage, then
-JaCoCo should suffice. Run 
+JaCoCo should suffice. Run
 ```shell
 mvn clean verify
 ```
 
 and then open `target/site/jacoco/index.html` in a browser to view coverage
 reports.
+
+## Authentication
+The authentication is handled using JSON Web Tokens; here is how it works:
+- a client needs to hit the `/signup/` endpoint with his username and password as parameters to be added to the database
+- to get his JWT, a client need to hit the `/login` endpoint with the right credentials
+- on every subsequent request, the client has to add the `Authorization: Bearer <token>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error

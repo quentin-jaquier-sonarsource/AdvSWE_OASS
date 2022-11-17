@@ -48,7 +48,7 @@ public class AuthController {
 
         String username = request.getUsername();
         String password = request.getPassword();
-        
+
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
