@@ -8,7 +8,7 @@ jobs:
       - image: cimg/openjdk:19.0.1
         environment:
           # I think this is picked up by the application.properties file
-          DATABASE_URL: postgresql://postgres@localhost/testdb
+#          DATABASE_URL: postgresql://postgres@localhost/testdb
 
       # Service container image
       - image: cimg/postgres:14.0
@@ -18,14 +18,21 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
           # create the testdb database
           name: Setup Postgres Service Container
           command: |
             sudo apt-get update
             sudo apt-get install postgresql-client
             whoami
+      - run:
+          name: Create Test DB
+          command: |
             psql
             CREATE DATABASE testdb
+          
 
       - run:
           name: Analyze on SonarCloud
