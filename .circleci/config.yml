@@ -21,10 +21,7 @@ jobs:
       - run:
           # This step not necessary since we are not creating any tables
           name: Setup Postgres Service Container
-          command: |
-            sudo apt-get update \
-            sudo apt-get install postgresql-client \
-            whoami \
+          command: whoami
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -Dsonar.projectKey=omniyyahOS1_AdvSWE_OASS
