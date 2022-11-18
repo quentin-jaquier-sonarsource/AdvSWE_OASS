@@ -8,10 +8,6 @@ jobs:
       - image: cimg/openjdk:19.0.1
         environment:
           PGHOST: localhost
-          # TODO add this to the context
-          API_KEY: fake_key
-          # I think this is picked up by the application.properties file
-#          DATABASE_URL: postgresql://postgres@localhost/testdb
 
       # Service container image
       - image: cimg/postgres:14.0
