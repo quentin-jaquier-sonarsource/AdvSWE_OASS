@@ -2,10 +2,32 @@ version: 2.1
 
 jobs:
   build:
+
+    # Primary container where our tests are run
     docker:
       - image: cimg/openjdk:19.0.1
+        environment:
+          PGHOST: localhost
+
+      # Service container image
+      - image: cimg/postgres:14.0
     steps:
       - checkout
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          # create the testdb database
+          name: Setup Postgres Service Container
+          command: |
+            sudo apt-get update
+            sudo apt-get install postgresql-client
+            whoami
+      - run:
+          name: Create Test DB
+          command: psql -U postgres -c "CREATE DATABASE testdb;"
+          
+
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -Dsonar.projectKey=omniyyahOS1_AdvSWE_OASS
