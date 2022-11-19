@@ -1,10 +1,12 @@
 package coms.w4156.moviewishlist.controllers;
 
+import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
+import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.UserService;
 import coms.w4156.moviewishlist.services.WatchModeService;
@@ -27,6 +29,9 @@ public class GraphqlController {
      * Use dependency injection to inject an object of the UserService class.
      */
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -34,6 +39,27 @@ public class GraphqlController {
 
     @Autowired
     private WatchModeService watchModeService;
+
+    /**
+     * Fetch all clients in the database.
+     *
+     * @return List of User objects
+     */
+    @QueryMapping
+    public Collection<Client> clients() {
+        return clientService.getAll();
+    }
+
+    /**
+     * Fetch a client by ID.
+     *
+     * @param id - ID of the client to fetch
+     * @return Client
+     */
+    @QueryMapping
+    public Optional<Client> clientById(@Argument final String id) {
+        return clientService.findById(Long.parseLong(id));
+    }
 
     /**
      * Fetch all users in the database.
