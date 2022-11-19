@@ -5,7 +5,13 @@ type Query {
     # get a particular user by email
     userByEmail(email: String!): User
 
-    # movies
+    # get all clients
+    clients: [Client]
+
+    # get a particular client by id
+    clientById(id: ID!): Client
+
+    # get all movies in the database
     movies: [Movie]
 
     # watch mode API
