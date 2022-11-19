@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,18 +35,17 @@ public class Movie implements ModelInterface<Long> {
     private Long id;
 
     /**
-     * Title of the movie.
+     * ID of the movie on WatchMode.
      */
     @Getter
     @Setter
-    private String title;
-
-    /**
-     * The year when the movie released.
-     */
-    @Getter
-    @Setter
-    private Integer releaseYear;
+    @Column(
+        name = "watchmode_id",
+        nullable = false,
+        unique = true,
+        updatable = false
+    )
+    private Long watchModeId;
 
     /**
      * The wishlists that contain this movie.
@@ -57,44 +57,18 @@ public class Movie implements ModelInterface<Long> {
 
     /**
      * Create a new Movie object.
-     * @param title - Title of the movie
-     * @param releaseYear - The year when the movie came out
-     */
-    public Movie(
-        @JsonProperty final String title,
-        @JsonProperty final Integer releaseYear
-    ) {
-        this.title = title;
-        this.releaseYear = releaseYear;
-    }
-
-    /**
-     * Create a new Movie object.
      *
      * @param id - ID of the movie
-     * @param title - Title of the movie
-     * @param releaseYear - The year when the movie came out
+     * @param watchModeId - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
      */
     public Movie(
         @JsonProperty final Long id,
-        @JsonProperty final String title,
-        @JsonProperty final Integer releaseYear,
+        @JsonProperty final Long watchModeId,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
-        this.title = title;
-        this.releaseYear = releaseYear;
+        this.watchModeId = watchModeId;
         this.wishlists = wishlists;
-    }
-
-    /**
-     * Fetch the IDs of the wishlists associated with this movie.
-     * @return list of Long IDs
-     */
-    public List<Long> getWishlistIds() {
-        return this.wishlists.stream()
-            .map(wishlist -> wishlist.getId())
-            .toList();
     }
 }

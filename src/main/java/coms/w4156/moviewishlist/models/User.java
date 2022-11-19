@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Builder;
@@ -51,6 +53,12 @@ public class User implements ModelInterface<String> {
     @Getter
     private List<Wishlist> wishlists;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    @Getter
+    @Setter
+    private Client client;
+
     /**
      * Constructor for the User class.
      *
@@ -75,12 +83,14 @@ public class User implements ModelInterface<String> {
      * @param name      - Name of the user
      * @param password  - Password of the user
      * @param wishlists - List of wishlists owned by the user
+     * @param client    - The client that services this user
      */
     public User(
         @JsonProperty final String email,
         @JsonProperty final String name,
         @JsonProperty final String password,
-        @JsonProperty final List<Wishlist> wishlists
+        @JsonProperty final List<Wishlist> wishlists,
+        @JsonProperty final Client client
     ) {
         this.email = email;
         this.name = name;
