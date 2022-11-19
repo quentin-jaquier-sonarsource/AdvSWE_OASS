@@ -1,0 +1,13 @@
+type WatchModeSource {
+    id: ID
+    name: String
+    type: String
+    region: String
+    iosUrl: String
+    androidUrl: String
+    webUrl: String
+    format: String
+    price: String
+    seasons: Int
+    episodes: Int
+}

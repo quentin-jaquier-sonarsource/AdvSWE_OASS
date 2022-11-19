@@ -1,0 +1,21 @@
+type Query {
+    # Get all users
+    users: [User]
+
+    # get a particular user by email
+    userByEmail(email: String!): User
+
+    # movies
+    movies: [Movie]
+
+    # watch mode API
+    networks: [WatchModeNetwork]
+
+    # Serach for Movies and TV Shows by title
+    # Returns a list of results sorted by relevance
+    searchTitles(title: String!): [TitleSearchResult]
+
+    # Get details about a movie by ID
+    # This includes the sources where this title is available
+    titleDetail(id: ID!): TitleDetail
+}
