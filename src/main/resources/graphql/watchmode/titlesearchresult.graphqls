@@ -1,0 +1,21 @@
+type TitleSearchResult {
+    # The id of the Movie or TV Show Title
+    id: ID
+    # The name or Title of the Title
+    name: String
+    # How relevant the title is to the search query
+    relevance: Float
+    # More details about the title
+    # Can be slow as it sometimes depends on a second API call
+    details: TitleDetail
+
+    # Purposely not exposing these fields
+    # They will be available under the details field
+    #
+    # type: String
+    # year: Int
+    # resultType: String
+    # tmdb_id: Int
+    # tmdb_type: String
+    # image_url: String
+}

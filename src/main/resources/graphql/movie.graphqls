@@ -1,0 +1,6 @@
+type Movie {
+    id: ID!
+    title: String
+    releaseYear: Int
+    wishlists: [Wishlist]
+}
