@@ -1,5 +1,11 @@
+# A client that uses our service. E.g. an app or another API
 type Client {
+    # The unique ID of the client
     id: ID!
+
+    # The client's email address
     email: String!
+
+    # A list of users that the client provides a service for. For example, the users on the client's app
     users: [User]
 }
