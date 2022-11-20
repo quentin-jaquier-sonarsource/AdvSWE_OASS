@@ -1,4 +1,7 @@
 type Movie {
     id: ID!
+    movieName: String!
+    genre: [String]
+    movieReleaseYear: Int
     wishlists: [Wishlist]
 }

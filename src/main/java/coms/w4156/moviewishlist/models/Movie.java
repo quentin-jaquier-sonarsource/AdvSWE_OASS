@@ -47,6 +47,37 @@ public class Movie implements ModelInterface<Long> {
     )
     private Long watchModeId;
 
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_name",
+            nullable = false,
+            unique = true,
+            updatable = false
+    )
+    private String movieName;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_genre",
+            nullable = false,
+            unique = false,
+            updatable = true
+    )
+    private String genre;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_release_year",
+            nullable = false,
+            unique = false,
+            updatable = true
+    )
+    private int movieReleaseYear;
+
+
     /**
      * The wishlists that contain this movie.
      */
@@ -60,15 +91,24 @@ public class Movie implements ModelInterface<Long> {
      *
      * @param id - ID of the movie
      * @param watchModeId - ID of the movie on WatchMode
+     * @param movieName - Name of the movie
+     * @param genre - Movie genre
+     * @param movieReleaseYear - Release year of the movie
      * @param wishlists - The wishlists that contain this movie
      */
     public Movie(
         @JsonProperty final Long id,
         @JsonProperty final Long watchModeId,
+        @JsonProperty final String movieName,
+        @JsonProperty final String genre,
+        @JsonProperty final int movieReleaseYear,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
         this.watchModeId = watchModeId;
+        this.movieName = movieName;
+        this.genre = genre;
+        this.movieReleaseYear = movieReleaseYear;
         this.wishlists = wishlists;
     }
 }
