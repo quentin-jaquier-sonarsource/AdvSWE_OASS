@@ -220,6 +220,20 @@ public class GraphqlController {
 //    }
 
     /**
+     * Fetch movie by name in the waishlist.
+     *
+     * @return List of User objects
+     */
+//    @QueryMapping
+//    public Collection<Movie> movieByName(@Argument) {
+//        //get wishlist by id
+//
+//        // find movie name inside the wishlist
+//
+//        //return wishlistService.get
+//    }
+
+    /**
      * Fetch a movie by id.
      *
      * @param title - The title of the movie
