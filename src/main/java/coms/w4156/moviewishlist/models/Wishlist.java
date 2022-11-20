@@ -65,6 +65,7 @@ public class Wishlist implements ModelInterface<Long> {
         name = "wishlist_movies",
         joinColumns = @JoinColumn(name = "wishlist_id"),
         inverseJoinColumns = @JoinColumn(name = "movie_id")
+                            
     )
     @Setter
     private List<Movie> movies;
