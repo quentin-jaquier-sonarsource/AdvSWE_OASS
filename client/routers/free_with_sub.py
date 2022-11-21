@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 from requests import Response
-from constants import GRAPHQL_URL
+from constants import GRAPHQL_URL, SOURCE_TAG
 
 import requests
 import json
 
 router = APIRouter(
     prefix="/sources",
-    tags=["Movie Sources Endpoints"]
+    tags=[SOURCE_TAG]
 )
 
 @router.get("/")

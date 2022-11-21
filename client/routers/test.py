@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from requests import Response
-from constants import TEST_URL
+from constants import TEST_URL, TEST_TAG
 
 import requests
 
 router = APIRouter(
     prefix="/tests",
-    tags=["Test Endpoints"]
+    tags=[TEST_TAG]
 )
 
 
