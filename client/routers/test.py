@@ -11,6 +11,12 @@ router = APIRouter(
 
 @router.get("/")
 async def test():
-    signup_resp : Response = requests.get(url=TEST_URL)
+    try:
+        # Try to hit the test endpoint and return the results 
+        signup_resp : Response = requests.get(url=TEST_URL)
+        return {"Response from service" : signup_resp.text}
 
-    return {"Response" : signup_resp.text}
+    except Exception as e:
+
+        # If there was an issue hitting the test endpoint, show it to the user
+        return {"Exception: " : e.__str__()}
