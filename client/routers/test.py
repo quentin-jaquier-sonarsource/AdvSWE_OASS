@@ -12,6 +12,10 @@ router = APIRouter(
 
 @router.get("/")
 async def test():
+    """
+    This endpoint simply hits the /test endpoint of our service and returns the
+    resulting message.
+    """
     try:
         # Try to hit the test endpoint and return the results 
         signup_resp: Response = requests.get(url=TEST_URL)
