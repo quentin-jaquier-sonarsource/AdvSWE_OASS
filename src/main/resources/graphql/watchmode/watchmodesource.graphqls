@@ -19,12 +19,15 @@ type WatchModeSource {
     """
     The type of the source. One of {"sub", "rent", "buy"}
 
-    if type == "sub", then this source allows you to watch movies for free with a subscription to the source. For example,
-    Hulu, Netflix, Shudder, and HBO Max are all of type 'sub'
+    if type == "sub", then this source allows you to watch movies for free with
+    a subscription to the source. For example, Hulu, Netflix, Shudder, and
+    HBO Max are all of type 'sub'
 
-    if type == "rent", then this source allows you to rent movies. For example, Vudu
+    if type == "rent", then this source allows you to rent movies.
+    For example, Vudu
 
-    if type == "buy", then this source allows you to buy movies. For example: iTunes
+    if type == "buy", then this source allows you to buy movies.
+    For example: iTunes
     """
     type: String
 
