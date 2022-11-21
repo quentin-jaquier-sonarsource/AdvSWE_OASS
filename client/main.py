@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import test, free_with_sub
+from routers import sources, test
 from constants import CLIENT_DESCRIPTION,TAG_METADATA
 
 app = FastAPI(
@@ -8,7 +8,7 @@ app = FastAPI(
     openapi_tags=TAG_METADATA
 )
 app.include_router(test.router)
-app.include_router(free_with_sub.router)
+app.include_router(sources.router)
 
 
 @app.get("/")
