@@ -1,19 +1,20 @@
 from fastapi import APIRouter
 from requests import Response
-from constants import GRAPHQL_URL, SOURCE_TAG
+from constants import GRAPHQL_URL, SOURCE_TAG, HOST_ID
 
 import requests
 import json
 
 router = APIRouter(
-    prefix="/sources",
+    prefix="/sources/sub",
     tags=[SOURCE_TAG]
 )
 
 @router.get("/")
-async def test():
-    query = """query{
-        titleDetail (id : 1616666 ) {
+async def test(id : int = HOST_ID):
+
+    query = """query($var : ID!) {
+        titleDetail (id : $var ) {
             title
             sources{
                 name
@@ -22,8 +23,9 @@ async def test():
         }
     }
     """
+    variables = {"var" : str(id)}
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query})
+    r : Response = requests.post(GRAPHQL_URL, json={'query' : query, 'variables': variables})
 
     json_data = json.loads(r.text)["data"]
     titleDetail = json_data["titleDetail"]
