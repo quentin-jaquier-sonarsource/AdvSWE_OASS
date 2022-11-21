@@ -32,6 +32,3 @@ TAG_METADATA = [
         "description" : TEST_DESCRIPTION
     }
 ]
-
-
-HOST_ID = 1616666

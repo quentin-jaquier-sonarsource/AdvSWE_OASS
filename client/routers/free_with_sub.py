@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from requests import Response
-from constants import GRAPHQL_URL, SOURCE_TAG, HOST_ID
+from constants import GRAPHQL_URL, SOURCE_TAG
+from .router_constants import HOST_ID
 
 import requests
 import json
