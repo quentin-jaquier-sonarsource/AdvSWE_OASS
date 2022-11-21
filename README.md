@@ -218,3 +218,6 @@ mvn clean verify
 
 and then open `target/site/jacoco/index.html` in a browser to view coverage
 reports.
+
+## Client
+To run the client, read the instructions in `client/README.md`
