@@ -12,6 +12,24 @@ router = APIRouter(
 
 @router.get("/")
 async def test(id : int = HOST_ID):
+    """
+    Return the name of the movie associated with the WatchMode id along with
+    the name of all the streaming services on which it is available for free
+    with subscription
+
+    - **id**: the WatchMode id of the movie in question
+
+    Example response:
+    ```json
+    {
+        "Movie title": "Annihilation",
+        "Sources that are free with subscription": [
+            "Paramount+",
+            "Hoopla"
+        ]
+    }    
+    ```
+    """
 
     query = """query($var : ID!) {
         titleDetail (id : $var ) {
