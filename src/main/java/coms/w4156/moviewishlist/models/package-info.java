@@ -3,7 +3,7 @@
  */
 @NonNullApi
 @NonNullFields
-package coms.w4156.moviewishlist.models;
+package coms.w4156.moviewishlist.Models;
 
 import org.springframework.lang.NonNullFields;
 import org.springframework.lang.NonNullApi;

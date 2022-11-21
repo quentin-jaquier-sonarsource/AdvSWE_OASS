@@ -100,4 +100,8 @@ public class Movie implements ModelInterface<Long> {
             .toList();
     }
 
+    @Override
+    public int compareTo(Movie o) {
+        return 0;
+    }
 }

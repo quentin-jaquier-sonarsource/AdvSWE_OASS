@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import coms.w4156.moviewishlist.models.Movie;
+import coms.w4156.moviewishlist.Models.Movie;
 import coms.w4156.moviewishlist.services.MovieService;
 
 @RequestMapping(value = "/movies")

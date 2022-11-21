@@ -8,7 +8,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.data.repository.CrudRepository;
 
-import coms.w4156.moviewishlist.models.ModelInterface;
+import coms.w4156.moviewishlist.Models.ModelInterface;
 import lombok.Getter;
 import lombok.Setter;
 

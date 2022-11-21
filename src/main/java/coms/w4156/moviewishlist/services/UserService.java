@@ -1,13 +1,13 @@
-package coms.w4156.moviewishlist.services;
+package coms.w4156.moviewishlist.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import coms.w4156.moviewishlist.models.User;
-import coms.w4156.moviewishlist.repository.UserRepository;
+import coms.w4156.moviewishlist.Models.User;
+import coms.w4156.moviewishlist.Repositories.UserRepository;
 
 @Service
-public class UserService extends ServiceForRepository<
+public class UserService extends coms.w4156.moviewishlist.services.ServiceForRepository<
     String,
     User,
     UserRepository
