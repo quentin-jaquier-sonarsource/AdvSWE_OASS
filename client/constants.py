@@ -1,3 +1,4 @@
+GRAPHQL_URL = "http://localhost:8080/graphql/"
 URL = "http://localhost:8080"
 
 TEST_URL = URL + "/test/"
