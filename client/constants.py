@@ -27,12 +27,12 @@ CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
 
 TAG_METADATA = [
     {
-        "name" : SOURCE_TAG,
-        "description" : SOURCE_TAG_DESCRIPTION
-    },
-    {
         "name" : TEST_TAG,
         "description" : TEST_DESCRIPTION
+    },
+    {
+        "name" : SOURCE_TAG,
+        "description" : SOURCE_TAG_DESCRIPTION
     },
     {
         "name": CLIENT_TAG,
