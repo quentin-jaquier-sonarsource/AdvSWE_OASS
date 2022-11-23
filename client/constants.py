@@ -25,6 +25,9 @@ movies. Movie sources are one of 3 types:
 CLIENT_TAG = "Client Endpoints"
 CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
 
+USER_TAG = "User Endpoints"
+USER_TAG_DESCRIPTION = "Endpoints related to user data"
+
 TAG_METADATA = [
     {
         "name" : TEST_TAG,
@@ -37,5 +40,9 @@ TAG_METADATA = [
     {
         "name": CLIENT_TAG,
         "description": CLIENT_TAG_DESCRIPTION
+    },
+    {
+        "name": USER_TAG,
+        "description": USER_TAG_DESCRIPTION
     }
 ]
