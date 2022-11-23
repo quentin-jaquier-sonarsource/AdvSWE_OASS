@@ -26,13 +26,13 @@ import org.springframework.stereotype.Controller;
 public class GraphqlController {
 
     /**
-     * Use dependency injection to inject an object of the UserService class.
+     * Use dependency injection to inject an object of the profileService class.
      */
     @Autowired
     private ClientService clientService;
 
     @Autowired
-    private ProfileService userService;
+    private ProfileService profileService;
 
     @Autowired
     private MovieService movieService;
@@ -43,7 +43,7 @@ public class GraphqlController {
     /**
      * Fetch all clients in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<Client> clients() {
@@ -62,13 +62,13 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch all users in the database.
+     * Fetch all profiles in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
-    public Collection<Profile> users() {
-        return userService.getAll();
+    public Collection<Profile> profiles() {
+        return profileService.getAll();
     }
 
     /**
@@ -80,13 +80,13 @@ public class GraphqlController {
      */
     @QueryMapping
     public Optional<Profile> profileByName(@Argument final String name) {
-        return userService.findByName(name);
+        return profileService.findByName(name);
     }
 
     /**
      * Fetch all movies in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<Movie> movies() {
@@ -98,7 +98,7 @@ public class GraphqlController {
      *
      * @param title - The title of the movie
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<TitleSearchResult> searchTitles(
@@ -158,7 +158,7 @@ public class GraphqlController {
     // /**
     //  * Get all WatchMode sources.
     //  *
-    //  * @return List of User objects
+    //  * @return List of Profile objects
     //  */
     // @QueryMapping
     // public Collection<WatchModeSource> sources() {
@@ -168,7 +168,7 @@ public class GraphqlController {
     /**
      * Get all WatchMode networks.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<WatchModeNetwork> networks() {
