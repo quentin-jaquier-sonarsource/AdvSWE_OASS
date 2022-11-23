@@ -12,6 +12,8 @@ import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -67,8 +70,16 @@ public class GraphqlController {
      * @return List of Profile objects
      */
     @QueryMapping
-    public Collection<Profile> profiles() {
-        return profileService.getAll();
+    public Collection<Profile> profiles(Authentication authentication) {
+        String clientEmail = authentication.getName();
+
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+
+        if (!client.isPresent()) {
+            return new ArrayList<Profile>();
+        }
+
+        return profileService.getAllForClient(client.get().getId());
     }
 
     /**

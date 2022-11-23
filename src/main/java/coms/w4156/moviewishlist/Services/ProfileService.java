@@ -1,5 +1,6 @@
 package coms.w4156.moviewishlist.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,9 @@ public class ProfileService extends ServiceForRepository<
     public Optional<Profile> findByName(String name) throws Error {
         Optional<Profile> profile = this.getRepository().findByName(name);
         return profile;
+    }
+
+    public List<Profile> getAllForClient(Long clientId) {
+        return this.getRepository().findByClientId(clientId);
     }
 }
