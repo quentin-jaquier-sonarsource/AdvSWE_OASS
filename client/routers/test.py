@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 @router.get("/")
-async def test():
+async def test_connection_to_service():
     """
     This endpoint simply hits the /test endpoint of our service and returns the
     resulting message.
@@ -28,7 +28,7 @@ async def test():
         return {"Exception: ": e.__str__()}
 
 @router.get("/graphql")
-async def graphql():
+async def exercise_arbitrary_graphql_endpoint():
     """
     This endpoint hits a graphql endpoint. Arbitrarily, it queries for movies,
     but the main point of this endpoint is just to hit our graphql endpoint

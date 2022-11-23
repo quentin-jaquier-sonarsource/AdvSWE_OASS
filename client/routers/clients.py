@@ -31,7 +31,7 @@ async def get_all_clients():
     return {"Result" : json_data}
 
 @router.get("/all-verbose")
-async def get_all_clients():
+async def get_all_clients_verbose():
     """
     Returns all clients including user data
     """
