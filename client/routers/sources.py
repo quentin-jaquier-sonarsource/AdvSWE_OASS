@@ -49,11 +49,50 @@ def get_sources(id: int, source_type : str = SUB, description : str = SUB_DESCRI
             free_source_names.append(source["name"])
 
     # Only return unique source names
+    # Need to filter because we are not including source format which
+    # is sometimes used to distinguish
     free_source_names = list(set(free_source_names))
     
     return {
         "Movie title" : title,
         description : free_source_names
+        }
+
+@router.get("/all")
+async def get_all_source_info(id : int = HOST_ID):
+    """
+    Return the name of the movie associated with the WatchMode id along with all
+    the information on all the streaming services on which it is available
+    with subscription
+
+    - **id**: the WatchMode id of the movie in question
+    """
+
+    query = """query($var : ID!) {
+        titleDetail (id : $var ) {
+            title
+            sources{
+                name
+                type
+                format
+                price
+            }
+        }
+    }
+    """
+    variables = {"var" : str(id)}
+
+    json_data = query_graphql_service(query, variables)
+    
+    titleDetail = json_data["titleDetail"]
+    title = titleDetail["title"]
+
+    sources = titleDetail["sources"]
+
+    
+    return {
+        "Movie title" : title,
+        "All Sources Info" : sources
         }
 
 @router.get("/sub")
