@@ -28,10 +28,17 @@ CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
 USER_TAG = "User Endpoints"
 USER_TAG_DESCRIPTION = "Endpoints related to user data"
 
+SEARCH_TAG = "Search Endpoints"
+SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
+
 TAG_METADATA = [
     {
         "name" : TEST_TAG,
         "description" : TEST_DESCRIPTION
+    },
+    {
+        "name": SEARCH_TAG,
+        "description": SEARCH_TAG_DESCRIPTION
     },
     {
         "name" : SOURCE_TAG,
@@ -44,5 +51,5 @@ TAG_METADATA = [
     {
         "name": USER_TAG,
         "description": USER_TAG_DESCRIPTION
-    }
+    },
 ]

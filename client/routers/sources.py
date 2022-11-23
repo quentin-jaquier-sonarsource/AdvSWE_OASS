@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from constants import SOURCE_TAG
 from routers.utils import query_graphql_service
 
-from .router_constants import (BUY, BUY_DESCRIPTION, HOST_ID, RENT,
+from .router_constants import (BUY, BUY_DESCRIPTION, DEFAULT_ID, RENT,
                                RENT_DESCRIPTION, SUB, SUB_DESCRIPTION)
 
 router = APIRouter(
@@ -59,7 +59,7 @@ def get_sources(id: int, source_type : str = SUB, description : str = SUB_DESCRI
         }
 
 @router.get("/all")
-async def get_all_source_info(id : int = HOST_ID):
+async def get_all_source_info(id : int = DEFAULT_ID):
     """
     Return the name of the movie associated with the WatchMode id along with all
     the information on all the streaming services on which it is available
@@ -96,7 +96,7 @@ async def get_all_source_info(id : int = HOST_ID):
         }
 
 @router.get("/sub")
-async def get_sources_that_are_free_with_subscription(id : int = HOST_ID):
+async def get_sources_that_are_free_with_subscription(id : int = DEFAULT_ID):
     """
     Return the name of the movie associated with the WatchMode id along with
     the name of all the streaming services on which it is available for free
@@ -119,7 +119,7 @@ async def get_sources_that_are_free_with_subscription(id : int = HOST_ID):
     return get_sources(id, SUB, SUB_DESCRIPTION)
 
 @router.get("/rent")
-async def get_rent_sources(id : int = HOST_ID):
+async def get_rent_sources(id : int = DEFAULT_ID):
     """
     Return the name of the movie associated with the WatchMode id along with
     the name of all the streaming services on which it is available to rent
@@ -144,7 +144,7 @@ async def get_rent_sources(id : int = HOST_ID):
     return get_sources(id, RENT, RENT_DESCRIPTION)
 
 @router.get("/buy")
-async def get_buy_sources(id : int = HOST_ID):
+async def get_buy_sources(id : int = DEFAULT_ID):
     """
     Return the name of the movie associated with the WatchMode id along with
     the name of all the streaming services on which it is available to rent
