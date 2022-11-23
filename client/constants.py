@@ -22,6 +22,9 @@ movies. Movie sources are one of 3 types:
 3. buy: a source that requires you to buy the movie, e.g. iTunes
 """
 
+CLIENT_TAG = "Client Endpoints"
+CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
+
 TAG_METADATA = [
     {
         "name" : SOURCE_TAG,
@@ -30,5 +33,9 @@ TAG_METADATA = [
     {
         "name" : TEST_TAG,
         "description" : TEST_DESCRIPTION
+    },
+    {
+        "name": CLIENT_TAG,
+        "description": CLIENT_TAG_DESCRIPTION
     }
 ]

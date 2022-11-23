@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import sources, test
+from routers import sources, test, clients
 from constants import CLIENT_DESCRIPTION,TAG_METADATA
 
 app = FastAPI(
@@ -7,8 +7,11 @@ app = FastAPI(
     description=CLIENT_DESCRIPTION,
     openapi_tags=TAG_METADATA
 )
+
+# Add all the different routers
 app.include_router(test.router)
 app.include_router(sources.router)
+app.include_router(clients.router)
 
 
 @app.get("/")
