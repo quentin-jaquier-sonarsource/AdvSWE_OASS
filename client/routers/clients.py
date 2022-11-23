@@ -1,10 +1,6 @@
-import json
 from fastapi import APIRouter
-from requests import Response
-from constants import GRAPHQL_URL, CLIENT_TAG
 
-import requests
-
+from constants import CLIENT_TAG
 from routers.utils import query_graphql_service
 
 router = APIRouter(

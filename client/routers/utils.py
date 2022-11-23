@@ -1,8 +1,10 @@
 import json
-import requests
 
+import requests
 from requests import Response
+
 from constants import GRAPHQL_URL
+
 
 def query_graphql_service(query : str, variables : dict = {}) -> dict:
     """

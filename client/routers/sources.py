@@ -1,11 +1,10 @@
 from fastapi import APIRouter
-from requests import Response
-from constants import GRAPHQL_URL, SOURCE_TAG
-from routers.utils import query_graphql_service
-from .router_constants import HOST_ID, SUB, RENT, BUY, SUB_DESCRIPTION, RENT_DESCRIPTION, BUY_DESCRIPTION
 
-import requests
-import json
+from constants import SOURCE_TAG
+from routers.utils import query_graphql_service
+
+from .router_constants import (BUY, BUY_DESCRIPTION, HOST_ID, RENT,
+                               RENT_DESCRIPTION, SUB, SUB_DESCRIPTION)
 
 router = APIRouter(
     prefix="/sources",
