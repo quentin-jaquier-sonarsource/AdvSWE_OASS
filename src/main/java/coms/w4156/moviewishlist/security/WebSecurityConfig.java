@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 
 import coms.w4156.moviewishlist.security.jwt.JwtRequestFilter;
 import coms.w4156.moviewishlist.services.ClientService;
-import coms.w4156.moviewishlist.services.ProfileService;
 
 @Configuration
 @EnableWebSecurity

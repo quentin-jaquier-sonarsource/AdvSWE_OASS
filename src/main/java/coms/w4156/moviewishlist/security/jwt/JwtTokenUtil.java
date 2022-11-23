@@ -25,8 +25,8 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    // Retrieve username from jwt token
-    public String getUsernameFromToken(String token) {
+    // Retrieve sub (in this case, email) from jwt token
+    public String getSubFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -74,7 +74,7 @@ public class JwtTokenUtil implements Serializable {
 
     // Validate token
     public Boolean validateToken(String token, UserDetails clientDetails) {
-        final String email = getUsernameFromToken(token);
+        final String email = getSubFromToken(token);
         return (email.equals(clientDetails.getUsername()) && !isTokenExpired(token));
     }
 }
