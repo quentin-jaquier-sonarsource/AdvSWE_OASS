@@ -1,8 +1,4 @@
-# Users (`/users`)
-
-These are the endpoints that can be used to complete CRUD operations for Users.
-
-## Endpoints
+## Authentication Endpoints
 
 ### **POST** `/new-client?{email}`
 
