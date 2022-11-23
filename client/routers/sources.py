@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from requests import Response
 from constants import GRAPHQL_URL, SOURCE_TAG
+from routers.utils import query_graphql_service
 from .router_constants import HOST_ID, SUB, RENT, BUY, SUB_DESCRIPTION, RENT_DESCRIPTION, BUY_DESCRIPTION
 
 import requests
@@ -35,9 +36,8 @@ def get_sources(id: int, source_type : str = SUB, description : str = SUB_DESCRI
     """
     variables = {"var" : str(id)}
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query, 'variables': variables})
-
-    json_data = json.loads(r.text)["data"]
+    json_data = query_graphql_service(query, variables)
+    
     titleDetail = json_data["titleDetail"]
     title = titleDetail["title"]
 

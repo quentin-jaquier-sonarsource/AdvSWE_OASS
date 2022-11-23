@@ -5,6 +5,8 @@ from constants import GRAPHQL_URL, TEST_URL, TEST_TAG
 
 import requests
 
+from routers.utils import query_graphql_service
+
 router = APIRouter(
     prefix="/tests",
     tags=[TEST_TAG]
@@ -42,10 +44,7 @@ async def exercise_arbitrary_graphql_endpoint():
     }
     """
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query})
-
-    json_data = json.loads(r.text)["data"]
+    json_data = query_graphql_service(query=query)
     return {
-        "Status code" : r.status_code,
         "Json Data" : json_data
     }

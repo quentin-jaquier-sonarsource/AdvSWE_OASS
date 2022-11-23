@@ -5,6 +5,8 @@ from constants import GRAPHQL_URL, CLIENT_TAG
 
 import requests
 
+from routers.utils import query_graphql_service
+
 router = APIRouter(
     prefix="/clients",
     tags=[CLIENT_TAG]
@@ -24,9 +26,7 @@ async def get_all_clients():
     }
     """
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query})
-
-    json_data = json.loads(r.text)["data"]
+    json_data = query_graphql_service(query)
     
     return {"Result" : json_data}
 
@@ -47,9 +47,7 @@ async def get_all_clients_verbose():
     }
     """
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query})
-
-    json_data = json.loads(r.text)["data"]
+    json_data = query_graphql_service(query)
     
     return {"Result" : json_data}
 

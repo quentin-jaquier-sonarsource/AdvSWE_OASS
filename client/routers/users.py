@@ -1,9 +1,7 @@
-import json
 from fastapi import APIRouter
-from requests import Response
-from constants import GRAPHQL_URL, USER_TAG
+from constants import USER_TAG
 
-import requests
+from .utils import query_graphql_service
 
 router = APIRouter(
     prefix="/users",
@@ -24,8 +22,28 @@ async def get_all_users():
     }
     """
 
-    r : Response = requests.post(GRAPHQL_URL, json={'query' : query})
+    json_data = query_graphql_service(query)
+    
+    return {"Result" : json_data}
 
-    json_data = json.loads(r.text)["data"]
+
+@router.get("/by-email")
+async def get_user_by_email(email : str = "test@test.com"):
+    """
+    Returns a user's information based on their email
+
+    **email** the email of the user whose information we want
+    """
+
+    query = """query ($email_var : String!) {
+        userByEmail(email : $email_var) {
+            name
+        }
+    }
+    """
+
+    variables = {"email_var" : email}
+
+    json_data = query_graphql_service(query, variables)
     
     return {"Result" : json_data}
