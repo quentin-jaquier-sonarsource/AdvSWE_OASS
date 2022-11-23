@@ -10,9 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,44 +47,48 @@ public class MovieController {
             .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
-    /**
-     * POST `/movies` will create a new movie. The fields for the movie object
-     * must be passed in as the RequestBody as json.path.
-     *
-     * @param movie - Movie object to add to the database.
-     * @return The movie object that was just created
-     */
-    @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody final Movie movie) {
-        if (movie.getTitle().isEmpty() || movie.getReleaseYear() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(movieService.create(movie), HttpStatus.OK);
-    }
+    // /*
+    //  * POST `/movies` will create a new movie.
+    // The fields for the movie object
+    //  * must be passed in as the RequestBody as json.path.
+    //  *
+    //  * @param movie - Movie object to add to the database.
+    //  * @return The movie object that was just created
+    //  */
+    // @PostMapping
+    // public ResponseEntity<Movie> createMovie
+    // (@RequestBody final Movie movie) {
+    //     if (movie.getTitle().isEmpty() || movie.getReleaseYear() == null) {
+    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    //     }
+    //     return new ResponseEntity<>
+    // (movieService.create(movie), HttpStatus.OK);
+    // }
 
-    /**
-     * PUT `/movies/{id}` will update an existing movie with the given ID.
-     * The updated fields for the movie should be passed in as the JSON Request
-     * Body.
-     *
-     * @param id      - ID of the movie to update
-     * @param newData - Movie data for the updated movie
-     * @return The newly updated movie
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(
-        @PathVariable final Long id,
-        @RequestBody final Movie newData
-    ) {
-        return movieService
-            .findById(id)
-            .map(movie -> {
-                movie.setTitle(newData.getTitle());
-                movieService.update(movie);
-                return new ResponseEntity<>(movie, HttpStatus.OK);
-            })
-            .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
-    }
+    // /*
+    //  * PUT `/movies/{id}` will update an existing movie with the given ID.
+    //  * The updated fields for the movie
+    // should be passed in as the JSON Request
+    //  * Body.
+    //  *
+    //  * @param id      - ID of the movie to update
+    //  * @param newData - Movie data for the updated movie
+    //  * @return The newly updated movie
+    //  */
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Movie> updateMovie(
+    //     @PathVariable final Long id,
+    //     @RequestBody final Movie newData
+    // ) {
+    //     return movieService
+    //         .findById(id)
+    //         .map(movie -> {
+    //             movie.setTitle(newData.getTitle());
+    //             movieService.update(movie);
+    //             return new ResponseEntity<>(movie, HttpStatus.OK);
+    //         })
+    //         .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    // }
 
     /**
      * Delete all movies.

@@ -10,8 +10,8 @@ import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
 })
 class MovieWishlistApplicationTests {
 
-//    @Test
-//    void contextLoads() {
-//    }
+    @Test
+    void contextLoads() {
+    }
 
 }

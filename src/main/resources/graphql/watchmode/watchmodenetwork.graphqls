@@ -1,0 +1,6 @@
+type WatchModeNetwork {
+    id: ID!
+    name: String
+    origin_country: String
+    tmdb_id: Int
+}

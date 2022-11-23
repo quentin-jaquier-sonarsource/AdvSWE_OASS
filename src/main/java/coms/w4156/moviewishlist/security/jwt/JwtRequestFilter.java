@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import coms.w4156.moviewishlist.services.UserService;
+import coms.w4156.moviewishlist.services.ClientService;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -23,27 +23,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserService userService;
+    private ClientService clientService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authorization = httpServletRequest.getHeader("Authorization");
         String token = null;
-        String username = null;
+        String email = null;
 
         if(null != authorization && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
-            username = jwtTokenUtil.getUsernameFromToken(token);
+            email = jwtTokenUtil.getUsernameFromToken(token);
         }
 
-        if(null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails
-                    = userService.loadUserByUsername(username);
+        if(null != email && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            if(jwtTokenUtil.validateToken(token,userDetails)) {
+            UserDetails clientDetails = clientService.loadUserByUsername(email);
+
+            if(jwtTokenUtil.validateToken(token, clientDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                        = new UsernamePasswordAuthenticationToken(userDetails,
-                        null, userDetails.getAuthorities());
+                        = new UsernamePasswordAuthenticationToken(clientDetails,
+                        null, clientDetails.getAuthorities());
 
                 usernamePasswordAuthenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(httpServletRequest)

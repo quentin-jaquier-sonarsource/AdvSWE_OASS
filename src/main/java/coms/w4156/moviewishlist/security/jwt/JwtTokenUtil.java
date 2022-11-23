@@ -19,7 +19,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = 2342342234234324L;
-    
+
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     @Value("${jwt.secret}")
@@ -73,8 +73,8 @@ public class JwtTokenUtil implements Serializable {
 
 
     // Validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, UserDetails clientDetails) {
+        final String email = getUsernameFromToken(token);
+        return (email.equals(clientDetails.getUsername()) && !isTokenExpired(token));
     }
 }

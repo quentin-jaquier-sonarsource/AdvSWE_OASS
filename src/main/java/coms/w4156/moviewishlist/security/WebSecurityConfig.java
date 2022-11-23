@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.authentication.AuthenticationManager;
 
 import coms.w4156.moviewishlist.security.jwt.JwtRequestFilter;
+import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.UserService;
 
 @Configuration
@@ -26,11 +27,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     JwtRequestFilter jwtFilter;
 
     @Autowired
-    UserService userService;
+    ClientService clientService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(clientService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -48,8 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**/login").permitAll()
-                .antMatchers("/**/signup").permitAll()
+                .antMatchers("/**/new-client").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
