@@ -1,8 +1,8 @@
 package coms.w4156.moviewishlist.controllers;
 
-import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
-import coms.w4156.moviewishlist.services.UserService;
+import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WishlistService;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ public class WishlistController {
 
     /**
      * Use dependency injection to inject an object of the
-     * UserService class.
+     * ProfileService class.
      */
     @Autowired
-    private UserService userService;
+    private ProfileService profileService;
 
     /**
      * `/wishlists` will fetch a list of all wishlists in the database.
@@ -74,7 +74,7 @@ public class WishlistController {
         @RequestBody final Wishlist wishlist
     ) {
         if (wishlist.getName().isEmpty()
-            || wishlist.getUserId() == null
+            || wishlist.getProfileId() == null
             || wishlist.getMovieIds() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -99,13 +99,13 @@ public class WishlistController {
             .findById(id)
             .map(wishlist -> {
                 String name = wl.getName();
-                Long userID = wl.getUserId();
-                Optional<User> user = userService.findById(userID);
+                Long profileID = wl.getProfileId();
+                Optional<Profile> profile = profileService.findById(profileID);
                 if (name != null) {
                     wishlist.setName(name);
                 }
-                if (user.isPresent()) {
-                    wishlist.setUser(user.get());
+                if (profile.isPresent()) {
+                    wishlist.setProfile(profile.get());
                 }
                 return new ResponseEntity<>(
                     wlService.update(wishlist),

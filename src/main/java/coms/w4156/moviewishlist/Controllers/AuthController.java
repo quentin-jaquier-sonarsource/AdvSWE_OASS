@@ -21,9 +21,6 @@ public class AuthController {
     private JwtTokenUtil jwtUtility;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private ClientService clientService;
 
     @PostMapping("/new-client")
@@ -40,25 +37,4 @@ public class AuthController {
 
         return new ResponseEntity<JwtResponse>(new JwtResponse(token), HttpStatus.OK);
     }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<JwtResponse> authenticate(@RequestBody JwtRequest request) {
-
-    //     String username = request.getUsername();
-    //     String password = request.getPassword();
-
-    //     try {
-    //         authenticationManager.authenticate(
-    //             new UsernamePasswordAuthenticationToken(username, password)
-    //         );
-    //     } catch (BadCredentialsException e) {
-    //         return new ResponseEntity<JwtResponse>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
-    //     }
-
-    //     final UserDetails userDetails = userService.loadUserByUsername(username);
-
-    //     final String token = jwtUtility.generateToken(userDetails);
-
-    //     return new ResponseEntity<JwtResponse>(new JwtResponse(token), HttpStatus.OK);
-    // }
 }

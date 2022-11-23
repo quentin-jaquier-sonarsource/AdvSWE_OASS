@@ -45,7 +45,7 @@ public class Client implements ModelInterface<Long> {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @Getter
     @Setter
-    private List<User> users;
+    private List<Profile> users;
 
     /**
      * Create a new Client object.
@@ -53,7 +53,7 @@ public class Client implements ModelInterface<Long> {
      * @param email - email of the client
      * @param users - The list of user profiles serviced by this client
      */
-    public Client(final Long id, final String email, final List<User> users) {
+    public Client(final Long id, final String email, final List<Profile> users) {
         this.id = id;
         this.email = email;
         this.users = users;

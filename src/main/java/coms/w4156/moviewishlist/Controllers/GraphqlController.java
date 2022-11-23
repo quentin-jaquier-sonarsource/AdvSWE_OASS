@@ -2,13 +2,13 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.UserService;
+import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
@@ -32,7 +32,7 @@ public class GraphqlController {
     private ClientService clientService;
 
     @Autowired
-    private UserService userService;
+    private ProfileService userService;
 
     @Autowired
     private MovieService movieService;
@@ -67,21 +67,20 @@ public class GraphqlController {
      * @return List of User objects
      */
     @QueryMapping
-    public Collection<User> users() {
+    public Collection<Profile> users() {
         return userService.getAll();
     }
 
     /**
-     * Fetch a user by email.
+     * Fetch a profile by name.
      *
-     * @param email - The email address of the user
+     * @param name - The name of the profile
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
-    public Optional<User> userByEmail(@Argument final String email) {
-        System.out.print(email);
-        return userService.findByEmail(email);
+    public Optional<Profile> profileByName(@Argument final String name) {
+        return userService.findByName(name);
     }
 
     /**
