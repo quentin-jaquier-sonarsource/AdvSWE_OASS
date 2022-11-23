@@ -221,6 +221,5 @@ reports.
 
 ## Authentication
 The authentication is handled using JSON Web Tokens; here is how it works:
-- a client needs to hit the `/signup/` endpoint with his username and password as parameters to be added to the database
-- to get his JWT, a client need to hit the `/login` endpoint with the right credentials
-- on every subsequent request, the client has to add the `Authorization: Bearer <token>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error
+- a client needs to hit the `/new-client/` endpoint with his email to be added to the database; he will receive his own JWT in the response
+- on every subsequent request, the client has to add the `Authorization: Bearer <JWT>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error
