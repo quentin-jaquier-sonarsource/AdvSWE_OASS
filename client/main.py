@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import sources, test, clients, users, search
+from routers import sources, test, clients, users, search, auth
 from constants import CLIENT_DESCRIPTION,TAG_METADATA
 
 app = FastAPI(
@@ -14,6 +14,7 @@ app.include_router(sources.router)
 app.include_router(clients.router)
 app.include_router(users.router)
 app.include_router(search.router)
+app.include_router(auth.router)
 
 
 @app.get("/")

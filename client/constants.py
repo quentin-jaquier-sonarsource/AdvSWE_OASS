@@ -2,7 +2,6 @@ GRAPHQL_URL = "http://localhost:8080/graphql/"
 URL = "http://localhost:8080"
 
 TEST_URL = URL + "/test/"
-SIGNUP_URL = URL+"/signup/"
 
 CLIENT_DESCRIPTION = """
 Our Client is used to exercise our service end to end

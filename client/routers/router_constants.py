@@ -1,7 +1,7 @@
 URL = "http://localhost:8080"
 
 TEST_URL = URL + "/test/"
-SIGNUP_URL = URL+"/signup/"
+SIGNUP_URL = URL+"/new-client/"
 
 DEFAULT_TITLE = "Casino Royale"
 DEFAULT_ID = 1616666 #Host (2020)
