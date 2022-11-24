@@ -187,15 +187,21 @@ The documentation is interactive.
 
 ![The documentation pane](/Documentation/documentation-screenshots/docs.png)
 
+
 ## SonarCloud
 The SonarCloud dashboard for this project is located [here](https://sonarcloud.io/summary/overall?id=omniyyahOS1_AdvSWE_OASS)
 
 ## JaCoCo
 SonarCloud is very verbose, if all you are interested in is code coverage, then
-JaCoCo should suffice. Run 
+JaCoCo should suffice. Run
 ```shell
 mvn clean verify
 ```
 
 and then open `target/site/jacoco/index.html` in a browser to view coverage
 reports.
+
+## Authentication
+The authentication is handled using JSON Web Tokens; here is how it works:
+- a client needs to hit the `/new-client/` endpoint with his email to be added to the database; he will receive his own JWT in the response
+- on every subsequent request, the client has to add the `Authorization: Bearer <JWT>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error

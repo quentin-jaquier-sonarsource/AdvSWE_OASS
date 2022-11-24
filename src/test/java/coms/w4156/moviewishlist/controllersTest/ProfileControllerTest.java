@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.controllersTest;
-import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
-import coms.w4156.moviewishlist.services.UserService;
+import coms.w4156.moviewishlist.services.ProfileService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import coms.w4156.moviewishlist.controllers.UserController;
+import coms.w4156.moviewishlist.controllers.ProfileController;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,50 +28,42 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class UserControllerTest {
+public class ProfileControllerTest {
 
     private MockMvc mockMvc;
 
-    //we need to convert from json to string and vice versa
+    // We need to convert from json to string and vice versa
     private ObjectMapper objectMapper = new ObjectMapper();
     private ObjectWriter objectWriter = objectMapper.writer();
 
-    //Mock user repo
+    // Mock profile repo
     @Mock
-    private UserService userService;
+    private ProfileService profileService;
 
     @InjectMocks
-    private UserController userController;
+    private ProfileController profileController;
 
     private List<Wishlist> l = List.of();
-    //should pass
-    private User userOne = User.builder()
-        .email("omniyyah@gmail.com")
+    // Should pass
+    private Profile profileOne = Profile.builder()
         .name("omniyyah")
-        .password("hjgT48582%%")
         .wishlists(l)
         .build();
 
-    //should not pass
-    private User userTwo = User.builder()
-        .email("userTwo")
+    // Should not pass
+    private Profile profileTwo = Profile.builder()
         .name("omniyyah")
-        .password("hjgT48582%%")
         .wishlists(l)
         .build();
 
-    //should not pass
-    private User userThree = User.builder()
-        .email("")
+    // Should not pass
+    private Profile profileThree = Profile.builder()
         .name("")
-        .password("")
         .wishlists(l)
         .build();
 
-    private User userTen = User.builder()
-        .email("userTen@gmail.com")
-        .name("userTen")
-        .password("nycjfkGG48#%")
+    private Profile profileTen = Profile.builder()
+        .name("profileTen")
         .wishlists(l)
         .build();
 
@@ -81,35 +73,31 @@ public class UserControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(profileController).build();
     }
 
     /**
-     * Test the create user endpoint.
+     * Test the create profile endpoint.
      * @throws Exception
      */
     @Test
-    public void shouldCreateUser() throws Exception {
-        User user = User.builder()
-            .email("test@gmail.com")
+    public void shouldCreateProfile() throws Exception {
+        Profile profile = Profile.builder()
             .name("test")
-            .password("hjgT48582%%")
             .wishlists(List.of())
             .build();
 
-        // This exact user is not being passed....
-        Mockito.when(userService.create(user)).thenReturn(user);
-        // String content = objectWriter.writeValueAsString(user);
+        // This exact profile is not being passed....
+        Mockito.when(profileService.create(profile)).thenReturn(profile);
+        // String content = objectWriter.writeValueAsString(profile);
         String content = String.format(
             "{%s,%s,%s,%s}",
-            String.format("\"email\":\"%s\"", user.getEmail()),
-            String.format("\"name\":\"%s\"", user.getName()),
-            String.format("\"password\":\"%s\"", user.getPassword()),
+            String.format("\"name\":\"%s\"", profile.getName()),
             "\"wishlists\": []"
         );
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .post("/users")
+            .post("/profiles")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
@@ -124,24 +112,22 @@ public class UserControllerTest {
 
 
     /**
-     * Test the create user endpoint.
+     * Test the create profile endpoint.
      * @throws Exception
      */
     @Test
-    public void shouldFailWhiteCreatingInvalidUser() throws Exception {
+    public void shouldFailWhiteCreatingInvalidProfile() throws Exception {
         List<Wishlist> l = List.of();
-        User user = User.builder()
-            .email("test")
+        Profile profile = Profile.builder()
             .name("test name")
-            .password("hjgT48582%%")
             .wishlists(l)
             .build();
 
-        Mockito.when(userService.create(user)).thenReturn(user);
-        String content = objectWriter.writeValueAsString(user);
+        Mockito.when(profileService.create(profile)).thenReturn(profile);
+        String content = objectWriter.writeValueAsString(profile);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .post("/users")
+            .post("/profiles")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
@@ -153,71 +139,66 @@ public class UserControllerTest {
 
 
     /**
-     * Test fetching all users.
+     * Test fetching all profiles.
      * @throws Exception
      */
     @Test
     public void getAll() throws Exception {
-        List<User> users = List.of(userOne, userTwo, userThree, userTen);
+        List<Profile> profiles = List.of(profileOne, profileTwo, profileThree, profileTen);
 
         Mockito
-            .when(userService.getAll())
-            .thenReturn(users);
+            .when(profileService.getAll())
+            .thenReturn(profiles);
 
         mockMvc.perform(MockMvcRequestBuilders
-            .get("/users")
+            .get("/profiles")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
-            .andExpect(jsonPath("$[0].email", is("omniyyah@gmail.com")));
+            .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)));
     }
 
     /**
-     * Test fetching a user by id.
+     * Test fetching a profile by id.
      * @throws Exception
      */
     @Test
-    public void getUserById() throws Exception {
+    public void getProfileById() throws Exception {
         Mockito
-            .when(userService.findById(userTen.getId()))
-            .thenReturn(java.util.Optional.of(userTen));
+            .when(profileService.findById(profileTen.getId()))
+            .thenReturn(java.util.Optional.of(profileTen));
     }
 
     /**
-     * Test updating a user by id.
+     * Test updating a profile by id.
      * @throws Exception
      */
     @Test
-    public void updateUser() throws Exception {
+    public void updateProfile() throws Exception {
         List<Wishlist> l = List.of();
 
-        User origUser = User.builder()
-            .email("test@gmail.com")
+        Profile origProfile = Profile.builder()
             .name("test name")
-            .password("hjgT48582%%")
             .wishlists(l)
             .build();
 
-        User updatedUser = User.builder()
-            .email("test@gmail.com")
+        Profile updatedProfile = Profile.builder()
             .name("test update name")
-            .password("hjgT48582%%")
             .wishlists(l)
             .build();
 
         Mockito
-            .when(userService.findById(updatedUser.getId()))
-            .thenReturn(java.util.Optional.of(origUser));
+            .when(profileService.findById(updatedProfile.getId()))
+            .thenReturn(java.util.Optional.of(origProfile));
 
         Mockito
-            .when(userService.update(origUser))
-            .thenReturn(updatedUser);
+            .when(profileService.update(origProfile))
+            .thenReturn(updatedProfile);
 
         String content = "{\"name\":\"test update name\"}";
-        String userId = origUser.getId();
+        Long profileId = origProfile.getId();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .put("/users/" + userId)
+            .put("/profiles/" + profileId)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(content);
@@ -230,13 +211,13 @@ public class UserControllerTest {
     }
 
     /**
-     * Test deleting all users.
+     * Test deleting all profiles.
      * @throws Exception
      */
     @Test
-    public void deleteAllUsers() throws Exception {
+    public void deleteAllProfiles() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-            .delete("/users")
+            .delete("/profiles")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }

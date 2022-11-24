@@ -1,6 +1,6 @@
 package coms.w4156.moviewishlist.controllersTest;
 
-import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.WishlistService;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import coms.w4156.moviewishlist.services.UserService;
+import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.controllers.WishlistController;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,10 +39,10 @@ public class WishlistControllerTest {
     private WishlistService wishlistService;
 
     /**
-     * Mocks the user service.
+     * Mocks the profile service.
      */
     @MockBean
-    private UserService userService;
+    private ProfileService profileService;
 
     /**
      * Injects the wishlist controller with the mocked services.
@@ -54,19 +54,15 @@ public class WishlistControllerTest {
     /**
      * Mock data for Testing.
      */
-    private User user = User.builder()
-        .email("omniyyah@gmail.com")
+    private Profile profile = Profile.builder()
         .name("omniyyah")
-        .password("hjgT48582%%")
         .build();
 
     /**
      * Mock data for Testing.
      */
-    private User user3 = User.builder()
-        .email("userTwo")
+    private Profile profile3 = Profile.builder()
         .name("omniyyah")
-        .password("hjgT48582%%")
         .build();
 
     /**
@@ -74,7 +70,7 @@ public class WishlistControllerTest {
      */
     private Wishlist wishlist1 = Wishlist.builder()
         .name("wishlist1 for omniyyah")
-        .user(user)
+        .profile(profile)
         .build();
 
     /**
@@ -96,7 +92,7 @@ public class WishlistControllerTest {
     public void shouldSuccessfullyCreateAWishlist() throws Exception {
         Wishlist wishlist = Wishlist.builder()
             .name("test wishlist")
-            .user(user)
+            .profile(profile)
             .build();
 
         Mockito
@@ -105,9 +101,9 @@ public class WishlistControllerTest {
 
         final String content =
             String.format(
-                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "{\"name\":\"%s\",\"profile\":{\"name\":\"%s\"},\"movies\":[]}",
                 "test wishlist",
-                user.getEmail()
+                profile.getName()
             );
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -123,14 +119,14 @@ public class WishlistControllerTest {
     }
 
     /**
-     * Test for creating a wishlist with an invalid user.
+     * Test for creating a wishlist with an invalid profile.
      * @throws Exception if there is an error.
      */
     @Test
-    public void shouldFailTryingToCreateAnInvalidUser() throws Exception {
+    public void shouldFailTryingToCreateAnInvalidProfile() throws Exception {
         final Wishlist wishlist = Wishlist.builder()
             .name("test wishlist")
-            .user(user3)
+            .profile(profile3)
             .build();
 
         Mockito
@@ -139,8 +135,8 @@ public class WishlistControllerTest {
 
         final String content =
             String.format(
-                "{\"name\":\"\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
-                user3.getEmail()
+                "{\"name\":\"\",\"profile\":{\"name\":\"%s\"},\"movies\":[]}",
+                profile3.getName()
             );
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -163,7 +159,7 @@ public class WishlistControllerTest {
 
         final Wishlist updatedWishlist = Wishlist.builder()
             .name("updated test wishlist")
-            .user(user)
+            .profile(profile)
             .build();
 
         Mockito
@@ -176,9 +172,9 @@ public class WishlistControllerTest {
 
         final String content =
             String.format(
-                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "{\"name\":\"%s\",\"profile\":{\"name\":\"%s\"},\"movies\":[]}",
                 "updated test wishlist",
-                user3.getEmail()
+                profile3.getName()
             );
 
         final long wishlistId = 9L;
@@ -213,9 +209,9 @@ public class WishlistControllerTest {
     public void deleteWishlist() throws Exception {
         final String content =
             String.format(
-                "{\"name\":\"%s\",\"user\":{\"email\":\"%s\"},\"movies\":[]}",
+                "{\"name\":\"%s\",\"profile\":{\"name\":\"%s\"},\"movies\":[]}",
                 "delete test wishlist",
-                user.getEmail()
+                profile.getName()
             );
 
         final Long wishlistId = 9L;
