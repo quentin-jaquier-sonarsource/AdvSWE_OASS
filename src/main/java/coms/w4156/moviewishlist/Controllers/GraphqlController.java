@@ -43,16 +43,19 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
+
+    // TODO: This query seems obsolete
     /**
      * Fetch all clients in the database.
      *
-     * @return List of Profile objects
+     * @return List of Client objects
      */
     @QueryMapping
     public Collection<Client> clients() {
         return clientService.getAll();
     }
 
+    // TODO: This query seems obsolete
     /**
      * Fetch a client by ID.
      *
@@ -72,9 +75,7 @@ public class GraphqlController {
     @QueryMapping
     public Collection<Profile> profiles(Authentication authentication) {
         String clientEmail = authentication.getName();
-
         Optional<Client> client = clientService.findByEmail(clientEmail);
-
         if (!client.isPresent()) {
             return new ArrayList<Profile>();
         }
@@ -90,8 +91,19 @@ public class GraphqlController {
      * @return List of Profile objects
      */
     @QueryMapping
-    public Optional<Profile> profileByName(@Argument final String name) {
-        return profileService.findByName(name);
+    public Optional<Profile> profileByName(@Argument final String name, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findByName(name);
+        if (!profile.isPresent() || profile.get().getClient().getId() != client.get().getId()) {
+            return null;
+        }
+
+        return profile;
     }
 
     /**
