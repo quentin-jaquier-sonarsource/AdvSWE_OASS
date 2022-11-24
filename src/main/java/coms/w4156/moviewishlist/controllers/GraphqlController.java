@@ -367,6 +367,22 @@ public class GraphqlController {
     }
 
     /**
+     * filter all movies by genre in a specific wishlist
+     * @param wishlistID - Wishlist id
+     * @param genre - Genre
+     *
+     * @return List of movies of that genre in the wishlist
+     */
+
+    @QueryMapping
+    public Collection<Movie> moviesByGenre(
+            @Argument final Long id,
+            @Argument final String genre
+    ){
+        return wishlist.moviesByGenre(genre);
+    }
+
+    /**
      * Get title details by id.
      *
      * @param titledetail - The TitleDetail object
@@ -405,4 +421,5 @@ public class GraphqlController {
             )
             .toList();
     }
+
 }
