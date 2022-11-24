@@ -66,6 +66,34 @@ async def get_all_source_info(id : int = DEFAULT_ID):
     with subscription
 
     - **id**: the WatchMode id of the movie in question
+
+    Example Response:
+
+    ```json
+    {
+        "Movie title": "Host",
+        "All Sources Info": [
+            {
+                "name": "iTunes",
+                "type": "rent",
+                "format": "HD",
+                "price": "4.99"
+            },
+            {
+                "name": "Shudder",
+                "type": "sub",
+                "format": "HD",
+                "price": null
+            },
+            {
+                "name": "Amazon",
+                "type": "buy",
+                "format": "SD",
+                "price": "9.99"
+            },
+        ]
+    }
+    ```
     """
 
     query = """query($var : ID!) {

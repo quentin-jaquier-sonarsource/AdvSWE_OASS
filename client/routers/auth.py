@@ -17,6 +17,13 @@ router = APIRouter(
 async def sign_up(email : str = "dummy@test.com"):
     """
     Signs up for the service
+
+    Example response:
+    ```json
+    {
+        "token" : "some_random_string"
+    }    
+    ```
     """
 
     try:

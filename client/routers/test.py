@@ -16,6 +16,22 @@ async def test_connection_to_service():
     """
     This endpoint simply hits the /test endpoint of our service and returns the
     resulting message.
+
+    Response if we're properly connected:
+    ```json
+    {
+        "Status Code": 200,
+        "Response from service": "All good!"
+    }
+    ```
+
+    Response if we're not authenticate properly:
+    ```json
+    {
+        "Status Code": 403,
+        "Response from service": ""
+    }
+    ```
     """
     try:
         auth_header = get_auth_header()
