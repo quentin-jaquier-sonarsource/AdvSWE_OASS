@@ -133,4 +133,6 @@ public class Movie implements ModelInterface<Long> {
         }
         return wishlists;
     }
+
+
 }
