@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
@@ -14,16 +15,13 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
-public class MovieRating implements ModelInterface<Movie> {
+public class MovieRating implements ModelInterface<Long> {
 
 
 
     @Id
-    @Getter
     @Setter
-    @OneToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+    private Long id;
 
     @Getter
     @Setter
@@ -35,23 +33,25 @@ public class MovieRating implements ModelInterface<Movie> {
 
 
     public MovieRating(
-            @JsonProperty final Movie movie,
+            @JsonProperty final Long id,
             @JsonProperty final String review,
             @JsonProperty final Double rating
     ) {
-        this.movie = movie;
+        this.id = id;
         this.rating = rating;
         this.review = review;
     }
 
-    public Long getMovieId() {
-        return this.movie.getId();
-    }
-
     @Override
-    public Movie getId() {
+    public Long getId() {
         return null;
     }
+
+//    public Long getMovieId() {
+//        return this.id;
+//    }
+//
+
 
 
 }
