@@ -4,24 +4,31 @@ from fastapi import APIRouter
 from requests import Response
 
 from constants import CLIENT_TAG
-from routers.router_constants import SIGNUP_URL
+from routers.router_constants import SIGNUP_URL, TOKEN_PATH
 
 router = APIRouter(
     prefix="/clients",
     tags=[CLIENT_TAG]
 )
 
+
+
 @router.get("/signup")
-async def sign_up():
+async def sign_up(email : str = "dummy@test.com"):
     """
     Signs up for the service
     """
 
     try:
     
-        r : Response = requests.post(url=SIGNUP_URL, params = {"email" : "test@test2.com"})
+        r : Response = requests.post(url=SIGNUP_URL, params = {"email" : email})
         json_data = json.loads(r.text)
-        
+        token = json_data["token"]
+
+        outfile = open(TOKEN_PATH, "a")
+        outfile.write(token)
+        outfile.close()
+
         return json_data
     
     except Exception as e:

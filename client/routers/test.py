@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from requests import Response
 
 from constants import TEST_TAG, TEST_URL
-from routers.utils import query_graphql_service
+from routers.utils import get_auth_header, query_graphql_service
 
 router = APIRouter(
     prefix="/tests",
@@ -18,9 +18,13 @@ async def test_connection_to_service():
     resulting message.
     """
     try:
+        auth_header = get_auth_header()
         # Try to hit the test endpoint and return the results 
-        signup_resp: Response = requests.get(url=TEST_URL)
-        return {"Response from service": signup_resp.text}
+        test_resp: Response = requests.get(url=TEST_URL, headers = auth_header)
+        return {
+                "Status Code" : test_resp.status_code,
+                "Response from service": test_resp.text
+            }
 
     except Exception as e:
 
