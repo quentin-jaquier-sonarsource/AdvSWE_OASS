@@ -24,7 +24,7 @@ import org.springframework.lang.Nullable;
 @Entity
 @Table(
     name = "wishlists",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "name", "user_id" })
+    uniqueConstraints = @UniqueConstraint(columnNames = { "name", "profile_id" })
 )
 @ToString
 @EqualsAndHashCode
@@ -50,12 +50,12 @@ public class Wishlist implements ModelInterface<Long> {
     private String name;
 
     /**
-     * The user that owns this wishlist.
+     * The profile that owns this wishlist.
      */
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "profile_id")
     @Setter
-    private User user;
+    private Profile profile;
 
     /**
      * The movies within this wishlist.
@@ -74,14 +74,14 @@ public class Wishlist implements ModelInterface<Long> {
      * Constructor to create a new Wishlist Object.
      *
      * @param name - Name of the wishlist
-     * @param user - The user that this wishlist belongs to
+     * @param profile - The profile that this wishlist belongs to
      */
     public Wishlist(
         @JsonProperty final String name,
-        @JsonProperty final User user
+        @JsonProperty final Profile profile
     ) {
         this.name = name;
-        this.user = user;
+        this.profile = profile;
     }
 
     /**
@@ -89,28 +89,28 @@ public class Wishlist implements ModelInterface<Long> {
      *
      * @param id - ID of the wishlist
      * @param name - Name of the wishlist
-     * @param user - The user that this wishlist belongs to
+     * @param profile - The profile that this wishlist belongs to
      * @param movies - The movies within this wishlist
      */
     public Wishlist(
         @JsonProperty final Long id,
         @JsonProperty final String name,
-        @JsonProperty final User user,
+        @JsonProperty final Profile profile,
         @JsonProperty final List<Movie> movies
     ) {
         this.id = id;
         this.name = name;
-        this.user = user;
+        this.profile = profile;
         this.movies = movies;
     }
 
     /**
-     * Get the email of the user that owns this wishlist.
+     * Get the Id of the profile that owns this wishlist.
      *
-     * @return the email string
+     * @return the Id of the profile
      */
-    public String getUserId() {
-        return this.user.getEmail();
+    public Long getProfileId() {
+        return this.profile.getId();
     }
 
     /**
