@@ -111,4 +111,6 @@ public class Movie implements ModelInterface<Long> {
         this.movieReleaseYear = movieReleaseYear;
         this.wishlists = wishlists;
     }
+
+
 }

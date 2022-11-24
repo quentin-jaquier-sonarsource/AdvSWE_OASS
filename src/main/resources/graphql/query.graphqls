@@ -14,14 +14,14 @@ type Query {
     # get all movies in the database
     movies: [Movie]
 
-    # get movie by name in a specific wishlist
-    movieByName(wishlistID: ID!, movieName: String!): Movie
-
-    # get all movies by genre in a specific wishlist
+    # filter all movies by genre in a specific wishlist
     moviesByGenre(wishlistID: ID!, genre: String): [Movie]
 
-    # get all movies by release date in a specific wishlist
-    movieByReleaseYear(wishlistID: ID!, movieReleaseYear: Int): [Movie]
+    # filter all movies by release date in a specific wishlist
+    #moviesByReleaseYear(wishlistID: ID!, movieReleaseYear: Int): [Movie]
+
+    # filter all movies by release date in a specific wishlist
+#    moviesByReleaseYear(wishlistID: ID!, rating: Int): [Movie]
 
     # watch mode API
     networks: [WatchModeNetwork]

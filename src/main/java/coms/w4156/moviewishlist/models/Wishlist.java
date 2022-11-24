@@ -2,6 +2,7 @@ package coms.w4156.moviewishlist.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -120,5 +121,11 @@ public class Wishlist implements ModelInterface<Long> {
      */
     public List<Long> getMovieIds() {
         return this.movies.stream().map(movie -> movie.getId()).toList();
+    }
+
+    public List<Movie> moviesByGenre(String genre){
+        return this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getGenre().equalsIgnoreCase(genre), Collectors.toList()));
     }
 }
