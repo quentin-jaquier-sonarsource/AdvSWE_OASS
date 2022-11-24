@@ -26,14 +26,21 @@ I'm running 3.10 but any Python 3 should be fine
     - On Windows cmd: `client-env\Scripts\activate.bat`
     - On Windows PowerShell: `client-env\Scripts\Activate.ps1`
     - You should see your environment name in the shell (can confirm on Windows)
-2. Install the dependencies
+3. Install the dependencies
     - On the command line run `pip install -r requirements.txt`
-3. Run the app
+4. Run the app
     - On the command line run `uvicorn main:app --reload`
     - Make sure that you also have our service up and running locally (will
     change the implementation to use the Heroku instance later)
     - the `--reload` flag allows you to make changes to the app while it runs
     without having stop the app and restart it in order to see the changes
-3. Open the app
+5. Open the app
     - go to http://localhost:8000/docs in order to see the Swagger for all the
     endpoints
+6. Using the app
+    - Under the `Client Endpoints` section in the swagger, hit the
+    `/clients/signup` to sign up as a client of the service. This should return
+    back a token but you don't need to do anything with it. It will be stored in
+    a temporary file on localhost
+    - Now that you're signed up and you have a token, all the other endpoints
+    should work. If you try to access the other endpoints before signing up you should receive an error
