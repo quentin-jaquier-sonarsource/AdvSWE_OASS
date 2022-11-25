@@ -3,8 +3,8 @@ import requests
 from fastapi import APIRouter
 from requests import Response
 
-from constants import CLIENT_TAG
-from routers.router_constants import SIGNUP_URL, TOKEN_PATH
+from app.constants import CLIENT_TAG
+from app.routers.router_constants import SIGNUP_URL, TOKEN_PATH
 
 router = APIRouter(
     prefix="/clients",

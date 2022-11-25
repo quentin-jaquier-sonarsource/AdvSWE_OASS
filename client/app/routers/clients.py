@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from constants import CLIENT_TAG
-from routers.utils import query_graphql_service
+from app.constants import CLIENT_TAG
+from app.routers.utils import query_graphql_service
 
 router = APIRouter(
     prefix="/clients",

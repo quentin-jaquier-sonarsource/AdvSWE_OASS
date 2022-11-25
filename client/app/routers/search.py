@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from constants import SEARCH_TAG
-from routers.router_constants import DEFAULT_TITLE
-from routers.utils import query_graphql_service
+from app.constants import SEARCH_TAG
+from app.routers.router_constants import DEFAULT_TITLE
+from app.routers.utils import query_graphql_service
 
 router = APIRouter(
     prefix="/search",

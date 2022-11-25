@@ -3,8 +3,8 @@ import json
 import requests
 from requests import Response
 
-from constants import GRAPHQL_URL
-from routers.router_constants import TOKEN_PATH
+from app.constants import GRAPHQL_URL
+from app.routers.router_constants import TOKEN_PATH
 
 def get_auth_header() -> dict:
     """

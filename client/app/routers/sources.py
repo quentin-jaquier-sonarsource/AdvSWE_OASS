@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from constants import SOURCE_TAG
-from routers.utils import query_graphql_service
+from app.constants import SOURCE_TAG
+from app.routers.utils import query_graphql_service
 
 from .router_constants import (BUY, BUY_DESCRIPTION, DEFAULT_ID, RENT,
                                RENT_DESCRIPTION, SUB, SUB_DESCRIPTION)

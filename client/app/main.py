@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routers import sources, test, clients, users, search, auth
-from constants import CLIENT_DESCRIPTION,TAG_METADATA
+from app.routers import sources, test, clients, users, search, auth
+from .constants import CLIENT_DESCRIPTION, TAG_METADATA
 
 app = FastAPI(
     title="OASS Client",

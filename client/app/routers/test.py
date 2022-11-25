@@ -2,8 +2,8 @@ import requests
 from fastapi import APIRouter
 from requests import Response
 
-from constants import TEST_TAG, TEST_URL
-from routers.utils import get_auth_header, query_graphql_service
+from app.constants import TEST_TAG, TEST_URL
+from app.routers.utils import get_auth_header, query_graphql_service
 
 router = APIRouter(
     prefix="/tests",

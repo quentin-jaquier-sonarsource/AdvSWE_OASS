@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from constants import USER_TAG
+from app.constants import USER_TAG
 
 from .utils import query_graphql_service
 
