@@ -18,9 +18,9 @@ type Query {
     moviesByGenre(wishlistID: ID!, genre: String): [Movie]
 
     # filter all movies by release date in a specific wishlist
-    #moviesByReleaseYear(wishlistID: ID!, movieReleaseYear: Int): [Movie]
+    moviesByReleaseYear(wishlistID: ID!, movieReleaseYear: Int): [Movie]
 
-    # filter all movies by release date in a specific wishlist
+    # filter all movies by rating in a specific wishlist
 #    moviesByReleaseYear(wishlistID: ID!, rating: Int): [Movie]
 
     # watch mode API
