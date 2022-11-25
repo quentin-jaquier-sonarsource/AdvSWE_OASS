@@ -238,6 +238,14 @@ public class GraphqlController {
         return wishlist.moviesByGenre(genre);
     }
 
+    @QueryMapping
+    public Collection<Movie> moviesByReleaseYear(
+            @Argument final Long id,
+            @Argument final int movieReleaseYear
+    ){
+        return wishlist.moviesByReleaseYear(movieReleaseYear);
+    }
+
     /**
      * Get title details by id.
      *
