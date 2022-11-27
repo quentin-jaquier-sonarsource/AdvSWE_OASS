@@ -1,3 +1,4 @@
+# The root query mechanism. Use this for all data fetching
 type Query {
     # Get all users
     profiles: [Profile]

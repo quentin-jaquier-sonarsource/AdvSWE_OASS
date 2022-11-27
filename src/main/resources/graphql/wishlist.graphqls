@@ -1,5 +1,18 @@
+"""
+A wish list comprised of movies created by clients. What we mean by wish is intentionally vague as it is up to the
+client to decide.
+
+For example, one client may provide a service for keeping watchlists for their users: a list of movies a user wants to
+watch. Alternatively, a client may provide a service keeping buy-lists for their users: a list of movies that the user
+wishes to purchase.
+"""
 type Wishlist {
+    # The unique identifier our service uses for this Wishlist
     id: ID!
+
+    # Given name for this wishlist
     name: String
+
+    # List of movies on the wishlist
     movies: [Movie]
 }
