@@ -1,9 +1,20 @@
 
 import os
+
 import psycopg2
+from fastapi.testclient import TestClient
 
-from tests.test_constants import DB_PASSWORD_ENV_VAR, DB_USER_NAME_ENV_VAR
+from app.main import app
+from app.routers.router_constants import TOKEN_PATH
+from tests.test_constants import CLIENT_EMAIL, DB_PASSWORD_ENV_VAR, DB_USER_NAME_ENV_VAR
 
+def reset_token():
+    """
+    Ensures that there is no token stored locally so we must call signup
+    endpoint
+    """
+    if os.path.exists(TOKEN_PATH):
+        os.remove(TOKEN_PATH)
 
 def erase_clients():
     """
@@ -34,3 +45,9 @@ def erase_clients():
         if db_conn:
             cursor.close()
             db_conn.close()
+
+
+def setup_end_to_end():
+    
+    reset_token()
+    erase_clients()

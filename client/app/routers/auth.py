@@ -34,7 +34,7 @@ async def sign_up(email : str = "dummy@test.com"):
         json_data = json.loads(r.text)
         token = json_data["token"]
 
-        outfile = open(TOKEN_PATH, "a")
+        outfile = open(TOKEN_PATH, "w")
         outfile.write(token)
         outfile.close()
 
