@@ -178,12 +178,31 @@ Here are the results of the latest test run:
 
 ## Documentation
 
-All the documentation for the GraphQL endpoint can be found by expanding the
-documentation pane in the top right.
+Documentation for many of our endpoints can be found in the Documentation folder
+
+All the documentation for the GraphQL endpoint can be found in the GraphiQL IDE.
+
+In order to access this IDE, you need to do a few things.
+
+1. Spin up a local instance of our service
+2. Authenticate by following the instructions in the Authentication portion of this README. Hold on to the token
+3. Download the ModHeader extension for Google Chrome
+4. Hit the /graphiql endpoint. At this point it should NOT work
+5. Use the ModHeader plugin to add a `Request Header` with name = `Authorization` and value = `Bearer <JWT>`
+   - Where JWT is your token that you saved from before. Note the space after "Bearer"
+
+The header should look like this:
+
+![ModHeader](/Documentation/documentation-screenshots/modHeader.png)
+
+After you have completed all these steps, you should be able to access the GraphiQL IDE
+through the /graphiql endpoint. The documentation for this endpoint is visible in the `Docs` pane which
+can be opened by clicking on the button in the top right. See the screenshot below.
+
 
 ![Where the docs button is](/Documentation/documentation-screenshots/where-docs.png)
 
-The documentation is interactive.
+The documentation is interactive. You can click on the types to introspect
 
 ![The documentation pane](/Documentation/documentation-screenshots/docs.png)
 
