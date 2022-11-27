@@ -1,13 +1,57 @@
+"""
+A WatchMode source.
+That is, a platform on which movies and TV shows can be streamed with subscription, bought, and/or rented.
+
+For example: Hulu, Vudu, iTunes, and Amazon are all WatchModeSources
+
+The fields of the source are determined by the movie in the overall query that returned this source. For example, if
+you queried the movie "Parasite" then the resulting source will be Hulu and the urls will link to Parasite. But if you
+query the movie "Skyfall", then the urls and price field will be different
+"""
 type WatchModeSource {
+
+    # The WatchMode ID for the source
     id: ID
+
+    # The name of the source e.g. Shudder
     name: String
+
+    """
+    The type of the source. One of {"sub", "rent", "buy"}
+
+    if type == "sub", then this source allows you to watch movies for free with
+    a subscription to the source. For example, Hulu, Netflix, Shudder, and
+    HBO Max are all of type 'sub'
+
+    if type == "rent", then this source allows you to rent movies.
+    For example, Vudu
+
+    if type == "buy", then this source allows you to buy movies.
+    For example: iTunes
+    """
     type: String
+
+    # Region in which this source has som certain movie
     region: String
+
+    # Url to view this movie on iOS devices
     iosUrl: String
+
+    # Url to view this movie on android devices
     androidUrl: String
+
+    # Url to view this movie on the WatchMode website
     webUrl: String
+
+    # Format that this source has the specified movie in. E.g. HD, SD, 4k, etc
     format: String
+
+    # If type == "rent" || type == "buy", this field gives the price to rent or buy the movie on this source
     price: String
+
+    # If the title is a TV show, this field keeps track of the number of seasons
     seasons: Int
+
+    # If the title is a TV show, this field keeps track of the number of episodes
     episodes: Int
 }

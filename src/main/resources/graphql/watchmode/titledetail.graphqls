@@ -1,29 +1,86 @@
+# Additional details on the movie returned by a title query
 type TitleDetail {
+    # the WatchMode ID of the title
     id: ID!
+
+    # The English title of the movie
     title: String
+
+    """
+    The original title of the movie
+    (differs from the title field only if the movie's original title is not in English)
+    """
     originalTitle: String
+
+    # Synopsis of the movie
     plotOverview: String
+
+    # Type of the returned title. Could be movie or Tv show, for our API we will only focus on movies
     type: String
+
+    # Runtime of the movie in minutes
     runtimeMinutes: Int
+
+    # Year the movie was initially released
     year: Int
+
+    # If the returned title is a show, the year the show ended.
     endYear: Int
+
+    # Original date the movie was released
     releaseDate: String
+
+    # The IMDb id for the movie. IMDb is a popular app and API
     imdbId: String
+
+    # the TMDb id for the movie. TMDb is a popular API for movies
     tmdbId: Int
+
+    # the TMDb type of this movie
     tmdbType: String
+
+    # List of genre ids that this movie belongs to
     genres: [Int]
+
+    # List of genres that this  movie belongs to
     genreNames: [String]
+
+    # Average IMDb user rating for the movie
     userRating: Float
+
+    # Metacritic score for the movie
     criticScore: Int
+
+    # What the movie is rated in the US (e.g. PG-13, R, etc.)
     usRating: String
+
+    # Link to a .jpg poster of the movie
     poster: String
+
+    # Link to a .jpg wallpaper for the movie
     backdrop: String
+
+    # The original language the movie was filmed in
     originalLanguage: String
+
+    # A list of similar TitleDetail objects, i.e. a list of similar movies
     similarTitles: [TitleDetail]
+
+    # IDs of TV networks that carried this title (if this title is a show)
     networks: [Int]
+
+    # List of TV networks that carried this title (if this title is a show)
     networkNames: [String]
+
+    # A URL to a trailer for this film
     trailer: String
+
+    # A link to a .jpg thumbnail for a trailer for this film
     trailerThumbnail: String
+
+    # Measure of how relevant this title is to the search
     relevancePercentile: Float
+
+    # A list of WatchModeSources on which this movie can be watched
     sources: [WatchModeSource]
 }

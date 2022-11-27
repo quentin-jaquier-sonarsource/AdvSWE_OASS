@@ -1,5 +1,5 @@
 /**
- * This package contains the nmodel for this project.
+ * This package contains the models for this project.
  */
 @NonNullApi
 @NonNullFields
