@@ -1,6 +1,8 @@
 package coms.w4156.moviewishlist.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +16,8 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
-public class UserRating implements ModelInterface<Long> {
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+public class Ratings implements ModelInterface<Long> {
 
 
     /**
@@ -26,16 +29,16 @@ public class UserRating implements ModelInterface<Long> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Getter
-    @Setter
-    @ManyToOne(cascade=CascadeType.ALL)
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
+    @Setter
     private User user;
 
-    @Getter
-    @Setter
-    @ManyToOne(cascade=CascadeType.ALL)
+
+    @ManyToOne
     @JoinColumn(name = "movie_id")
+    @Setter
     private Movie movie;
 
     @Getter
@@ -48,7 +51,7 @@ public class UserRating implements ModelInterface<Long> {
 
 
 
-    public UserRating(
+    public Ratings(
             @JsonProperty final User users,
             @JsonProperty final Movie movies,
             @JsonProperty final String review,
@@ -61,7 +64,7 @@ public class UserRating implements ModelInterface<Long> {
     }
 
 
-    public UserRating(
+    public Ratings(
             @JsonProperty final Long id,
             @JsonProperty final User users,
             @JsonProperty final Movie movies,
@@ -85,4 +88,11 @@ public class UserRating implements ModelInterface<Long> {
     public Long getMovieIds() {
         return this.movie.getId();
     }
+
+//    @Override
+//    public String toString() {
+//        return "";
+//    }
 }
+
+

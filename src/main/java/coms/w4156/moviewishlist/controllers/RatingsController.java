@@ -1,10 +1,9 @@
 package coms.w4156.moviewishlist.controllers;
 
 
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.services.MovieRatingService;
 import coms.w4156.moviewishlist.services.UserRatingService;
-import coms.w4156.moviewishlist.models.MovieRating;
-import coms.w4156.moviewishlist.models.UserRating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +22,20 @@ public class RatingsController {
 
 
     @GetMapping
-    public ResponseEntity<List<UserRating>> getAllUserRatings() {
-        List<UserRating> allUserRatings = userRatingService.getAll();
-        return new ResponseEntity<>(allUserRatings, HttpStatus.OK);
+    public ResponseEntity<List<Ratings>> getAllUserRatings() {
+        try{
+            List<Ratings> allRatings = userRatingService.getAll();
+            System.out.println("stopping here");
+            return new ResponseEntity<>(allRatings, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserRating> getUserRatingById(@PathVariable final Long id) {
+    public ResponseEntity<Ratings> getUserRatingById(@PathVariable final Long id) {
         return userRatingService.findById(id)
                 .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
@@ -38,27 +43,27 @@ public class RatingsController {
 
 
     @PostMapping(consumes="application/json")
-    public ResponseEntity<UserRating> giveUserRating(@RequestBody UserRating userRating) {
+    public ResponseEntity<Ratings> giveUserRating(@RequestBody Ratings ratings) {
 
 
-        if ( userRating.getUserId().isEmpty()
-                || userRating.getMovieIds() == 0) {
+        if ( ratings.getUserId().isEmpty()
+                || ratings.getMovieIds() == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(userRatingService.create(userRating), HttpStatus.OK);
+        return new ResponseEntity<>(userRatingService.create(ratings), HttpStatus.OK);
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<MovieRating>> getAllMovieRatings(){
-        return new ResponseEntity<>(movieRatingService.getAll(), HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<MovieRating>> getAllMovieRatings(){
+//        return new ResponseEntity<>(movieRatingService.getAll(), HttpStatus.OK);
+//    }
 
 
-    @GetMapping
-    public ResponseEntity<MovieRating> getMovieRatingById(){
-
-    }
+//    @GetMapping
+//    public ResponseEntity<MovieRating> getMovieRatingById(){
+//
+//    }
 
 
 }

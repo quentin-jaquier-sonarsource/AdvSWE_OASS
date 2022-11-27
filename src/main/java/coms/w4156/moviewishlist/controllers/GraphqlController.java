@@ -2,14 +2,12 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.models.User;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.services.ClientService;
-import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.UserService;
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.services.*;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 import java.util.Collection;
@@ -39,6 +37,10 @@ public class GraphqlController {
 
     @Autowired
     private WatchModeService watchModeService;
+
+
+    @Autowired
+    private UserRatingService userRatingService;
 
     /**
      * Fetch all clients in the database.
@@ -232,4 +234,17 @@ public class GraphqlController {
             )
             .toList();
     }
+
+
+    @QueryMapping
+    public Collection<Ratings> ratings() {
+        return userRatingService.getAll();
+    }
+
+    @QueryMapping
+    public Optional<Ratings> ratingsById(@Argument final Long id) {
+        System.out.print(id);
+        return userRatingService.findById(id);
+    }
+
 }

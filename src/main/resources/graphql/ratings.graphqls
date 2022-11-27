@@ -1,0 +1,7 @@
+type Ratings {
+    id : ID!
+    user : User
+    movie : Movie
+    review : String
+    rating : Float
+}

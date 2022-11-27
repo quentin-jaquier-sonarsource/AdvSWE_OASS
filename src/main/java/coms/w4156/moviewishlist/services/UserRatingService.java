@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.services;
 
 
-import coms.w4156.moviewishlist.models.UserRating;
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.repositories.UserRatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserRatingService extends ServiceForRepository<
         Long,
-        UserRating,
+        Ratings,
         UserRatingRepository
     > {
     /**

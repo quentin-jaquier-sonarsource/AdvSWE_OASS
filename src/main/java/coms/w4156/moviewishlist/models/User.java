@@ -9,12 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.*;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +18,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
+@AllArgsConstructor
 public class User implements ModelInterface<String> {
 
     /**
@@ -58,6 +55,11 @@ public class User implements ModelInterface<String> {
     @Getter
     @Setter
     private Client client;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Getter
+    private List<Ratings> ratings;
 
     /**
      * Constructor for the User class.
