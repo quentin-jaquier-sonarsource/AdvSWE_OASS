@@ -29,9 +29,12 @@ I'm running 3.10 but any Python 3 should be fine
 3. Install the dependencies
     - On the command line run `pip install -r requirements.txt`
 4. Run the app
-    - On the command line run `uvicorn main:app --reload`
+    - On the command line run `uvicorn app.main:app --reload`
     - Make sure that you also have our service up and running locally (will
     change the implementation to use the Heroku instance later)
+        - TODO: should I switch this? Having the locally running instance
+        allows for better end to end testing because I can change the state of
+        the DB
     - the `--reload` flag allows you to make changes to the app while it runs
     without having stop the app and restart it in order to see the changes
 5. Open the app
