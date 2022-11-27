@@ -40,11 +40,6 @@ public class AuthControllerTest {
 
     private MockMvc mockMvc;
 
-    // We need to convert from json to string and vice versa
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private ObjectWriter objectWriter = objectMapper.writer();
-
-    // Mock client repo
     @Mock
     private ClientService clientService;
 
@@ -105,7 +100,7 @@ public class AuthControllerTest {
     }
 
     /**
-     * Test that endpoints can be accessed without the token
+     * Test that endpoints can be accessed with the token
      */
     @Test
     public void shouldAllowAuthenticatedRequestsTest() throws Exception {
