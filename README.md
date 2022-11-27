@@ -206,6 +206,7 @@ The documentation is interactive. You can click on the types to introspect
 
 ![The documentation pane](/Documentation/documentation-screenshots/docs.png)
 
+
 ## SonarCloud
 The SonarCloud dashboard for this project is located [here](https://sonarcloud.io/summary/overall?id=omniyyahOS1_AdvSWE_OASS)
 
