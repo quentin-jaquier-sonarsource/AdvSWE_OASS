@@ -16,7 +16,9 @@ router = APIRouter(
 @router.get("/signup")
 async def sign_up(email : str = "dummy@test.com"):
     """
-    Signs up for the service
+    Signs up for the service. Returns a token but you don't need to
+    do anything with it, it will be used on the backend in order to perform the
+    other operations this client provides
 
     Example response:
     ```json
