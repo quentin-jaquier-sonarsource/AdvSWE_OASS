@@ -25,7 +25,9 @@ CLIENT_TAG = "Client Endpoints"
 CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
 
 USER_TAG = "User Endpoints"
-USER_TAG_DESCRIPTION = "Endpoints related to user data"
+USER_TAG_DESCRIPTION = """"Endpoints related to user data. 
+TODO these should be should be scrapped now that we are getting rid of
+users"""
 
 SEARCH_TAG = "Search Endpoints"
 SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
