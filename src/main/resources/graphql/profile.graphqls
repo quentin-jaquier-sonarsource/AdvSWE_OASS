@@ -1,0 +1,6 @@
+type Profile {
+    id: ID!
+    name: String
+    wishlists: [Wishlist]
+    client: Client
+}

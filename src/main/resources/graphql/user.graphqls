@@ -1,6 +1,0 @@
-type User {
-    email: String!
-    name: String
-    password: String
-    wishlists: [Wishlist]
-}

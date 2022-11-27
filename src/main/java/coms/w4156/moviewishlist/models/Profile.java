@@ -25,6 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 public class Profile implements ModelInterface<Long> {
+
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -55,9 +56,7 @@ public class Profile implements ModelInterface<Long> {
      *
      * @param name     - Name of the profile
      */
-    public Profile(
-        @JsonProperty final String name
-    ) {
+    public Profile(@JsonProperty final String name) {
         this.name = name;
     }
 
@@ -78,7 +77,19 @@ public class Profile implements ModelInterface<Long> {
         this.client = client;
     }
 
-    public Profile(Long id, @JsonProperty String name, @JsonProperty final List<Wishlist> wishlists, Client client) {
+    /**
+     * Create a new Profile object.
+     * @param id
+     * @param name
+     * @param wishlists
+     * @param client
+     */
+    public Profile(
+        final Long id,
+        @JsonProperty final String name,
+        @JsonProperty final List<Wishlist> wishlists,
+        final Client client
+    ) {
         this.id = id;
         this.name = name;
         this.wishlists = wishlists;

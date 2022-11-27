@@ -1,9 +1,9 @@
 type Query {
     # Get all users
-    users: [User]
+    profiles: [Profile]
 
     # get a particular user by email
-    userByEmail(email: String!): User
+    profileByID(id: ID!): Profile
 
     # get all clients
     clients: [Client]

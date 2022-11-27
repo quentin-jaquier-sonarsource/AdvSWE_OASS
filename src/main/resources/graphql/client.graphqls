@@ -1,5 +1,5 @@
 type Client {
     id: ID!
     email: String!
-    users: [User]
+    profiles: [Profile]
 }

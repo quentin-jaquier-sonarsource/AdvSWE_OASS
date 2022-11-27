@@ -1,4 +1,5 @@
 type Movie {
     id: ID!
     wishlists: [Wishlist]
+    details: TitleDetail
 }
