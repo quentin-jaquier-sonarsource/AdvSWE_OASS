@@ -2,12 +2,14 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.Ratings;
-import coms.w4156.moviewishlist.models.User;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.services.*;
+import coms.w4156.moviewishlist.services.ClientService;
+import coms.w4156.moviewishlist.services.MovieService;
+import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 import java.util.Collection;
@@ -24,13 +26,13 @@ import org.springframework.stereotype.Controller;
 public class GraphqlController {
 
     /**
-     * Use dependency injection to inject an object of the UserService class.
+     * Use dependency injection to inject an object of the profileService class.
      */
     @Autowired
     private ClientService clientService;
 
     @Autowired
-    private UserService userService;
+    private ProfileService profileService;
 
     @Autowired
     private MovieService movieService;
@@ -38,14 +40,10 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
-
-    @Autowired
-    private UserRatingService userRatingService;
-
     /**
      * Fetch all clients in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<Client> clients() {
@@ -64,32 +62,31 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch all users in the database.
+     * Fetch all profiles in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
-    public Collection<User> users() {
-        return userService.getAll();
+    public Collection<Profile> profiles() {
+        return profileService.getAll();
     }
 
     /**
-     * Fetch a user by email.
+     * Fetch a profile by name.
      *
-     * @param email - The email address of the user
+     * @param name - The name of the profile
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
-    public Optional<User> userByEmail(@Argument final String email) {
-        System.out.print(email);
-        return userService.findById(email);
+    public Optional<Profile> profileByName(@Argument final String name) {
+        return profileService.findByName(name);
     }
 
     /**
      * Fetch all movies in the database.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<Movie> movies() {
@@ -101,7 +98,7 @@ public class GraphqlController {
      *
      * @param title - The title of the movie
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<TitleSearchResult> searchTitles(
@@ -161,7 +158,7 @@ public class GraphqlController {
     // /**
     //  * Get all WatchMode sources.
     //  *
-    //  * @return List of User objects
+    //  * @return List of Profile objects
     //  */
     // @QueryMapping
     // public Collection<WatchModeSource> sources() {
@@ -171,7 +168,7 @@ public class GraphqlController {
     /**
      * Get all WatchMode networks.
      *
-     * @return List of User objects
+     * @return List of Profile objects
      */
     @QueryMapping
     public Collection<WatchModeNetwork> networks() {
@@ -234,17 +231,4 @@ public class GraphqlController {
             )
             .toList();
     }
-
-
-    @QueryMapping
-    public Collection<Ratings> ratings() {
-        return userRatingService.getAll();
-    }
-
-    @QueryMapping
-    public Optional<Ratings> ratingsById(@Argument final Long id) {
-        System.out.print(id);
-        return userRatingService.findById(id);
-    }
-
 }
