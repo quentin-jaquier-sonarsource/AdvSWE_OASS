@@ -72,15 +72,14 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a profile by name.
+     * Fetch a profile by ID.
      *
-     * @param name - The name of the profile
-     *
+     * @param id - The id of the profile
      * @return List of Profile objects
      */
     @QueryMapping
-    public Optional<Profile> profileByName(@Argument final String name) {
-        return profileService.findByName(name);
+    public Optional<Profile> profileByUD(@Argument final String id) {
+        return profileService.findById(Long.parseLong(id));
     }
 
     /**
@@ -155,16 +154,6 @@ public class GraphqlController {
         return detail;
     }
 
-    // /**
-    //  * Get all WatchMode sources.
-    //  *
-    //  * @return List of Profile objects
-    //  */
-    // @QueryMapping
-    // public Collection<WatchModeSource> sources() {
-    //     return watchModeService.getAllSources();
-    // }
-
     /**
      * Get all WatchMode networks.
      *
@@ -190,6 +179,26 @@ public class GraphqlController {
     ) {
         Boolean includeSources = env.getSelectionSet().contains("sources");
         return watchModeService.getTitleDetail(id, includeSources);
+    }
+
+    /**
+     * Get title details for a movie.
+     *
+     * @param movie - The local movie object
+     * @param env - The DataFetchingEnvironment
+     *
+     * @return Details of the Title
+     */
+    @SchemaMapping(typeName = "Movie", field = "details")
+    public TitleDetail getMovieDetails(
+        final Movie movie,
+        final DataFetchingEnvironment env
+    ) {
+        Boolean includeSources = env.getSelectionSet().contains("sources");
+        return watchModeService.getTitleDetail(
+            movie.getId().toString(),
+            includeSources
+        );
     }
 
     /**

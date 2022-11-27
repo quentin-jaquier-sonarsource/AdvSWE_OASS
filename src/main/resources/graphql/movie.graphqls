@@ -6,4 +6,5 @@ type Movie {
 
     # All the wishlists on which this movie resides
     wishlists: [Wishlist]
+    details: TitleDetail
 }

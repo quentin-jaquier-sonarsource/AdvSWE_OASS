@@ -6,6 +6,6 @@ type Client {
     # The client's email address
     email: String!
 
-    # A list of users that the client provides a service for. For example, the users on the client's app
-    users: [User]
+    # A list of profiles that the client provides a service for. For example, the profiles on the client's app
+    profiles: [Profile]
 }

@@ -1,0 +1,51 @@
+type Mutation {
+    # Create a new Client for the API
+    createClient(email: String!): Client!
+
+    # Update a client's email
+    updateClient(id: ID!, email: String!): Client!
+
+    # Delete a client
+    deleteClient(id: ID!): Client!
+
+    # Create a new profile
+    createProfile(
+        # ID of the client that this profile belongs to
+        clientID: ID!
+        # Display name of the profile
+        name: String
+    ): Profile!
+
+    # Update a profile
+    updateProfile(id: ID!, name: String!): Profile
+
+    # Delete a profile
+    deleteProfile(id: ID!): Profile
+
+    # Create a new Wishlist
+    createWishlist(
+        # ID of the profile that this wishlist belongs to
+        profileID: ID!
+        # Name of the wishlist
+        wishlistName: String!
+    ): Wishlist!
+
+    # Update a wishlist
+    updateWishlist(
+        # ID of the wishlist to be updated
+        id: ID!
+        # Name of the wishlist
+        name: String
+    ): Wishlist
+
+    # Delete a wishlist
+    deleteWishlist(id: ID!): Wishlist
+
+    # Add a movie by ID to a wishlist
+    addMovieToWishlist(
+        # ID of the wishlist that this movie belongs to
+        wishlistID: ID!
+        # ID of a movie found within the movie Search
+        movieID: ID!
+    ): Movie!
+}
