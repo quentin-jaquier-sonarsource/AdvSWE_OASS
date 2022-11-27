@@ -1,18 +1,12 @@
 """
 This file is meant to test every endpoint with the Movie Sources Endpoints tag
 """
-
-import os
-
-import psycopg2
 from fastapi.testclient import TestClient
 import pytest
-from requests import Response
 
 from app.main import app
-from tests.test_constants import (CLIENT_EMAIL, DB_PASSWORD_ENV_VAR,
-                                  DB_USER_NAME_ENV_VAR, HOST_ID, HOST_TITLE, SOURCES_PREFIX)
-from tests.utils import erase_clients, reset_token, setup_end_to_end
+from tests.test_constants import (CLIENT_EMAIL, HOST_ID, HOST_TITLE, SOURCES_PREFIX)
+from tests.utils import setup_end_to_end
 
 client = TestClient(app)
 
