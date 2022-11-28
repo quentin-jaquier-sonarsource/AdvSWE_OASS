@@ -224,3 +224,34 @@ reports.
 The authentication is handled using JSON Web Tokens; here is how it works:
 - a client needs to hit the `/new-client/` endpoint with his email to be added to the database; he will receive his own JWT in the response
 - on every subsequent request, the client has to add the `Authorization: Bearer <JWT>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error
+
+## Possible 3rd Part Applications
+
+There are a variety of ways a client could utilize our service.
+
+1. An app that uses ML to recommend users movies to watch based on their interests.
+   - Such an app might allow users to make watchlists and then based on those 
+watchlists it would recommend more movies in that vein for users to watch. 
+   - In this use case, the profile ID would correspond to a user ID.
+   - The app would use our service to group watchlists with users, take care of
+CRUD operations on those watchlists, and get information on the movies in the
+watchlists to display to the user (e.g. plot overview)
+2. A film news site that serves many listicles
+   - A Buzzfeed-like site for movies that groups movies based on some conceit
+     (e.g. Scariest Movies of all Time, Best B-movies, Hidden Gems from the
+90s, etc.)
+   - In this use case, the profile ID would be used as an article ID or perhaps
+a theme ID if the site had many listicles under one big theme (e.g. Best movies
+per decade)
+   - The site would use our service in order to logically group their lists of
+movies, perform CRUD on these lists, and to display where these movies are
+available to stream.
+3. A movie director information website
+   - A site dedicated to preserving information about film directors might find
+our service useful
+   - In this use case, the profile ID would be used as a director ID and each
+director would have an associated list of movies. The site moderators would
+maintain these lists of movies, using our service to perform CRUD on the lists
+of movies and rate the movies.
+   - Such a site might use our rating feature in order to determine the highest
+rated directors of all time based on the average ratings of their movies.
