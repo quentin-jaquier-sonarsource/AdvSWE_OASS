@@ -28,6 +28,10 @@ PROFILE_TAG = "Profile Endpoints"
 USER_TAG_DESCRIPTION = """"Endpoints related to profiles.
 Profiles are groupings used by clients to serve end users."""
 
+WISHLIST_TAG = "Wishlist Endpoints"
+WISHLIST_TAG_DESCRIPTION = """ Endpoints related to wishlists
+"""
+
 SEARCH_TAG = "Search Endpoints"
 SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
 
@@ -51,5 +55,9 @@ TAG_METADATA = [
     {
         "name": PROFILE_TAG,
         "description": USER_TAG_DESCRIPTION
+    },
+    {
+        "name": WISHLIST_TAG,
+        "description": WISHLIST_TAG_DESCRIPTION
     },
 ]

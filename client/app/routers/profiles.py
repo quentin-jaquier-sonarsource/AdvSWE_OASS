@@ -22,6 +22,7 @@ async def get_all_profiles():
             name
             id
             wishlists {
+                id
                 name
                 movies {
                     details {
