@@ -66,6 +66,7 @@ def test_get_clients_verbose1():
 def test_get_clients_verbose2():
     """
     Tests /clients/all-verbose
+    Also tests /profiles/create
 
     Tests deeper in the response structure, looking at the profiles of the
     client. Does not go as deep as wishlists
