@@ -16,6 +16,45 @@ def reset_token():
     if os.path.exists(TOKEN_PATH):
         os.remove(TOKEN_PATH)
 
+def erase_table(table_name : str = "profiles"):
+    """
+    Erases all rows of the given table in testdb
+    """
+
+    db_conn = psycopg2.connect(
+        host = "localhost",
+        database = "testdb",
+        user = os.environ[DB_USER_NAME_ENV_VAR],
+        password = os.environ[DB_PASSWORD_ENV_VAR]
+    )
+
+    cursor = db_conn.cursor()
+
+    try:
+        erase_table_query = "DELETE from "+table_name
+
+        cursor.execute(erase_table_query)
+
+        # Make sure changes persist
+        db_conn.commit()
+
+    except (Exception, psycopg2.Error) as error:
+        print(f"failure: {error.__str__()}")
+    
+    finally:
+        if db_conn:
+            cursor.close()
+            db_conn.close()
+
+def erase_profiles():
+    """
+    Erases all rows of profiles table
+
+    Must be called before erase_clients because of foreign key constraint
+    """
+
+    erase_table("profiles")
+
 def erase_clients():
     """
     Erases all rows of the client table
@@ -50,4 +89,5 @@ def erase_clients():
 def setup_end_to_end():
     
     reset_token()
+    erase_profiles()
     erase_clients()

@@ -1,5 +1,5 @@
 from tests.test_constants import CLIENT_EMAIL
-from tests.utils import erase_clients
+from tests.utils import setup_end_to_end
 
 from app.main import app
 from fastapi.testclient import TestClient
@@ -11,7 +11,7 @@ def test_get_clients():
     """
     TODO may have to be refactored after authorization is added
     """
-    erase_clients()
+    setup_end_to_end()
 
     token = client.get("/clients/signup/", params={"email": CLIENT_EMAIL})
 
