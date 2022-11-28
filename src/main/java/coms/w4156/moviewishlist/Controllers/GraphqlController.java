@@ -3,7 +3,6 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
-import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
@@ -41,8 +40,6 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
-    private Wishlist wishlist;
-
     /**
      * Fetch all clients in the database.
      *
@@ -75,15 +72,14 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a profile by name.
+     * Fetch a profile by ID.
      *
-     * @param name - The name of the profile
-     *
+     * @param id - The id of the profile
      * @return List of Profile objects
      */
     @QueryMapping
-    public Optional<Profile> profileByName(@Argument final String name) {
-        return profileService.findByName(name);
+    public Optional<Profile> profileByUD(@Argument final String id) {
+        return profileService.findById(Long.parseLong(id));
     }
 
     /**
@@ -158,16 +154,6 @@ public class GraphqlController {
         return detail;
     }
 
-    // /**
-    //  * Get all WatchMode sources.
-    //  *
-    //  * @return List of Profile objects
-    //  */
-    // @QueryMapping
-    // public Collection<WatchModeSource> sources() {
-    //     return watchModeService.getAllSources();
-    // }
-
     /**
      * Get all WatchMode networks.
      *
@@ -196,27 +182,23 @@ public class GraphqlController {
     }
 
     /**
-     * filter all movies by genre in a specific wishlist
-     * @param wishlistID - Wishlist id
-     * @param genre - Genre
+     * Get title details for a movie.
      *
-     * @return List of movies of that genre in the wishlist
+     * @param movie - The local movie object
+     * @param env - The DataFetchingEnvironment
+     *
+     * @return Details of the Title
      */
-
-    @QueryMapping
-    public Collection<Movie> moviesByGenre(
-            @Argument final Long id,
-            @Argument final String genre
-    ){
-        return wishlist.moviesByGenre(genre);
-    }
-
-    @QueryMapping
-    public Collection<Movie> moviesByReleaseYear(
-            @Argument final Long id,
-            @Argument final int movieReleaseYear
-    ){
-        return wishlist.moviesByReleaseYear(movieReleaseYear);
+    @SchemaMapping(typeName = "Movie", field = "details")
+    public TitleDetail getMovieDetails(
+        final Movie movie,
+        final DataFetchingEnvironment env
+    ) {
+        Boolean includeSources = env.getSelectionSet().contains("sources");
+        return watchModeService.getTitleDetail(
+            movie.getId().toString(),
+            includeSources
+        );
     }
 
     /**
@@ -258,5 +240,4 @@ public class GraphqlController {
             )
             .toList();
     }
-
 }

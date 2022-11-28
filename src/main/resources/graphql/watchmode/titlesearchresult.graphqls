@@ -1,5 +1,6 @@
+# Result of the title search as returned by the WatchMode API
 type TitleSearchResult {
-    # The id of the Movie or TV Show Title
+    # The WatchMode id of the Movie or TV Show Title
     id: ID
     # The name or Title of the Title
     name: String

@@ -1,6 +1,14 @@
+# A TV network on which a show or made-for-TV movie can air. E.g. AMC, SHO, etc.
 type WatchModeNetwork {
+    # The WatchMode ID of the network
     id: ID!
+
+    # The name of the network
     name: String
+
+    # The country in which the show or movie originally aired
     origin_country: String
+
+    # The TMDb ID for the show or movie. TMDb is a popular movie API
     tmdb_id: Int
 }
