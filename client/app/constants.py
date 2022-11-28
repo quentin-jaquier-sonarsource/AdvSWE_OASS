@@ -24,10 +24,9 @@ movies. Movie sources are one of 3 types:
 CLIENT_TAG = "Client Endpoints"
 CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
 
-USER_TAG = "User Endpoints"
-USER_TAG_DESCRIPTION = """"Endpoints related to user data. 
-TODO these should be should be scrapped now that we are getting rid of
-users"""
+PROFILE_TAG = "Profile Endpoints"
+USER_TAG_DESCRIPTION = """"Endpoints related to profiles.
+Profiles are groupings used by clients to serve end users."""
 
 SEARCH_TAG = "Search Endpoints"
 SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
@@ -50,7 +49,7 @@ TAG_METADATA = [
         "description": CLIENT_TAG_DESCRIPTION
     },
     {
-        "name": USER_TAG,
+        "name": PROFILE_TAG,
         "description": USER_TAG_DESCRIPTION
     },
 ]
