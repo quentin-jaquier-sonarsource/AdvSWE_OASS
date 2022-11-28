@@ -35,9 +35,17 @@ async def get_all_clients_verbose():
         clients {
             id
             email
-            users {
-                email
+            profiles {
+                id
                 name
+                wishlists {
+                    name
+                    movies {
+                        details {
+                            title
+                        }
+                    }
+                }
             }
         }
     }
