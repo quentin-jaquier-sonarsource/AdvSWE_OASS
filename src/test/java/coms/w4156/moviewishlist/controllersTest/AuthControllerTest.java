@@ -86,6 +86,23 @@ public class AuthControllerTest {
     }
 
     /**
+     * Test that two clients with the same email cannot be created
+     * @throws Exception
+     */
+    @Test
+    public void shouldNotCreateClientTwice() throws Exception {
+        Mockito.when(clientService.create(client)).thenReturn(client);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post("/new-client?email=" + client.getEmail())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+            .andExpect(status().isBadRequest());
+    }
+
+    /**
      * Test that endpoints cannot be accessed without the token
      */
     @Test
