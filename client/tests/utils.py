@@ -46,6 +46,13 @@ def erase_table(table_name : str = "profiles"):
             cursor.close()
             db_conn.close()
 
+def erase_wishlists():
+    """
+    Erases all rows of the wishlists table
+    """
+
+    erase_table("wishlists")
+
 def erase_profiles():
     """
     Erases all rows of profiles table
@@ -99,5 +106,6 @@ def setup_end_to_end():
     """
     
     reset_token()
+    erase_wishlists()
     erase_profiles()
     erase_clients()

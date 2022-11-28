@@ -58,10 +58,10 @@ def test_profile_create():
     result = creation_json["Result"]
 
     # Assert structure of creation response
-    assert "createdProfile" in result
-    assert "id" in result["createdProfile"]
-    assert "name" in result["createdProfile"]
-    assert result["createdProfile"] == PROFILE_NAME
+    assert "createProfile" in result
+    assert "id" in result["createProfile"]
+    assert "name" in result["createProfile"]
+    assert result["createProfile"]["name"] == PROFILE_NAME
 
 
     # now fetch the updated client again to see it has changed
