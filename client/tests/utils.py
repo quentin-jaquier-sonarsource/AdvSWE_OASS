@@ -87,6 +87,16 @@ def erase_clients():
 
 
 def setup_end_to_end():
+    """
+    Sets the DB and local token store to known state
+
+    DB:
+        Erases profiles
+        Erases clients
+    
+    Token Store:
+        Erases stored token
+    """
     
     reset_token()
     erase_profiles()
