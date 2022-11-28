@@ -35,6 +35,13 @@ def test_all():
     Tests /profiles/all
     """
 
+    response = client.get("/profiles/all")
+    json_response = response.json()
+    result = json_response["Result"]
+    profiles = result["profiles"]
+
+    assert len(profiles) == 0
+
 
 def test_profile_create():
     """
