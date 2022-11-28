@@ -37,7 +37,7 @@ def query_graphql_service(query : str, variables : dict = {}) -> dict:
     Params
     ------------
     query : str
-        A GraphQL query
+        A GraphQL query or mutation
     
     variables : dict
         A dictionary mapping variable names to values. If `query` uses no
