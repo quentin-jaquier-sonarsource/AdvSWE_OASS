@@ -4,9 +4,8 @@ The client is itself an API. It has fixed endpoints that are designed to test
 the endpoints of our service end-to-end.
 
 It is programmed in Python using the FastAPI library and requires our service to
-be up and running in order to work. Right now I have it so that it is hitting
-the local endpoints but I can change that pretty easily to hit our Heroku
-instance when the time comes.
+be up and running in order to work. It runs on localhost and requires an
+instance of our service running locally in order to perform tests end to end.
 
 ## How to Run
 
@@ -30,11 +29,7 @@ I'm running 3.10 but any Python 3 should be fine
     - On the command line run `pip install -r requirements.txt`
 4. Run the app
     - On the command line run `uvicorn app.main:app --reload`
-    - Make sure that you also have our service up and running locally (will
-    change the implementation to use the Heroku instance later)
-        - TODO: should I switch this? Having the locally running instance
-        allows for better end to end testing because I can change the state of
-        the DB
+    - Make sure that you also have our service up and running locally
     - the `--reload` flag allows you to make changes to the app while it runs
     without having stop the app and restart it in order to see the changes
 5. Open the app
