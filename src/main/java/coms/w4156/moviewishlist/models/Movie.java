@@ -17,17 +17,9 @@ import lombok.*;
 public class Movie implements ModelInterface<Long> {
 
     /**
-     * ID of the movie.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Getter
-    @Setter
-    private Long id;
-
-    /**
      * ID of the movie on WatchMode.
      */
+    @Id
     @Getter
     @Setter
     @Column(
@@ -36,7 +28,7 @@ public class Movie implements ModelInterface<Long> {
         unique = true,
         updatable = false
     )
-    private Long watchModeId;
+    private Long id;
 
     /**
      * The wishlists that contain this movie.
@@ -56,17 +48,29 @@ public class Movie implements ModelInterface<Long> {
     /**
      * Create a new Movie object.
      *
-     * @param id - ID of the movie
-     * @param watchModeId - ID of the movie on WatchMode
+     * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
      */
     public Movie(
         @JsonProperty final Long id,
-        @JsonProperty final Long watchModeId,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
-        this.watchModeId = watchModeId;
         this.wishlists = wishlists;
+        if (this.wishlists == null) {
+            this.wishlists = List.of();
+        }
+    }
+
+    /**
+     * Get wishlists that this movie belongs to.
+     *
+     * @return List of wishlists
+     */
+    public List<Wishlist> getWishlists() {
+        if (this.wishlists == null) {
+            return List.of();
+        }
+        return wishlists;
     }
 }

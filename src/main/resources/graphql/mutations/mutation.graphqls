@@ -8,7 +8,7 @@ type Mutation {
     # Delete a client
     deleteClient(id: ID!): Client!
 
-    # Create a new user
+    # Create a new profile
     createProfile(
         # ID of the client that this profile belongs to
         clientID: ID!
@@ -16,21 +16,21 @@ type Mutation {
         name: String
     ): Profile!
 
-    # Update a profile
-    updateProfile(id: ID!, name: String): Profile!
+    # Update a profile's name
+    updateProfile(id: ID!, name: String!): Profile
 
-    # Delete a user
-    deleteUser(id: ID!): Profile
+    # Delete a profile
+    deleteProfile(id: ID!): Profile
 
     # Create a new Wishlist
     createWishlist(
-        # Email ID of the user that this wishlist belongs to
-        profileId: ID!
+        # ID of the profile that this wishlist belongs to
+        profileID: ID!
         # Name of the wishlist
         wishlistName: String!
     ): Wishlist!
 
-    # Update a wishlist
+    # Update a wishlist's name
     updateWishlist(
         # ID of the wishlist to be updated
         id: ID!
