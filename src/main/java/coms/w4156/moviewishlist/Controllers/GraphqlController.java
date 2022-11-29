@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
@@ -39,6 +40,8 @@ public class GraphqlController {
 
     @Autowired
     private WatchModeService watchModeService;
+
+    private Wishlist wishlist;
 
     /**
      * Fetch all clients in the database.
@@ -99,6 +102,23 @@ public class GraphqlController {
      *
      * @return List of movies of that genre in the wishlist
      */
+
+    @QueryMapping
+    public Collection<Movie> moviesByGenre(
+            @Argument final Long id,
+            @Argument final String genre
+    ){
+        return wishlist.moviesByGenre(genre);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByReleaseYear(
+            @Argument final Long id,
+            @Argument final String release_year
+    ){
+
+        return wishlist.moviesByReleaseYear(release_year);
+    }
 
     /**
      * Fetch a movie by id.

@@ -126,12 +126,12 @@ public class Wishlist implements ModelInterface<Long> {
     public List<Movie> moviesByGenre(String genre){
         return this.movies.stream()
                 .collect(Collectors.filtering(
-                        movie -> movie.equalsIgnoreCase(genre), Collectors.toList()));
+                        movie -> movie.getMovie_gener().equalsIgnoreCase(genre), Collectors.toList()));
     }
 
-    public List<Movie> moviesByReleaseYear(int movieReleaseYear){
+    public List<Movie> moviesByReleaseYear(String movieReleaseYear){
         return this.movies.stream()
                 .collect(Collectors.filtering(
-                        movie -> movie.getMovieReleaseYear() == movieReleaseYear, Collectors.toList()));
+                        movie -> movie.getMovie_release_year().equalsIgnoreCase(movieReleaseYear) , Collectors.toList()));
     }
 }
