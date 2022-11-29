@@ -209,8 +209,6 @@ public class MutationController {
         final String movie_name;
         final String movie_gener;
         final String movie_release_year;
-        final int movie_runtime;
-        final int critic_score;
 
         movie_name = watchModeService.getMovieName(movieID);
         movie_gener = watchModeService.getMovieGenre(movieID);

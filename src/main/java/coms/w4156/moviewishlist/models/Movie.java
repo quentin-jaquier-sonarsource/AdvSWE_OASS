@@ -25,16 +25,16 @@ import javax.persistence.CascadeType;
 public class Movie implements ModelInterface<Long> {
 
     /**
-     * ID of the movie.
+     * ID of the movie on WatchMode.
      */
     @Id
     @Getter
     @Setter
     @Column(
-            name = "watchmode_id",
-            nullable = false,
-            unique = true,
-            updatable = false
+        name = "watchmode_id",
+        nullable = false,
+        unique = true,
+        updatable = false
     )
     private Long id;
 
@@ -50,8 +50,8 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_name",
-            nullable = true,
-            unique = false,
+            nullable = false,
+            unique = true,
             updatable = false
     )
     private String movie_name;
@@ -60,7 +60,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_gener",
-            nullable = true,
+            nullable = false,
             unique = false,
             updatable = true
     )
@@ -70,7 +70,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_release_year",
-            nullable = true,
+            nullable = false,
             unique = false,
             updatable = false
     )
@@ -107,6 +107,7 @@ public class Movie implements ModelInterface<Long> {
 
     /**
      * Create a new Movie object.
+     *
      * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
      * @param movie_name - Name of the movie
@@ -147,6 +148,4 @@ public class Movie implements ModelInterface<Long> {
         }
         return wishlists;
     }
-
-
 }

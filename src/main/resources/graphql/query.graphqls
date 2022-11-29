@@ -33,7 +33,7 @@ type Query {
     # watch mode API
     networks: [WatchModeNetwork]
 
-    # Search for Movies and TV Shows by title
+    # Serach for Movies and TV Shows by title
     # Returns a list of results sorted by relevance
     searchTitles(title: String!): [TitleSearchResult]
 
