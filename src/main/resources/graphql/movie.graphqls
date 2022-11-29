@@ -3,11 +3,14 @@ type Movie {
 
     # Our service's unique identifier for the movie
     id: ID!
-
+    movieName: String!
+    genre: String
+    movieReleaseYear: String
     # All the wishlists on which this movie resides
     movieName: String!
     genre: [String]
     movieReleaseYear: Int
     wishlists: [Wishlist]
     details: TitleDetail
+
 }

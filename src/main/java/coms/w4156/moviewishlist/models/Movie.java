@@ -85,6 +85,48 @@ public class Movie implements ModelInterface<Long> {
     @Builder.Default
     private List<Wishlist> wishlists = new ArrayList<>();
 
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_name",
+            nullable = false,
+            unique = true,
+            updatable = false
+    )
+    private String movie_name;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_gener",
+            nullable = false,
+            unique = false,
+            updatable = true
+    )
+    private String movie_gener;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_release_year",
+            nullable = false,
+            unique = false,
+            updatable = false
+    )
+    private String movie_release_year;
+
+//    @Getter
+//    @Setter
+//    @Column(
+//            name = "movie_director",
+//            nullable = false,
+//            unique = true,
+//            updatable = false
+//    )
+//    private List<Wishlist> wishlists = new ArrayList<>();
+
+
+
     /**
      * Create a new Movie object.
      *
@@ -100,6 +142,9 @@ public class Movie implements ModelInterface<Long> {
         @JsonProperty final String movieName,
         @JsonProperty final String genre,
         @JsonProperty final int movieReleaseYear,
+        @JsonProperty final String movie_name,
+        @JsonProperty final String movie_gener,
+        @JsonProperty final String movie_release_year,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
@@ -123,6 +168,4 @@ public class Movie implements ModelInterface<Long> {
         }
         return wishlists;
     }
-
-
 }

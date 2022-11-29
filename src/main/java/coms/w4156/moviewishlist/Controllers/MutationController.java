@@ -1,6 +1,8 @@
 package coms.w4156.moviewishlist.controllers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import coms.w4156.moviewishlist.models.Client;
+import coms.w4156.moviewishlist.services.WatchModeService watchModeService;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
@@ -32,6 +34,9 @@ public class MutationController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private WatchModeService watchModeService;
 
     /**
      * Create a new client with the given email ID.
@@ -194,6 +199,14 @@ public class MutationController {
         @Argument final String wishlistID,
         @Argument final String movieID
     ) {
+        final String movie_name;
+        final String movie_gener;
+        final String movie_release_year;
+
+        movie_name = watchModeService.getMovieName(movieID);
+        movie_gener = watchModeService.getMovieGenre(movieID);
+        movie_release_year = watchModeService.getMovieReleaseYear(movieID);
+
         var wishlist = wishlistService
             .findById(Long.parseLong(wishlistID))
             .get();
@@ -218,6 +231,9 @@ public class MutationController {
                     Movie
                         .builder()
                         .id(Long.parseLong(movieID))
+                        .movie_name(movie_name)
+                        .movie_gener(movie_gener)
+                        .movie_release_year(movie_release_year)
                         .wishlists(List.of(wishlist))
                         .build()
                 )
