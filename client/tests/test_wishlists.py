@@ -34,14 +34,14 @@ def setUp():
 
     # Run after tests
 
-def test_create():
-    """
-    Tests /watchlists/create
-    """
+# def test_create():
+#     """
+#     Tests /watchlists/create
+#     """
 
-    response = client.get("/wishlists/create")
-    json_response = response.json()
-    result = json_response["Result"]
-    profiles = result["profiles"]
+#     response = client.get("/wishlists/create")
+#     json_response = response.json()
+#     result = json_response["Result"]
+#     profiles = result["profiles"]
 
-    assert len(profiles) == 0
+#     assert len(profiles) == 0
