@@ -135,17 +135,15 @@ public class Movie implements ModelInterface<Long> {
     )
     private int movie_runtime;
 
-//    @Getter
-//    @Setter
-//    @Column(
-//            name = "movie_director",
-//            nullable = false,
-//            unique = true,
-//            updatable = false
-//    )
-//    private List<Wishlist> wishlists = new ArrayList<>();
-
-
+    @Getter
+    @Setter
+    @Column(
+            name = "critic_score",
+            nullable = false,
+            unique = false,
+            updatable = false
+    )
+    private int critic_score;
 
     /**
      * Create a new Movie object.
@@ -162,6 +160,7 @@ public class Movie implements ModelInterface<Long> {
         @JsonProperty final String movie_gener,
         @JsonProperty final String movie_release_year,
         @JsonProperty final int movie_runtime,
+        @JsonProperty final int critic_score,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
@@ -169,6 +168,7 @@ public class Movie implements ModelInterface<Long> {
         this.movie_gener = movie_gener;
         this.movie_release_year = movie_release_year;
         this.movie_runtime = movie_runtime;
+        this.critic_score = critic_score;
         this.wishlists = wishlists;
         if (this.wishlists == null) {
             this.wishlists = List.of();

@@ -319,4 +319,16 @@ public class WatchModeService {
         return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getRuntimeMinutes();
     }
 
+    public int getMoviesByCriticScore(
+            final String id
+    ) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getCriticScore();
+    }
 }
