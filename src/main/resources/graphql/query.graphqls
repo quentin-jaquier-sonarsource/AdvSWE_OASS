@@ -31,6 +31,11 @@ type Query {
     # get user rating by id
     ratingsById(id:ID!) : Ratings
 
+    # get ratings done by a specific profile
+    ratingsByProfile(profileId : String!) : [Ratings]
+
+    # get ratings for a specific movie
+    ratingsByMovie(movieId : String!) : [Ratings]
 
     # get wishlists
     wishlists : [Wishlist]

@@ -3,19 +3,17 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.services.ClientService;
-import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.ProfileService;
-import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.services.*;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -39,6 +37,10 @@ public class GraphqlController {
 
     @Autowired
     private WatchModeService watchModeService;
+
+
+    @Autowired
+    private RatingService ratingService;
 
     /**
      * Fetch all clients in the database.
@@ -81,6 +83,45 @@ public class GraphqlController {
     @QueryMapping
     public Optional<Profile> profileByName(@Argument final String name) {
         return profileService.findByName(name);
+    }
+
+
+    /**
+     * Fetch all ratings in the database.
+     *
+     * @return List of ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratings() {
+        return ratingService.getAll();
+    }
+
+    /**
+     * Fetch a rating by id.
+     *
+     * @param id - The id of the rating
+     *
+     * @return Ratings objects
+     */
+    @QueryMapping
+    public Optional<Ratings> ratingsById(@Argument final Long id) {
+        return ratingService.findById(id);
+    }
+
+
+    @QueryMapping
+    public Collection<Ratings> ratingsByProfile(@Argument final String profileId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getProfileId()==Long.parseLong(profileId))
+                .collect(Collectors.toCollection(ArrayList:: new));
+    }
+
+
+    @QueryMapping
+    public Collection<Ratings> ratingsByMovie(@Argument final String movieId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getMovieIds()==Long.parseLong(movieId))
+                .collect(Collectors.toCollection(ArrayList:: new));
     }
 
     /**

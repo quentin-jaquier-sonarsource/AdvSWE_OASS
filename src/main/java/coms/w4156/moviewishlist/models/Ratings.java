@@ -10,13 +10,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        name = "user_ratings"
+        name = "ratings"
 )
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Ratings implements ModelInterface<Long> {
 
 
@@ -31,9 +30,9 @@ public class Ratings implements ModelInterface<Long> {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "profile_id")
     @Setter
-    private User user;
+    private Profile profile;
 
 
     @ManyToOne
@@ -52,12 +51,20 @@ public class Ratings implements ModelInterface<Long> {
 
 
     public Ratings(
-            @JsonProperty final User users,
+            @JsonProperty final String review,
+            @JsonProperty final Double rating
+    ) {
+        this.review = review;
+        this.rating = rating;
+    }
+
+    public Ratings(
+            @JsonProperty final Profile profile,
             @JsonProperty final Movie movies,
             @JsonProperty final String review,
             @JsonProperty final Double rating
     ) {
-        this.user = users;
+        this.profile = profile;
         this.movie = movies;
         this.rating = rating;
         this.review = review;
@@ -66,13 +73,13 @@ public class Ratings implements ModelInterface<Long> {
 
     public Ratings(
             @JsonProperty final Long id,
-            @JsonProperty final User users,
+            @JsonProperty final Profile profile,
             @JsonProperty final Movie movies,
             @JsonProperty final String review,
             @JsonProperty final Double rating
     ) {
         this.id = id;
-        this.user = users;
+        this.profile = profile;
         this.movie = movies;
         this.rating = rating;
         this.review = review;
@@ -81,18 +88,14 @@ public class Ratings implements ModelInterface<Long> {
 
 
 
-    public String getUserId() {
-        return this.user.getEmail();
+    public Long getProfileId() {
+        return this.profile.getId();
     }
 
     public Long getMovieIds() {
         return this.movie.getId();
     }
 
-//    @Override
-//    public String toString() {
-//        return "";
-//    }
 }
 
 

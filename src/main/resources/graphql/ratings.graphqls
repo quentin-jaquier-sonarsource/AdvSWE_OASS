@@ -1,6 +1,6 @@
 type Ratings {
     id : ID!
-    user : User
+    profile : Profile
     movie : Movie
     review : String
     rating : Float
