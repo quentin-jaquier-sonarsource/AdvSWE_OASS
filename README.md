@@ -225,6 +225,9 @@ The authentication is handled using JSON Web Tokens; here is how it works:
 - a client needs to hit the `/new-client/` endpoint with his email to be added to the database; he will receive his own JWT in the response
 - on every subsequent request, the client has to add the `Authorization: Bearer <JWT>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error
 
+## Client
+To run the client, read the instructions in `client/README.md`
+
 ## Possible 3rd Part Applications
 
 There are a variety of ways a client could utilize our service.
