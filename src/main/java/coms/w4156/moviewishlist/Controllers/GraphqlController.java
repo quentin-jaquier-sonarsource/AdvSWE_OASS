@@ -126,10 +126,17 @@ public class GraphqlController {
             @Argument final int runtime
     ){
 
-        return wishlist.getMoviesByRunetime(runtime);
+        return wishlist.getMoviesByRuntime(runtime);
     }
 
+    @QueryMapping
+    public Collection<Movie> moviesByCriticScore(
+            @Argument final Long id,
+            @Argument final int critic_score
+    ){
 
+        return wishlist.getMoviesByCriticScore(critic_score);
+    }
 
     /**
      * Fetch a movie by id.
