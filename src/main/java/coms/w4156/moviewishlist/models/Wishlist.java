@@ -123,15 +123,23 @@ public class Wishlist implements ModelInterface<Long> {
         return this.movies.stream().map(movie -> movie.getId()).toList();
     }
 
-    public List<Movie> moviesByGenre(String genre){
+    public List<Movie> getMoviesByGenre(String genre){
         return this.movies.stream()
                 .collect(Collectors.filtering(
                         movie -> movie.getMovie_gener().equalsIgnoreCase(genre), Collectors.toList()));
     }
 
-    public List<Movie> moviesByReleaseYear(String movieReleaseYear){
+    public List<Movie> getMoviesByReleaseYear(String movieReleaseYear){
         return this.movies.stream()
                 .collect(Collectors.filtering(
                         movie -> movie.getMovie_release_year().equalsIgnoreCase(movieReleaseYear) , Collectors.toList()));
     }
+
+    public List<Movie> getMoviesByRunetime(int runtime){
+        return this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getMovie_runtime() == runtime , Collectors.toList()));
+    }
+
+
 }
