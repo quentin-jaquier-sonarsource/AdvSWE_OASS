@@ -16,7 +16,7 @@ type Mutation {
         name: String
     ): Profile!
 
-    # Update a profile
+    # Update a profile's name
     updateProfile(id: ID!, name: String!): Profile
 
     # Delete a profile
@@ -30,7 +30,7 @@ type Mutation {
         wishlistName: String!
     ): Wishlist!
 
-    # Update a wishlist
+    # Update a wishlist's name
     updateWishlist(
         # ID of the wishlist to be updated
         id: ID!

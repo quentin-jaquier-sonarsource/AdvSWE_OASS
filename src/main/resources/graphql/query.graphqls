@@ -1,9 +1,9 @@
 # The root query mechanism. Use this for all data fetching
 type Query {
-    # Get all users
+    # Get all profiles
     profiles: [Profile]
 
-    # get a particular user by email
+    # get a particular profile by id
     profileByID(id: ID!): Profile
 
     # get all clients
@@ -18,7 +18,7 @@ type Query {
     # watch mode API
     networks: [WatchModeNetwork]
 
-    # Serach for Movies and TV Shows by title
+    # Search for Movies and TV Shows by title
     # Returns a list of results sorted by relevance
     searchTitles(title: String!): [TitleSearchResult]
 
