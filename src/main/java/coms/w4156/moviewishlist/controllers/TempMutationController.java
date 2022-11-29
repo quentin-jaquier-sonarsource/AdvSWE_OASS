@@ -11,7 +11,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MutationController {
+public class TempMutationController {
 
     /**
      * Use dependency injection to inject an object of the UserService class.
