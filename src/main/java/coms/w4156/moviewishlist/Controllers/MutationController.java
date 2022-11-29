@@ -2,7 +2,7 @@ package coms.w4156.moviewishlist.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import coms.w4156.moviewishlist.models.Client;
-import coms.w4156.moviewishlist.services.WatchModeService watchModeService;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
