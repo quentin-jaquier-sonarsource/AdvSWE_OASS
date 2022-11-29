@@ -209,10 +209,12 @@ public class MutationController {
         final String movie_name;
         final String movie_gener;
         final String movie_release_year;
+        final int movie_runtime;
 
         movie_name = watchModeService.getMovieName(movieID);
         movie_gener = watchModeService.getMovieGenre(movieID);
         movie_release_year = watchModeService.getMovieReleaseYear(movieID);
+        movie_runtime = watchModeService.getMovieRuntime(movieID);
 
         var wishlist = wishlistService
             .findById(Long.parseLong(wishlistID))
@@ -241,6 +243,7 @@ public class MutationController {
                         .movie_name(movie_name)
                         .movie_gener(movie_gener)
                         .movie_release_year(movie_release_year)
+                        .movie_runtime(movie_runtime)
                         .wishlists(List.of(wishlist))
                         .build()
                 )
