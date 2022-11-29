@@ -152,6 +152,4 @@ public class Wishlist implements ModelInterface<Long> {
                 .collect(Collectors.filtering(
                         movie -> movie.getMovieReleaseYear() == movieReleaseYear, Collectors.toList()));
     }
-
-
 }

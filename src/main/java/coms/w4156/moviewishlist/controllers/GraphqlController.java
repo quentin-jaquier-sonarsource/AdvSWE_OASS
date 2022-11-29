@@ -327,7 +327,6 @@ public class GraphqlController {
         );
     }
 
-
     /**
      * Get title details by id.
      *
