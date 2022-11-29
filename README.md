@@ -178,12 +178,31 @@ Here are the results of the latest test run:
 
 ## Documentation
 
-All the documentation for the GraphQL endpoint can be found by expanding the
-documentation pane in the top right.
+Documentation for many of our endpoints can be found in the Documentation folder
+
+All the documentation for the GraphQL endpoint can be found in the GraphiQL IDE.
+
+In order to access this IDE, you need to do a few things.
+
+1. Spin up a local instance of our service
+2. Authenticate by following the instructions in the Authentication portion of this README. Hold on to the token
+3. Download the ModHeader extension for Google Chrome
+4. Hit the /graphiql endpoint. At this point it should NOT work
+5. Use the ModHeader plugin to add a `Request Header` with name = `Authorization` and value = `Bearer <JWT>`
+   - Where JWT is your token that you saved from before. Note the space after "Bearer"
+
+The header should look like this:
+
+![ModHeader](/Documentation/documentation-screenshots/modHeader.png)
+
+After you have completed all these steps, you should be able to access the GraphiQL IDE
+through the /graphiql endpoint. The documentation for this endpoint is visible in the `Docs` pane which
+can be opened by clicking on the button in the top right. See the screenshot below.
+
 
 ![Where the docs button is](/Documentation/documentation-screenshots/where-docs.png)
 
-The documentation is interactive.
+The documentation is interactive. You can click on the types to introspect
 
 ![The documentation pane](/Documentation/documentation-screenshots/docs.png)
 
@@ -208,3 +227,34 @@ The authentication is handled using JSON Web Tokens; here is how it works:
 
 ## Client
 To run the client, read the instructions in `client/README.md`
+
+## Possible 3rd Part Applications
+
+There are a variety of ways a client could utilize our service.
+
+1. An app that uses ML to recommend users movies to watch based on their interests.
+   - Such an app might allow users to make watchlists and then based on those 
+watchlists it would recommend more movies in that vein for users to watch. 
+   - In this use case, the profile ID would correspond to a user ID.
+   - The app would use our service to group watchlists with users, take care of
+CRUD operations on those watchlists, and get information on the movies in the
+watchlists to display to the user (e.g. plot overview)
+2. A film news site that serves many listicles
+   - A Buzzfeed-like site for movies that groups movies based on some conceit
+     (e.g. Scariest Movies of all Time, Best B-movies, Hidden Gems from the
+90s, etc.)
+   - In this use case, the profile ID would be used as an article ID or perhaps
+a theme ID if the site had many listicles under one big theme (e.g. Best movies
+per decade)
+   - The site would use our service in order to logically group their lists of
+movies, perform CRUD on these lists, and to display where these movies are
+available to stream.
+3. A movie director information website
+   - A site dedicated to preserving information about film directors might find
+our service useful
+   - In this use case, the profile ID would be used as a director ID and each
+director would have an associated list of movies. The site moderators would
+maintain these lists of movies, using our service to perform CRUD on the lists
+of movies and rate the movies.
+   - Such a site might use our rating feature in order to determine the highest
+rated directors of all time based on the average ratings of their movies.
