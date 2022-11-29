@@ -100,15 +100,6 @@ public class GraphqlController {
      * @return List of movies of that genre in the wishlist
      */
 
-    @QueryMapping
-    public Collection<Movie> moviesByGenre(
-            @Argument final Long id,
-            @Argument final String genre
-    ){
-        watchModeService.
-        return wishlist.moviesByGenre(genre);
-    }
-
     /**
      * Fetch a movie by id.
      *
