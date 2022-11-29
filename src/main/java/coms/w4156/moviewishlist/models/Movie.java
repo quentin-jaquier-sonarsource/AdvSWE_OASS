@@ -75,6 +75,16 @@ public class Movie implements ModelInterface<Long> {
     )
     private String movie_release_year;
 
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_runtime",
+            nullable = false,
+            unique = false,
+            updatable = false
+    )
+    private int movie_runtime;
+
 //    @Getter
 //    @Setter
 //    @Column(
@@ -98,12 +108,14 @@ public class Movie implements ModelInterface<Long> {
         @JsonProperty final String movie_name,
         @JsonProperty final String movie_gener,
         @JsonProperty final String movie_release_year,
+        @JsonProperty final int movie_runtime,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
         this.movie_name = movie_name;
         this.movie_gener = movie_gener;
         this.movie_release_year = movie_release_year;
+        this.movie_runtime = movie_runtime;
         this.wishlists = wishlists;
         if (this.wishlists == null) {
             this.wishlists = List.of();
