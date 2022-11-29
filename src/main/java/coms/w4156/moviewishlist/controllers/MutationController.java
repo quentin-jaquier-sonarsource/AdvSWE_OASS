@@ -1,13 +1,8 @@
 package coms.w4156.moviewishlist.controllers;
 
-import coms.w4156.moviewishlist.models.Client;
-import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.Profile;
-import coms.w4156.moviewishlist.models.Wishlist;
-import coms.w4156.moviewishlist.services.ClientService;
-import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.ProfileService;
-import coms.w4156.moviewishlist.services.WishlistService;
+import coms.w4156.moviewishlist.models.*;
+import coms.w4156.moviewishlist.services.*;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +27,9 @@ public class MutationController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private RatingService ratingService;
 
     /**
      * Create a new client with the given email ID.
@@ -223,4 +221,51 @@ public class MutationController {
                 )
             );
     }
+
+
+
+    @MutationMapping
+    public Ratings createRatings(
+            @Argument final String profileId,
+            @Argument final String movieId,
+            @Argument final String review,
+            @Argument final Double rating
+    ) {
+        return ratingService.create(
+                Ratings
+                        .builder()
+                        .profile(profileService.findById(Long.parseLong(profileId)).get())
+                        .movie(movieService.findById(Long.parseLong(movieId)).get())
+                        .review(review)
+                        .rating(rating)
+                        .build()
+        );
+    }
+
+    @MutationMapping
+    public Optional<Ratings> updateRating(
+            @Argument final String id,
+            @Argument final String profileId,
+            @Argument final String movieId,
+            @Argument final String review,
+            @Argument final Double rating
+    ) {
+        return ratingService
+                .findById(Long.parseLong(id))
+                .map(w -> {
+                    w.setProfile(profileService.findById(Long.parseLong(profileId)).get());
+                    w.setRating(rating);
+                    w.setReview(review);
+                    w.setMovie(movieService.findById(Long.parseLong(movieId)).get());
+                    return ratingService.update(w);
+                });
+    }
+
+
+    @MutationMapping
+    public Optional<Ratings> deleteRating(@Argument final String id) {
+        return ratingService.deleteById(Long.parseLong(id));
+    }
+
+
 }
