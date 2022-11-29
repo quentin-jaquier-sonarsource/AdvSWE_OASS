@@ -7,6 +7,7 @@ type Movie {
     genre: String
     movieReleaseYear: String
     movieRuntime: Int
+    movieCriticScore: Int
     # All the wishlists on which this movie resides
     movieName: String!
     genre: [String]

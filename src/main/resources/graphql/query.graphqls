@@ -24,6 +24,9 @@ type Query {
     # filter all movies by run time in a specific wishlist
     moviesByRuntime(wishlistID: ID!, movieReleaseYear: Int): [Movie]
 
+    # filter all movies by critic score in a specific wishlist
+    moviesByCriticScore(wishlistID: ID!, movieReleaseYear: Int): [Movie]
+
     # filter all movies by rating in a specific wishlist
 #    moviesByReleaseYear(wishlistID: ID!, rating: Int): [Movie]
 
