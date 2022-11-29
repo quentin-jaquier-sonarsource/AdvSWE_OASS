@@ -51,8 +51,6 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
-    private Wishlist wishlist;
-
 
     @Autowired
     private RatingService ratingService;
@@ -369,5 +367,4 @@ public class GraphqlController {
             )
             .toList();
     }
-
 }
