@@ -170,6 +170,23 @@ public class GraphqlController {
      * @return List of movies of that genre in the wishlist
      */
 
+    @QueryMapping
+    public Collection<Movie> moviesByGenre(
+            @Argument final Long id,
+            @Argument final String genre
+    ){
+        return wishlist.moviesByGenre(genre);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByReleaseYear(
+            @Argument final Long id,
+            @Argument final String release_year
+    ){
+
+        return wishlist.moviesByReleaseYear(release_year);
+    }
+
     /**
      * Fetch movie by name in the waishlist.
      *
