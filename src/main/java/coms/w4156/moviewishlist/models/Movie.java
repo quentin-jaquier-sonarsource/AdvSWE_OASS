@@ -80,7 +80,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_runtime",
-            nullable = true,
+            nullable = false,
             unique = false,
             updatable = false
     )
