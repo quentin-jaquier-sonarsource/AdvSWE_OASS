@@ -45,6 +45,48 @@ public class Movie implements ModelInterface<Long> {
     @Builder.Default
     private List<Wishlist> wishlists = new ArrayList<>();
 
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_name",
+            nullable = false,
+            unique = true,
+            updatable = false
+    )
+    private String movie_name;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_gener",
+            nullable = false,
+            unique = false,
+            updatable = true
+    )
+    private String movie_gener;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_release_year",
+            nullable = false,
+            unique = false,
+            updatable = false
+    )
+    private String movie_release_year;
+
+//    @Getter
+//    @Setter
+//    @Column(
+//            name = "movie_director",
+//            nullable = false,
+//            unique = true,
+//            updatable = false
+//    )
+//    private List<Wishlist> wishlists = new ArrayList<>();
+
+
+
     /**
      * Create a new Movie object.
      *
@@ -53,9 +95,15 @@ public class Movie implements ModelInterface<Long> {
      */
     public Movie(
         @JsonProperty final Long id,
+        @JsonProperty final String movie_name,
+        @JsonProperty final String movie_gener,
+        @JsonProperty final String movie_release_year,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
+        this.movie_name = movie_name;
+        this.movie_gener = movie_gener;
+        this.movie_release_year = movie_release_year;
         this.wishlists = wishlists;
         if (this.wishlists == null) {
             this.wishlists = List.of();

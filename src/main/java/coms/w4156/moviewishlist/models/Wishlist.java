@@ -126,7 +126,7 @@ public class Wishlist implements ModelInterface<Long> {
     public List<Movie> moviesByGenre(String genre){
         return this.movies.stream()
                 .collect(Collectors.filtering(
-                        movie -> movie.getGenre().equalsIgnoreCase(genre), Collectors.toList()));
+                        movie -> movie.equalsIgnoreCase(genre), Collectors.toList()));
     }
 
     public List<Movie> moviesByReleaseYear(int movieReleaseYear){
@@ -134,6 +134,4 @@ public class Wishlist implements ModelInterface<Long> {
                 .collect(Collectors.filtering(
                         movie -> movie.getMovieReleaseYear() == movieReleaseYear, Collectors.toList()));
     }
-
-
 }
