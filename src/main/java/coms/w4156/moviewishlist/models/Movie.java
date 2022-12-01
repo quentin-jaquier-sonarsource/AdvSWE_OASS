@@ -126,12 +126,12 @@ public class Movie implements ModelInterface<Long> {
         @JsonProperty final int critic_score
     ) {
         this.id = id;
+        this.wishlists = wishlists;
         this.movie_name = movie_name;
         this.movie_gener = movie_gener;
         this.movie_release_year = movie_release_year;
         this.movie_runtime = movie_runtime;
         this.critic_score = critic_score;
-        this.wishlists = wishlists;
         if (this.wishlists == null) {
             this.wishlists = List.of();
         }
