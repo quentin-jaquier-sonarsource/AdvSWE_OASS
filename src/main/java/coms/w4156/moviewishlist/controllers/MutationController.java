@@ -223,7 +223,15 @@ public class MutationController {
     }
 
 
-
+    /**
+     * Create a new Ratings for a profile and movie.
+     *
+     * @param profileId - ID of the profile to create the rating for
+     * @param movieId - ID of the movie for which the rating is given
+     * @param review - Comment left with the numerical rating
+     * @param rating - The numerical rating given to a movie
+     * @return the new ratings object
+     */
     @MutationMapping
     public Ratings createRatings(
             @Argument final String profileId,
@@ -234,14 +242,29 @@ public class MutationController {
         return ratingService.create(
                 Ratings
                         .builder()
-                        .profile(profileService.findById(Long.parseLong(profileId)).get())
-                        .movie(movieService.findById(Long.parseLong(movieId)).get())
+                        .profile(
+                            profileService.findById(Long.parseLong(profileId))
+                                    .get())
+                        .movie(
+                            movieService.findById(Long.parseLong(movieId))
+                                    .get())
                         .review(review)
                         .rating(rating)
                         .build()
         );
     }
 
+
+    /**
+     * Update a rating with the given ID.
+     *
+     * @param id - ID of the rating to update
+     * @param profileId - ID of the profile to update the rating for
+     * @param movieId - ID of the movie for which the rating is given
+     * @param review - Comment left with the numerical rating
+     * @param rating - The numerical rating given to a movie
+     * @return the updated ratings object
+     */
     @MutationMapping
     public Optional<Ratings> updateRating(
             @Argument final String id,
@@ -262,10 +285,15 @@ public class MutationController {
     }
 
 
+    /**
+     * Delete a rating by ID.
+     *
+     * @param id - ID of the rating to delete
+     * @return the deleted ratings object
+     */
     @MutationMapping
     public Optional<Ratings> deleteRating(@Argument final String id) {
         return ratingService.deleteById(Long.parseLong(id));
     }
-
 
 }

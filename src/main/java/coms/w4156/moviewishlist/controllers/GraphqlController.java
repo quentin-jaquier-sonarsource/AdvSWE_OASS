@@ -107,19 +107,33 @@ public class GraphqlController {
         return ratingService.findById(id);
     }
 
-
+    /**
+     * Fetch a rating by the profile that gave the rating.
+     *
+     * @param profileId - The id of the profile that gave the rating
+     *
+     * @return Ratings objects
+     */
     @QueryMapping
-    public Collection<Ratings> ratingsByProfile(@Argument final String profileId) {
+    public Collection<Ratings> ratingsByProfile(
+            @Argument final String profileId) {
         return ratingService.getAll().stream()
-                .filter(p -> p.getProfileId()==Long.parseLong(profileId))
+                .filter(p -> p.getProfileId() == Long.parseLong(profileId))
                 .collect(Collectors.toCollection(ArrayList:: new));
     }
 
-
+    /**
+     * Fetch a rating by the movie for which the rating was given.
+     *
+     * @param movieId - The id of the movie for which the rating was given
+     *
+     * @return List of Ratings objects
+     */
     @QueryMapping
-    public Collection<Ratings> ratingsByMovie(@Argument final String movieId) {
+    public Collection<Ratings> ratingsByMovie(
+            @Argument final String movieId) {
         return ratingService.getAll().stream()
-                .filter(p -> p.getMovieIds()==Long.parseLong(movieId))
+                .filter(p -> p.getMovieIds() == Long.parseLong(movieId))
                 .collect(Collectors.toCollection(ArrayList:: new));
     }
 

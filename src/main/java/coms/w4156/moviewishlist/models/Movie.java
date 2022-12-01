@@ -3,9 +3,17 @@ package coms.w4156.moviewishlist.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 import lombok.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+
 
 @Entity
 @Table(name = "movies")
@@ -40,7 +48,9 @@ public class Movie implements ModelInterface<Long> {
     private List<Wishlist> wishlists = new ArrayList<>();
 
 
-
+    /**
+     * The ratings given for this movie.
+     */
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     @Getter
     private List<Ratings> ratings;
