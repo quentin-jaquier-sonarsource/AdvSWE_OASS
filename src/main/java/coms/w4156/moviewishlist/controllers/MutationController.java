@@ -242,12 +242,12 @@ public class MutationController {
                     Movie
                         .builder()
                         .id(Long.parseLong(movieID))
+                        .wishlists(List.of(wishlist))
                         .movie_name(movie_name)
                         .movie_gener(movie_gener)
                         .movie_release_year(movie_release_year)
                         .movie_runtime(movie_runtime)
                         .critic_score(critic_score)
-                        .wishlists(List.of(wishlist))
                         .build()
                 )
             );

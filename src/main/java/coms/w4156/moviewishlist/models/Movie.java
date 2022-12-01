@@ -51,7 +51,7 @@ public class Movie implements ModelInterface<Long> {
     @Column(
             name = "movie_name",
             nullable = false,
-            unique = true,
+            unique = false,
             updatable = false
     )
     private String movie_name;
@@ -118,12 +118,12 @@ public class Movie implements ModelInterface<Long> {
      */
     public Movie(
         @JsonProperty final Long id,
+        @JsonProperty final List<Wishlist> wishlists,
         @JsonProperty final String movie_name,
         @JsonProperty final String movie_gener,
         @JsonProperty final String movie_release_year,
         @JsonProperty final int movie_runtime,
-        @JsonProperty final int critic_score,
-        @JsonProperty final List<Wishlist> wishlists
+        @JsonProperty final int critic_score
     ) {
         this.id = id;
         this.movie_name = movie_name;
