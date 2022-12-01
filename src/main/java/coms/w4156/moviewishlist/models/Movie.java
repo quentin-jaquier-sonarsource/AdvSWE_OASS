@@ -24,15 +24,6 @@ import lombok.ToString;
 public class Movie implements ModelInterface<Long> {
 
     /**
-     * ID of the movie.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Getter
-    @Setter
-    private Long id;
-
-    /**
      * ID of the movie on WatchMode.
      */
     @Id
@@ -45,37 +36,6 @@ public class Movie implements ModelInterface<Long> {
         updatable = false
     )
     private Long id;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_name",
-            nullable = false,
-            unique = true,
-            updatable = false
-    )
-    private String movieName;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_genre",
-            nullable = false,
-            unique = false,
-            updatable = true
-    )
-    private String genre;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_release_year",
-            nullable = false,
-            unique = false,
-            updatable = true
-    )
-    private int movieReleaseYear;
-
 
     /**
      * The wishlists that contain this movie.
@@ -90,7 +50,7 @@ public class Movie implements ModelInterface<Long> {
     @Column(
             name = "movie_name",
             nullable = false,
-            unique = true,
+            unique = false,
             updatable = false
     )
     private String movie_name;
@@ -138,20 +98,22 @@ public class Movie implements ModelInterface<Long> {
     /**
      * Create a new Movie object.
      *
-     * @param id - ID of the movie
-     * @param movieName - Name of the movie
-     * @param genre - Movie genre
-     * @param movieReleaseYear - Release year of the movie
+     * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
+     * @param movie_name - Name of the movie
+     * @param movie_gener - Movie genre
+     * @param movie_release_year - Release year of the movie
+     * @param movie_runtime - runtime of the movie
+     * @param critic_score - critic score of the movie
      */
     public Movie(
         @JsonProperty final Long id,
+        @JsonProperty final List<Wishlist> wishlists,
         @JsonProperty final String movie_name,
         @JsonProperty final String movie_gener,
         @JsonProperty final String movie_release_year,
         @JsonProperty final int movie_runtime,
-        @JsonProperty final int critic_score,
-        @JsonProperty final List<Wishlist> wishlists
+        @JsonProperty final int critic_score
     ) {
         this.id = id;
         this.movie_name = movie_name;
