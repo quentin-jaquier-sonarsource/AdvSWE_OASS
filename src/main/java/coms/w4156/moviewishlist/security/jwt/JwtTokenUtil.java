@@ -20,8 +20,6 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = 2342342234234324L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -67,7 +65,7 @@ public class JwtTokenUtil implements Serializable {
     // 2. Sign the JWT using the HS512 algorithm and secret key.
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(null) /* No expiration date because clients don't have passwords to get a new token */
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
