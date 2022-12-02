@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.controllers;
 
 
-import coms.w4156.moviewishlist.models.Ratings;
+import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,9 +34,9 @@ public class RatingsController {
      * @return a list of ratings objects
      */
     @GetMapping
-    public ResponseEntity<List<Ratings>> getAllRatings() {
+    public ResponseEntity<List<Rating>> getAllRatings() {
         try {
-            List<Ratings> allRatings = ratingService.getAll();
+            List<Rating> allRatings = ratingService.getAll();
             return new ResponseEntity<>(allRatings, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -50,7 +50,7 @@ public class RatingsController {
      * @return a single rating object
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Ratings> getRatingById(
+    public ResponseEntity<Rating> getRatingById(
             @PathVariable final Long id) {
         return ratingService.findById(id)
                 .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
@@ -66,10 +66,10 @@ public class RatingsController {
      * @return The ratings object that was just created
      */
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Ratings> giveRating(
-            @RequestBody final Ratings ratings) {
+    public ResponseEntity<Rating> giveRating(
+            @RequestBody final Rating ratings) {
         if (ratings.getId() == null
-                || ratings.getMovieIds() == 0) {
+                || ratings.getMovieId() == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(

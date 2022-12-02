@@ -53,7 +53,7 @@ public class Movie implements ModelInterface<Long> {
      */
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     @Getter
-    private List<Ratings> ratings;
+    private List<Rating> ratings;
 
     /**
      * Create a new Movie object.

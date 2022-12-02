@@ -6,7 +6,7 @@ import java.util.Optional;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
-import coms.w4156.moviewishlist.models.Ratings;
+import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.services.RatingService;
 import coms.w4156.moviewishlist.services.MovieService;
@@ -241,14 +241,14 @@ public class MutationController {
      * @return the new ratings object
      */
     @MutationMapping
-    public Ratings createRatings(
+    public Rating createRatings(
             @Argument final String profileId,
             @Argument final String movieId,
             @Argument final String review,
             @Argument final Double rating
     ) {
         return ratingService.create(
-                Ratings
+                Rating
                         .builder()
                         .profile(
                             profileService.findById(Long.parseLong(profileId))
@@ -274,7 +274,7 @@ public class MutationController {
      * @return the updated ratings object
      */
     @MutationMapping
-    public Optional<Ratings> updateRating(
+    public Optional<Rating> updateRating(
             @Argument final String id,
             @Argument final String profileId,
             @Argument final String movieId,
@@ -302,7 +302,7 @@ public class MutationController {
      * @return the deleted ratings object
      */
     @MutationMapping
-    public Optional<Ratings> deleteRating(@Argument final String id) {
+    public Optional<Rating> deleteRating(@Argument final String id) {
         return ratingService.deleteById(Long.parseLong(id));
     }
 

@@ -35,4 +35,9 @@ public class ProfileService
     public List<Profile> getAllForClient(Long clientId) {
         return this.getRepository().findByClientId(clientId);
     }
+
+    public Optional<Profile> findById(final Long id) throws Error {
+        Optional<Profile> profile = this.getRepository().findById(id);
+        return profile;
+    }
 }

@@ -59,7 +59,7 @@ public class Profile implements ModelInterface<Long> {
      */
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     @Getter
-    private List<Ratings> ratings;
+    private List<Rating> ratings;
 
     /**
      * Constructor for the Profile class.
@@ -115,5 +115,14 @@ public class Profile implements ModelInterface<Long> {
         return this.wishlists.stream()
             .map(wishlist -> wishlist.getId())
             .toList();
+    }
+
+    /**
+     * Get the Id of the client responsible for this profile
+     *
+     * @return the Id of the client responsible for this profile
+     */
+    public Long getClientId() {
+        return this.client.getId();
     }
 }

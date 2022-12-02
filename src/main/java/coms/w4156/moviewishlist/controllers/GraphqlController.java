@@ -3,7 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
-import coms.w4156.moviewishlist.models.Ratings;
+import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
@@ -18,7 +18,6 @@ import graphql.schema.DataFetchingFieldSelectionSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.List;
 
@@ -105,7 +104,7 @@ public class GraphqlController {
         }
 
         Optional<Profile> profile = profileService.findByName(name);
-        if (!profile.isPresent() || profile.get().getClient().getId() != client.get().getId()) {
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
             return null;
         }
 
@@ -121,7 +120,7 @@ public class GraphqlController {
         }
 
         Optional<Profile> profile = profileService.findById(Long.parseLong(id));
-        if (!profile.isPresent() || profile.get().getClient().getId() != client.get().getId()) {
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
             return null;
         }
 
@@ -135,8 +134,14 @@ public class GraphqlController {
      * @return List of ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratings() {
-        return ratingService.getAll();
+    public Collection<Rating> ratings(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return new ArrayList<Rating>();
+        }
+
+        return ratingService.getAllForClient(client.get().getId());
     }
 
     /**
@@ -147,8 +152,19 @@ public class GraphqlController {
      * @return Ratings objects
      */
     @QueryMapping
-    public Optional<Ratings> ratingsById(@Argument final Long id) {
-        return ratingService.findById(id);
+    public Optional<Rating> ratingsById(@Argument final Long id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Rating> rating = ratingService.findById(id);
+        if (!rating.isPresent() || rating.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return rating;
     }
 
     /**
@@ -159,11 +175,19 @@ public class GraphqlController {
      * @return Ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratingsByProfile(
-            @Argument final String profileId) {
-        return ratingService.getAll().stream()
-                .filter(p -> p.getProfileId() == Long.parseLong(profileId))
-                .collect(Collectors.toCollection(ArrayList:: new));
+    public Collection<Rating> ratingsByProfile(@Argument final String profileId, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return ratingService.getAllForProfileId(Long.parseLong(profileId));
     }
 
     /**
@@ -174,17 +198,20 @@ public class GraphqlController {
      * @return List of Ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratingsByMovie(
-            @Argument final String movieId) {
-        return ratingService.getAll().stream()
-                .filter(p -> p.getMovieIds() == Long.parseLong(movieId))
-                .collect(Collectors.toCollection(ArrayList:: new));
+    public Collection<Rating> ratingsByMovie(@Argument final String movieId, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        return ratingService.getByMovieIdForClient(Long.parseLong(movieId), client.get().getId());
     }
 
     /**
      * Fetch all movies in the database.
      *
-     * @return List of Profile objects
+     * @return List of Movie objects
      */
     @QueryMapping
     public Collection<Movie> movies() {
@@ -196,7 +223,7 @@ public class GraphqlController {
      *
      * @param title - The title of the movie
      *
-     * @return List of Profile objects
+     * @return List of Movie objects
      */
     @QueryMapping
     public Collection<TitleSearchResult> searchTitles(
