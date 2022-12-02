@@ -1,4 +1,4 @@
-package coms.w4156.moviewishlist.repository;
+package coms.w4156.moviewishlist.repositories;
 
 import java.util.Optional;
 

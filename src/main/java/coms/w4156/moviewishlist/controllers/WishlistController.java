@@ -1,5 +1,7 @@
 package coms.w4156.moviewishlist.controllers;
-
+import coms.w4156.moviewishlist.models.Wishlist;
+import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.WishlistService;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.ProfileService;

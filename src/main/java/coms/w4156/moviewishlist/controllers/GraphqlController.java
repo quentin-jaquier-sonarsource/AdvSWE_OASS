@@ -3,19 +3,25 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
+import coms.w4156.moviewishlist.services.RatingService;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
+
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Set;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -39,6 +45,10 @@ public class GraphqlController {
 
     @Autowired
     private WatchModeService watchModeService;
+
+
+    @Autowired
+    private RatingService ratingService;
 
     /**
      * Fetch all clients in the database.
@@ -80,6 +90,59 @@ public class GraphqlController {
     @QueryMapping
     public Optional<Profile> profileByUD(@Argument final String id) {
         return profileService.findById(Long.parseLong(id));
+    }
+
+
+    /**
+     * Fetch all ratings in the database.
+     *
+     * @return List of ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratings() {
+        return ratingService.getAll();
+    }
+
+    /**
+     * Fetch a rating by id.
+     *
+     * @param id - The id of the rating
+     *
+     * @return Ratings objects
+     */
+    @QueryMapping
+    public Optional<Ratings> ratingsById(@Argument final Long id) {
+        return ratingService.findById(id);
+    }
+
+    /**
+     * Fetch a rating by the profile that gave the rating.
+     *
+     * @param profileId - The id of the profile that gave the rating
+     *
+     * @return Ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratingsByProfile(
+            @Argument final String profileId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getProfileId() == Long.parseLong(profileId))
+                .collect(Collectors.toCollection(ArrayList:: new));
+    }
+
+    /**
+     * Fetch a rating by the movie for which the rating was given.
+     *
+     * @param movieId - The id of the movie for which the rating was given
+     *
+     * @return List of Ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratingsByMovie(
+            @Argument final String movieId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getMovieIds() == Long.parseLong(movieId))
+                .collect(Collectors.toCollection(ArrayList:: new));
     }
 
     /**

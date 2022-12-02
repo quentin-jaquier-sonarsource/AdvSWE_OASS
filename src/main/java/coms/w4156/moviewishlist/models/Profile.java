@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "profiles")
@@ -24,6 +25,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
+@AllArgsConstructor
 public class Profile implements ModelInterface<Long> {
 
     @Id
@@ -50,6 +52,14 @@ public class Profile implements ModelInterface<Long> {
     @Getter
     @Setter
     private Client client;
+
+
+    /**
+     * The ratings given by this profile.
+     */
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    @Getter
+    private List<Ratings> ratings;
 
     /**
      * Constructor for the Profile class.

@@ -2,7 +2,7 @@ package coms.w4156.moviewishlist.services;
 
 import coms.w4156.moviewishlist.exceptions.ClientAlreadyExistsException;
 import coms.w4156.moviewishlist.models.Client;
-import coms.w4156.moviewishlist.repository.ClientRepository;
+import coms.w4156.moviewishlist.repositories.ClientRepository;
 
 import java.util.ArrayList;
 

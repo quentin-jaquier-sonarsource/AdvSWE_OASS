@@ -1,7 +1,7 @@
 package coms.w4156.moviewishlist.services;
 
 import coms.w4156.moviewishlist.models.Profile;
-import coms.w4156.moviewishlist.repository.ProfileRepository;
+import coms.w4156.moviewishlist.repositories.ProfileRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

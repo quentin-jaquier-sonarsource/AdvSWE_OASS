@@ -25,4 +25,19 @@ type Query {
     # Get details about a movie by ID
     # This includes the sources where this title is available
     titleDetail(id: ID!): TitleDetail
+
+    # user ratings api
+    ratings : [Ratings]
+
+    # get user rating by id
+    ratingsById(id:ID!) : Ratings
+
+    # get ratings done by a specific profile
+    ratingsByProfile(profileId : String!) : [Ratings]
+
+    # get ratings for a specific movie
+    ratingsByMovie(movieId : String!) : [Ratings]
+
+    # get wishlists
+    wishlists : [Wishlist]
 }
