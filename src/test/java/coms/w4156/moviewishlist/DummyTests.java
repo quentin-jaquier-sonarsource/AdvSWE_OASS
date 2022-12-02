@@ -31,6 +31,7 @@ public class DummyTests {
     @MockBean
     DummyService ds;
 
+    @Disabled
     @Test
     public void numTest() throws Exception {
         this.mockMvc.perform(get("/num"))

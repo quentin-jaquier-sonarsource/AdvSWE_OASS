@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "profiles")
@@ -24,7 +25,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
+@AllArgsConstructor
 public class Profile implements ModelInterface<Long> {
+
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -50,14 +53,20 @@ public class Profile implements ModelInterface<Long> {
     @Setter
     private Client client;
 
+
+    /**
+     * The ratings given by this profile.
+     */
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    @Getter
+    private List<Ratings> ratings;
+
     /**
      * Constructor for the Profile class.
      *
      * @param name     - Name of the profile
      */
-    public Profile(
-        @JsonProperty final String name
-    ) {
+    public Profile(@JsonProperty final String name) {
         this.name = name;
     }
 
@@ -78,7 +87,19 @@ public class Profile implements ModelInterface<Long> {
         this.client = client;
     }
 
-    public Profile(Long id, @JsonProperty String name, @JsonProperty final List<Wishlist> wishlists, Client client) {
+    /**
+     * Create a new Profile object.
+     * @param id
+     * @param name
+     * @param wishlists
+     * @param client
+     */
+    public Profile(
+        final Long id,
+        @JsonProperty final String name,
+        @JsonProperty final List<Wishlist> wishlists,
+        final Client client
+    ) {
         this.id = id;
         this.name = name;
         this.wishlists = wishlists;

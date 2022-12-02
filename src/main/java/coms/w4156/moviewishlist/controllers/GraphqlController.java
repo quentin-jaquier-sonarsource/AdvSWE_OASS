@@ -3,9 +3,11 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
+import coms.w4156.moviewishlist.services.RatingService;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
@@ -15,9 +17,11 @@ import graphql.schema.DataFetchingFieldSelectionSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Set;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -43,6 +47,9 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
+
+    @Autowired
+    private RatingService ratingService;
 
     // TODO: This query seems obsolete
     /**
@@ -84,10 +91,9 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a profile by name.
+     * Fetch a profile by ID.
      *
-     * @param name - The name of the profile
-     *
+     * @param id - The id of the profile
      * @return List of Profile objects
      */
     @QueryMapping
@@ -104,6 +110,75 @@ public class GraphqlController {
         }
 
         return profile;
+    }
+
+    @QueryMapping
+    public Optional<Profile> profileById(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(id));
+        if (!profile.isPresent() || profile.get().getClient().getId() != client.get().getId()) {
+            return null;
+        }
+
+        return profileService.findById(Long.parseLong(id));
+    }
+
+
+    /**
+     * Fetch all ratings in the database.
+     *
+     * @return List of ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratings() {
+        return ratingService.getAll();
+    }
+
+    /**
+     * Fetch a rating by id.
+     *
+     * @param id - The id of the rating
+     *
+     * @return Ratings objects
+     */
+    @QueryMapping
+    public Optional<Ratings> ratingsById(@Argument final Long id) {
+        return ratingService.findById(id);
+    }
+
+    /**
+     * Fetch a rating by the profile that gave the rating.
+     *
+     * @param profileId - The id of the profile that gave the rating
+     *
+     * @return Ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratingsByProfile(
+            @Argument final String profileId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getProfileId() == Long.parseLong(profileId))
+                .collect(Collectors.toCollection(ArrayList:: new));
+    }
+
+    /**
+     * Fetch a rating by the movie for which the rating was given.
+     *
+     * @param movieId - The id of the movie for which the rating was given
+     *
+     * @return List of Ratings objects
+     */
+    @QueryMapping
+    public Collection<Ratings> ratingsByMovie(
+            @Argument final String movieId) {
+        return ratingService.getAll().stream()
+                .filter(p -> p.getMovieIds() == Long.parseLong(movieId))
+                .collect(Collectors.toCollection(ArrayList:: new));
     }
 
     /**
@@ -178,16 +253,6 @@ public class GraphqlController {
         return detail;
     }
 
-    // /**
-    //  * Get all WatchMode sources.
-    //  *
-    //  * @return List of Profile objects
-    //  */
-    // @QueryMapping
-    // public Collection<WatchModeSource> sources() {
-    //     return watchModeService.getAllSources();
-    // }
-
     /**
      * Get all WatchMode networks.
      *
@@ -213,6 +278,26 @@ public class GraphqlController {
     ) {
         Boolean includeSources = env.getSelectionSet().contains("sources");
         return watchModeService.getTitleDetail(id, includeSources);
+    }
+
+    /**
+     * Get title details for a movie.
+     *
+     * @param movie - The local movie object
+     * @param env - The DataFetchingEnvironment
+     *
+     * @return Details of the Title
+     */
+    @SchemaMapping(typeName = "Movie", field = "details")
+    public TitleDetail getMovieDetails(
+        final Movie movie,
+        final DataFetchingEnvironment env
+    ) {
+        Boolean includeSources = env.getSelectionSet().contains("sources");
+        return watchModeService.getTitleDetail(
+            movie.getId().toString(),
+            includeSources
+        );
     }
 
     /**

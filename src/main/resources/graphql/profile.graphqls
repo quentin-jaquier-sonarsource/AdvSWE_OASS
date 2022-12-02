@@ -1,0 +1,24 @@
+"""
+A Profile. A generic grouping mechanism that can be used by clients to server
+their end users. A client can have multiple profiles (read multiple grouping keys)
+and use this however they wish to logically group wishlists.
+
+Examples:
+1. A profile could be a user, and the wishlists represent a user's wishlists
+2. A profile could be used to group wishlists by genre, in which case a profile
+id would be akin to a genre id
+3. A profile could be used to group by popularity
+"""
+type Profile {
+    # The profile id (e.g. a grouping key)
+    id: ID!
+
+    # Human readable name for the profile
+    name: String
+
+    # list of wishlists belonging to this profile
+    wishlists: [Wishlist]
+
+    # Client to whom this profile belongs
+    client: Client
+}

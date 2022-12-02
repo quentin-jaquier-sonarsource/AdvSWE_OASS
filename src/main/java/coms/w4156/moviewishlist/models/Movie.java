@@ -3,19 +3,17 @@ package coms.w4156.moviewishlist.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+
 
 @Entity
 @Table(name = "movies")
@@ -23,20 +21,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
 public class Movie implements ModelInterface<Long> {
-
-    /**
-     * ID of the movie.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Getter
-    @Setter
-    private Long id;
 
     /**
      * ID of the movie on WatchMode.
      */
+    @Id
     @Getter
     @Setter
     @Column(
@@ -45,7 +36,7 @@ public class Movie implements ModelInterface<Long> {
         unique = true,
         updatable = false
     )
-    private Long watchModeId;
+    private Long id;
 
     /**
      * The wishlists that contain this movie.
@@ -53,22 +44,43 @@ public class Movie implements ModelInterface<Long> {
     @ManyToMany(mappedBy = "movies")
     @Setter
     @Builder.Default
+    @Getter
     private List<Wishlist> wishlists = new ArrayList<>();
+
+
+    /**
+     * The ratings given for this movie.
+     */
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @Getter
+    private List<Ratings> ratings;
 
     /**
      * Create a new Movie object.
      *
-     * @param id - ID of the movie
-     * @param watchModeId - ID of the movie on WatchMode
+     * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
      */
     public Movie(
         @JsonProperty final Long id,
-        @JsonProperty final Long watchModeId,
         @JsonProperty final List<Wishlist> wishlists
     ) {
         this.id = id;
-        this.watchModeId = watchModeId;
         this.wishlists = wishlists;
+        if (this.wishlists == null) {
+            this.wishlists = List.of();
+        }
+    }
+
+    /**
+     * Get wishlists that this movie belongs to.
+     *
+     * @return List of wishlists
+     */
+    public List<Wishlist> getWishlists() {
+        if (this.wishlists == null) {
+            return List.of();
+        }
+        return wishlists;
     }
 }
