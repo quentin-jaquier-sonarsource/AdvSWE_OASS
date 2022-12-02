@@ -36,7 +36,7 @@ SEARCH_TAG = "Search Endpoints"
 SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
 
 MOVIES_TAG = "Movie Endpoints"
-MOVIES_TAG_DESCRIPTION = "Endpoitns related to fetching movies from DB and adding them to wishlists"
+MOVIES_TAG_DESCRIPTION = "Endpoitns related to fetching movies from DB"
 
 TAG_METADATA = [
     {
