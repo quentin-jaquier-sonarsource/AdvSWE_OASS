@@ -82,6 +82,7 @@ class GraphqlControllerTest {
                   }
                 }
                 """;
+
         graphQlTester.document(query)
                 .execute()
                 .path("profiles")

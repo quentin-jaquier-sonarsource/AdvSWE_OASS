@@ -49,7 +49,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_name",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
