@@ -7,12 +7,20 @@ import coms.w4156.moviewishlist.models.Ratings;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.services.*;
+import coms.w4156.moviewishlist.services.RatingService;
+import coms.w4156.moviewishlist.services.ClientService;
+import coms.w4156.moviewishlist.services.MovieService;
+import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

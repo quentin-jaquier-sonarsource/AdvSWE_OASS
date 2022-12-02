@@ -1,10 +1,18 @@
 package coms.w4156.moviewishlist.controllers;
 
-import coms.w4156.moviewishlist.models.*;
-import coms.w4156.moviewishlist.services.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import coms.w4156.moviewishlist.models.Client;
+import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Wishlist;
+import coms.w4156.moviewishlist.models.Ratings;
+import coms.w4156.moviewishlist.models.Movie;
+import coms.w4156.moviewishlist.services.RatingService;
+import coms.w4156.moviewishlist.services.MovieService;
+import coms.w4156.moviewishlist.services.ClientService;
+import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -276,10 +284,12 @@ public class MutationController {
         return ratingService
                 .findById(Long.parseLong(id))
                 .map(w -> {
-                    w.setProfile(profileService.findById(Long.parseLong(profileId)).get());
+                    w.setProfile(profileService.findById(
+                            Long.parseLong(profileId)).get());
                     w.setRating(rating);
                     w.setReview(review);
-                    w.setMovie(movieService.findById(Long.parseLong(movieId)).get());
+                    w.setMovie(movieService.findById(
+                            Long.parseLong(movieId)).get());
                     return ratingService.update(w);
                 });
     }
