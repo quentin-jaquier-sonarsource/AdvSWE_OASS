@@ -50,7 +50,8 @@ public class RatingsController {
      * @return a single rating object
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Ratings> getRatingById(@PathVariable final Long id) {
+    public ResponseEntity<Ratings> getRatingById(
+            @PathVariable final Long id) {
         return ratingService.findById(id)
                 .map(rating -> new ResponseEntity<>(rating, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
@@ -65,7 +66,8 @@ public class RatingsController {
      * @return The ratings object that was just created
      */
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<Ratings> giveRating(@RequestBody final Ratings ratings) {
+    public ResponseEntity<Ratings> giveRating(
+            @RequestBody final Ratings ratings) {
         if (ratings.getId() == null
                 || ratings.getMovieIds() == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
