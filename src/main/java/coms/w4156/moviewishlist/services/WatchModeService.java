@@ -273,7 +273,7 @@ public class WatchModeService {
 
         var uri = builder.build().toUri();
 
-        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getTitle();
+        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getOriginalTitle();
     }
 
     public String getMovieReleaseYear(
