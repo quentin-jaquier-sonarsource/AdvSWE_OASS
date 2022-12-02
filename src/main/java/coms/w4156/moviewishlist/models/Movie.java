@@ -60,7 +60,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_gener",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = true
     )
@@ -70,7 +70,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_release_year",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
@@ -80,7 +80,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_runtime",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
