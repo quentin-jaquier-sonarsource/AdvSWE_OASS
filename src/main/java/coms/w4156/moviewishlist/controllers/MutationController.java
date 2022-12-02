@@ -232,7 +232,7 @@ public class MutationController {
 
 
     /**
-     * Create a new Ratings for a profile and movie.
+     * Create a new Rating for a profile and movie.
      *
      * @param profileId - ID of the profile to create the rating for
      * @param movieId - ID of the movie for which the rating is given
@@ -241,7 +241,7 @@ public class MutationController {
      * @return the new ratings object
      */
     @MutationMapping
-    public Rating createRatings(
+    public Rating createRating(
             @Argument final String profileId,
             @Argument final String movieId,
             @Argument final String review,
@@ -299,7 +299,7 @@ public class MutationController {
      * Delete a rating by ID.
      *
      * @param id - ID of the rating to delete
-     * @return the deleted ratings object
+     * @return the deleted Rating object
      */
     @MutationMapping
     public Optional<Rating> deleteRating(@Argument final String id) {

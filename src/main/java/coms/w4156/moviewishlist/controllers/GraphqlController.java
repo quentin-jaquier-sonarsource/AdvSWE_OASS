@@ -152,7 +152,7 @@ public class GraphqlController {
      * @return Ratings objects
      */
     @QueryMapping
-    public Optional<Rating> ratingsById(@Argument final Long id, Authentication authentication) {
+    public Optional<Rating> ratingById(@Argument final Long id, Authentication authentication) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
