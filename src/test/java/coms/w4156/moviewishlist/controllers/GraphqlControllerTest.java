@@ -103,4 +103,44 @@ class GraphqlControllerTest {
                 });
     }
 
+    @Test
+    void profileByUDTest(){
+
+    }
+
+
+    @Test
+    void moviesTest(){
+
+    }
+
+    @Test
+    void moviesByGenreTest(){
+
+    }
+
+    @Test
+    void moviesByReleaseYearTest() {
+
+    }
+
+    @Test
+    void moviesByRuntimeTest() {
+    }
+
+    @Test
+    void moviesByCriticScoreTest() {
+    }
+
+    @Test
+    void searchTitlesTest() {
+    }
+
+    @Test
+    void networksTest() {
+    }
+
+    @Test
+    void titleDetailTest() {
+    }
 }
