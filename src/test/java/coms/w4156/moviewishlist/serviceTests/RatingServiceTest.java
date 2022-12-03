@@ -28,7 +28,7 @@ class RatingServiceTest {
     @Test
     @DisplayName("JUnit test for getAll() for ratings")
     void getAll() {
-        List<Rating> ratings = new ArrayList();
+        List<Rating> ratings = new ArrayList<Rating>();
         ratings.add( Rating.builder().id(Long.valueOf("8")).rating(3.0).review("Average").build());
         ratings.add( Rating.builder().id(Long.valueOf("9")).rating(1.5).review("GreatMovie").build());
         Mockito

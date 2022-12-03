@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static kotlin.reflect.jvm.internal.impl.builtins.StandardNames.FqNames.list;
-
 /**
  * Service class to abstract away the logic related to getting information from
  * the WatchMode API.
