@@ -42,6 +42,7 @@ public class MutationController {
     @Autowired
     private RatingService ratingService;
 
+    /* TODO: this should also generate a JWT; for now we should be using the AuthController */
     /**
      * Create a new client with the given email ID.
      *
@@ -57,6 +58,7 @@ public class MutationController {
         // TODO: handle error when client is not created
     }
 
+    /* TODO: remove because this is obsolete */
     /**
      * Update a client with the given ID.
      * @param id - ID of the client to update
@@ -77,14 +79,19 @@ public class MutationController {
     }
 
     /**
-     * Delete a client by ID.
+     * Delete the client that makes the call
      *
-     * @param id - ID of the client to delete
      * @return the deleted client
      */
     @MutationMapping
-    public Optional<Client> deleteClient(@Argument final String id) {
-        return clientService.deleteById(Long.parseLong(id));
+    public Optional<Client> deleteClient(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        return clientService.deleteById(client.get().getId());
     }
 
     /**
@@ -120,10 +127,18 @@ public class MutationController {
     @MutationMapping
     public Optional<Profile> updateProfile(
         @Argument final String id,
-        @Argument final String name
+        @Argument final String name,
+        Authentication authentication
     ) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
         return profileService
             .findById(Long.parseLong(id))
+            .filter(p -> p.getClientId() == client.get().getId())
             .map(profile -> {
                 profile.setName(name);
                 return profileService.update(profile);
@@ -137,7 +152,18 @@ public class MutationController {
      * @return the deleted profile
      */
     @MutationMapping
-    public Optional<Profile> deleteProfile(@Argument final String id) {
+    public Optional<Profile> deleteProfile(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(id));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
         return profileService.deleteById(Long.parseLong(id));
     }
 
@@ -151,15 +177,25 @@ public class MutationController {
     @MutationMapping
     public Wishlist createWishlist(
         @Argument final String profileID,
-        @Argument final String wishlistName
+        @Argument final String wishlistName,
+        Authentication authentication
     ) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(profileID));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
         return wishlistService.create(
             Wishlist
                 .builder()
                 .name(wishlistName)
-                .profile(
-                    profileService.findById(Long.parseLong(profileID)).get()
-                )
+                .profile(profile.get())
                 .build()
         );
     }
@@ -174,10 +210,17 @@ public class MutationController {
     @MutationMapping
     public Optional<Wishlist> updateWishlist(
         @Argument final String id,
-        @Argument final String name
+        @Argument final String name,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        return wishlistService.findById(Long.parseLong(id))
+            .filter(w -> w.getClientId() == client.get().getId())
             .map(w -> {
                 w.setName(name);
                 return wishlistService.update(w);
@@ -191,7 +234,18 @@ public class MutationController {
      * @return the deleted wishlist
      */
     @MutationMapping
-    public Optional<Wishlist> deleteWishlist(@Argument final String id) {
+    public Optional<Wishlist> deleteWishlist(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(id));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
         return wishlistService.deleteById(Long.parseLong(id));
     }
 
@@ -205,11 +259,21 @@ public class MutationController {
     @MutationMapping
     public Movie addMovieToWishlist(
         @Argument final String wishlistID,
-        @Argument final String movieID
+        @Argument final String movieID,
+        Authentication authentication
     ) {
-        var wishlist = wishlistService
-            .findById(Long.parseLong(wishlistID))
-            .get();
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        var wishlistObj = wishlist.get();
 
         return movieService
             .findById(Long.parseLong(movieID))
@@ -217,11 +281,11 @@ public class MutationController {
                 Long matchingWishlists = m
                     .getWishlists()
                     .stream()
-                    .filter(w -> w.getId().equals(wishlist.getId()))
+                    .filter(w -> w.getId().equals(wishlistObj.getId()))
                     .count();
 
                 if (matchingWishlists == 0) {
-                    m.getWishlists().add(wishlist);
+                    m.getWishlists().add(wishlistObj);
                     return movieService.update(m);
                 }
                 return m;
@@ -231,7 +295,7 @@ public class MutationController {
                     Movie
                         .builder()
                         .id(Long.parseLong(movieID))
-                        .wishlists(List.of(wishlist))
+                        .wishlists(List.of(wishlistObj))
                         .build()
                 )
             );
@@ -253,10 +317,17 @@ public class MutationController {
             @Argument final String profileId,
             @Argument final String movieId,
             @Argument final String review,
-            @Argument final Double rating
+            @Argument final Double rating,
+            Authentication authentication
     ) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
         Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
-        if (!profile.isPresent()) {
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
             return null;
         }
 
@@ -293,19 +364,35 @@ public class MutationController {
             @Argument final String profileId,
             @Argument final String movieId,
             @Argument final String review,
-            @Argument final Double rating
+            @Argument final Double rating,
+            Authentication authentication
     ) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        Optional<Movie> movie = movieService.findById(Long.parseLong(movieId));
+        if (!movie.isPresent()) {
+            return null;
+        }
+
         return ratingService
-                .findById(Long.parseLong(id))
-                .map(w -> {
-                    w.setProfile(profileService.findById(
-                            Long.parseLong(profileId)).get());
-                    w.setRating(rating);
-                    w.setReview(review);
-                    w.setMovie(movieService.findById(
-                            Long.parseLong(movieId)).get());
-                    return ratingService.update(w);
-                });
+            .findById(Long.parseLong(id))
+            .filter(r -> r.getClientId() == client.get().getId())
+            .map(r -> {
+                r.setProfile(profile.get());
+                r.setRating(rating);
+                r.setReview(review);
+                r.setMovie(movie.get());
+                return ratingService.update(r);
+            });
     }
 
 
@@ -316,7 +403,18 @@ public class MutationController {
      * @return the deleted Rating object
      */
     @MutationMapping
-    public Optional<Rating> deleteRating(@Argument final String id) {
+    public Optional<Rating> deleteRating(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Rating> rating = ratingService.findById(Long.parseLong(id));
+        if (!rating.isPresent() || rating.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
         return ratingService.deleteById(Long.parseLong(id));
     }
 

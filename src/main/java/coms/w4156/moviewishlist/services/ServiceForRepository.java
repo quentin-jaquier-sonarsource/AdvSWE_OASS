@@ -50,7 +50,6 @@ public abstract class ServiceForRepository<
      * @return The Obect that was found, or None
      */
     public Optional<Model> findById(final ID id) {
-        System.out.println("findById: " + id.toString());
         return this.repository.findById(id);
     }
 
