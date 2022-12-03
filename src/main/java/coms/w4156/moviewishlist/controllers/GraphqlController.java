@@ -50,27 +50,15 @@ public class GraphqlController {
     @Autowired
     private RatingService ratingService;
 
-    // TODO: This query seems obsolete
     /**
-     * Fetch all clients in the database.
+     * Fetch the client making the request.
      *
-     * @return List of Client objects
+     * @return The Client object
      */
     @QueryMapping
-    public Collection<Client> clients() {
-        return clientService.getAll();
-    }
-
-    // TODO: This query seems obsolete
-    /**
-     * Fetch a client by ID.
-     *
-     * @param id - ID of the client to fetch
-     * @return Client
-     */
-    @QueryMapping
-    public Optional<Client> clientById(@Argument final String id) {
-        return clientService.findById(Long.parseLong(id));
+    public Optional<Client> client(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        return clientService.findByEmail(clientEmail);
     }
 
     /**
