@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import coms.w4156.moviewishlist.models.Client;
+import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.Rating;
-import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.services.RatingService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ClientService;
@@ -41,6 +42,9 @@ public class MutationController {
 
     @Autowired
     private RatingService ratingService;
+
+    @Autowired
+    private WatchModeService watchModeService;
 
     /* TODO: this should also generate a JWT; for now we should be using the AuthController */
     /**
@@ -275,6 +279,12 @@ public class MutationController {
 
         var wishlistObj = wishlist.get();
 
+        final String movie_name = watchModeService.getMovieName(movieID);
+        final String movie_genre = watchModeService.getMovieGenre(movieID);
+        final String movie_release_year = watchModeService.getMovieReleaseYear(movieID);
+        final int movie_runtime = watchModeService.getMovieRuntime(movieID);
+        final int critic_score = watchModeService.getMoviesByCriticScore(movieID);
+
         return movieService
             .findById(Long.parseLong(movieID))
             .map(m -> {
@@ -296,6 +306,11 @@ public class MutationController {
                         .builder()
                         .id(Long.parseLong(movieID))
                         .wishlists(List.of(wishlistObj))
+                        .movie_name(movie_name)
+                        .movie_gener(movie_genre)
+                        .movie_release_year(movie_release_year)
+                        .movie_runtime(movie_runtime)
+                        .critic_score(critic_score)
                         .build()
                 )
             );

@@ -2,6 +2,7 @@ package coms.w4156.moviewishlist.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -65,8 +66,10 @@ public class Wishlist implements ModelInterface<Long> {
         name = "wishlist_movies",
         joinColumns = @JoinColumn(name = "wishlist_id"),
         inverseJoinColumns = @JoinColumn(name = "movie_id")
+                            
     )
     @Setter
+    @Getter
     private List<Movie> movies;
 
     /**
@@ -128,5 +131,29 @@ public class Wishlist implements ModelInterface<Long> {
      */
     public List<Long> getMovieIds() {
         return this.movies.stream().map(movie -> movie.getId()).toList();
+    }
+
+    public List<Movie> getMoviesByGenre(String genre){
+        return   this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getMovie_gener().equalsIgnoreCase(genre), Collectors.toList()));
+    }
+
+    public List<Movie> getMoviesByReleaseYear(String movieReleaseYear){
+        return this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getMovie_release_year().equalsIgnoreCase(movieReleaseYear) , Collectors.toList()));
+    }
+
+    public List<Movie> getMoviesByRuntime(int runtime){
+        return this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getMovie_runtime() == runtime , Collectors.toList()));
+    }
+
+    public List<Movie> getMoviesByCriticScore(int critic_score){
+        return this.movies.stream()
+                .collect(Collectors.filtering(
+                        movie -> movie.getCritic_score() == critic_score , Collectors.toList()));
     }
 }

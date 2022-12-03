@@ -46,13 +46,14 @@ public class GraphqlController {
     private MovieService movieService;
 
     @Autowired
-    private WatchModeService watchModeService;
-
-    @Autowired
     private WishlistService wishlistService;
 
     @Autowired
+    private WatchModeService watchModeService;
+
+    @Autowired
     private RatingService ratingService;
+
 
     /**
      * Fetch the client making the request.
@@ -226,12 +227,63 @@ public class GraphqlController {
         return movieService.findById(id);
     }
 
+    @QueryMapping
+    public Collection<Movie> moviesByGenre(
+            @Argument final String id,
+            @Argument final String genre
+    ){
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByGenre(genre);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByReleaseYear(
+            @Argument final String id,
+            @Argument final String release_year
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByReleaseYear(release_year);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByRuntime(
+            @Argument final String id,
+            @Argument final int runtime
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByRuntime(runtime);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByCriticScore(
+            @Argument final String id,
+            @Argument final int critic_score
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByCriticScore(critic_score);
+    }
+
+    /**
+     * Fetch movie by name in the waishlist.
+     *
+     * @return List of User objects
+     */
+//    @QueryMapping
+//    public Collection<Movie> movieByName(@Argument) {
+//        //get wishlist by id
+
+//        // find movie name inside the wishlist
+
+//        //return wishlistService.get
+//    }
+
+
     /**
      * Fetch a movie by title.
+     * filter all movies by genre in a specific wishlist
+     * @param id - Wishlist id
+     * @param genre - Genre
      *
-     * @param title - The title of the movie
-     *
-     * @return List of Movie objects
+     * @return List of movies of that genre in the wishlist
      */
     @QueryMapping
     public Collection<TitleSearchResult> searchTitles(
