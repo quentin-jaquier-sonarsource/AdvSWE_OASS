@@ -164,7 +164,7 @@ public class GraphqlController {
 
     /**
      * filter all movies by genre in a specific wishlist
-     * @param wishlistID - Wishlist id
+     * @param id - Wishlist id
      * @param genre - Genre
      *
      * @return List of movies of that genre in the wishlist
@@ -172,37 +172,37 @@ public class GraphqlController {
 
     @QueryMapping
     public Collection<Movie> moviesByGenre(
-            @Argument final Long id,
+            @Argument final String id,
             @Argument final String genre
     ){
-        return wishlist.getMoviesByGenre(genre);
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByGenre(genre);
     }
 
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
-            @Argument final Long id,
+            @Argument final String id,
             @Argument final String release_year
     ){
 
-        return wishlist.getMoviesByReleaseYear(release_year);
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByReleaseYear(release_year);
     }
 
     @QueryMapping
     public Collection<Movie> moviesByRuntime(
-            @Argument final Long id,
+            @Argument final String id,
             @Argument final int runtime
     ){
 
-        return wishlist.getMoviesByRuntime(runtime);
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByRuntime(runtime);
     }
 
     @QueryMapping
     public Collection<Movie> moviesByCriticScore(
-            @Argument final Long id,
+            @Argument final String id,
             @Argument final int critic_score
     ){
 
-        return wishlist.getMoviesByCriticScore(critic_score);
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByCriticScore(critic_score);
     }
 
     /**
@@ -219,19 +219,6 @@ public class GraphqlController {
 //        //return wishlistService.get
 //    }
 
-    /**
-     * Fetch movie by name in the waishlist.
-     *
-     * @return List of User objects
-     */
-//    @QueryMapping
-//    public Collection<Movie> movieByName(@Argument) {
-//        //get wishlist by id
-//
-//        // find movie name inside the wishlist
-//
-//        //return wishlistService.get
-//    }
 
     /**
      * Fetch a movie by id.
@@ -342,53 +329,6 @@ public class GraphqlController {
         );
     }
 
-    /**
-     * filter all movies by genre in a specific wishlist
-     * @param wishlistID - Wishlist id
-     * @param genre - Genre
-     *
-     * @return List of movies of that genre in the wishlist
-     */
-
-    @QueryMapping
-    public Collection<Movie> moviesByGenre(
-            @Argument final Long id,
-            @Argument final String genre
-    ){
-        return wishlist.moviesByGenre(genre);
-    }
-
-    @QueryMapping
-    public Collection<Movie> moviesByReleaseYear(
-            @Argument final Long id,
-            @Argument final int movieReleaseYear
-    ){
-        return wishlist.moviesByReleaseYear(movieReleaseYear);
-    }
-
-    /**
-     * filter all movies by genre in a specific wishlist
-     * @param wishlistID - Wishlist id
-     * @param genre - Genre
-     *
-     * @return List of movies of that genre in the wishlist
-     */
-
-    @QueryMapping
-    public Collection<Movie> moviesByGenre(
-            @Argument final Long id,
-            @Argument final String genre
-    ){
-        return wishlist.moviesByGenre(genre);
-    }
-
-    @QueryMapping
-    public Collection<Movie> moviesByReleaseYear(
-            @Argument final Long id,
-            @Argument final int movieReleaseYear
-    ){
-        return wishlist.moviesByReleaseYear(movieReleaseYear);
-    }
 
     /**
      * Get title details by id.

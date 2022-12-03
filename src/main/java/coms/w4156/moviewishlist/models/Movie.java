@@ -28,55 +28,15 @@ public class Movie implements ModelInterface<Long> {
      * ID of the movie.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Getter
-    @Setter
-    private Long id;
-
-    /**
-     * ID of the movie on WatchMode.
-     */
-    @Id
     @Getter
     @Setter
     @Column(
-        name = "watchmode_id",
-        nullable = false,
-        unique = true,
-        updatable = false
-    )
-    private Long id;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_name",
+            name = "watchmode_id",
             nullable = false,
             unique = true,
             updatable = false
     )
-    private String movieName;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_genre",
-            nullable = false,
-            unique = false,
-            updatable = true
-    )
-    private String genre;
-
-    @Getter
-    @Setter
-    @Column(
-            name = "movie_release_year",
-            nullable = false,
-            unique = false,
-            updatable = true
-    )
-    private int movieReleaseYear;
-
+    private Long id;
 
     /**
      * The wishlists that contain this movie.
@@ -84,23 +44,14 @@ public class Movie implements ModelInterface<Long> {
     @ManyToMany(mappedBy = "movies")
     @Setter
     @Builder.Default
-    @Getter
     private List<Wishlist> wishlists = new ArrayList<>();
-
-
-    /**
-     * The ratings given for this movie.
-     */
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    @Getter
-    private List<Ratings> ratings;
 
     @Getter
     @Setter
     @Column(
             name = "movie_name",
-            nullable = false,
-            unique = true,
+            nullable = true,
+            unique = false,
             updatable = false
     )
     private String movie_name;
@@ -109,7 +60,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_gener",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = true
     )
@@ -119,7 +70,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_release_year",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
@@ -129,7 +80,7 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "movie_runtime",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
@@ -139,20 +90,30 @@ public class Movie implements ModelInterface<Long> {
     @Setter
     @Column(
             name = "critic_score",
-            nullable = false,
+            nullable = true,
             unique = false,
             updatable = false
     )
     private int critic_score;
 
+
+    /**
+     * The ratings given for this movie.
+     */
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @Getter
+    private List<Ratings> ratings;
+
+
     /**
      * Create a new Movie object.
-     *
-     * @param id - ID of the movie
-     * @param movieName - Name of the movie
-     * @param genre - Movie genre
-     * @param movieReleaseYear - Release year of the movie
+     * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
+     * @param movie_name - Name of the movie
+     * @param movie_gener - Movie genre
+     * @param movie_release_year - Release year of the movie
+     * @param movie_runtime - runtime of the movie
+     * @param critic_score - critic score of the movie
      */
     public Movie(
         @JsonProperty final Long id,
