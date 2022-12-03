@@ -54,10 +54,10 @@ def test_profile_create():
     json_response = response.json()
     id = int(json_response["Result"]["clients"][0]["id"])
     print(f"The fetched id: {id}")
+    print(f"Email of the fetched client: {json_response['Result']['clients'][0]['email']}")
 
     # Create a profile for the client
     params = {
-            "client_id" : id,
             "profile_name" : PROFILE_NAME
         }
     creation_response = client.get("/profiles/create", params=params)
