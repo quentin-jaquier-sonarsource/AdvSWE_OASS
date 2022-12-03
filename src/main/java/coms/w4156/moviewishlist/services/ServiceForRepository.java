@@ -50,6 +50,7 @@ public abstract class ServiceForRepository<
      * @return The Obect that was found, or None
      */
     public Optional<Model> findById(final ID id) {
+        System.out.println("findById: " + id.toString());
         return this.repository.findById(id);
     }
 
@@ -60,6 +61,7 @@ public abstract class ServiceForRepository<
      * @return - The object that was just added to the repository
      */
     public Model create(final Model object) {
+        System.out.println("here");
         return this.repository.save(object);
     }
 

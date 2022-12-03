@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,4 @@ public interface ProfileRepository extends CrudRepository<Profile, Long> {
     public Optional<Profile> findByName(String name);
 
     public Optional<Profile> findById(Long id);
-
-    public List<Profile> findByClientId(Long id);
 }

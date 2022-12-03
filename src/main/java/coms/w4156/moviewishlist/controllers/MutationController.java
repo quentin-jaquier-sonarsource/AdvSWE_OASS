@@ -16,6 +16,7 @@ import coms.w4156.moviewishlist.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -87,19 +88,23 @@ public class MutationController {
     /**
      * Create a new profile with the given name.
      *
-     * @param clientID - ID of the client to create the profile for
      * @param name - Name of the profile
      * @return the new profile
      */
     @MutationMapping
     public Profile createProfile(
-        @Argument final String clientID,
-        @Argument final String name
+        @Argument final String name,
+        Authentication authentication
     ) {
-        Client client = clientService.findById(Long.parseLong(clientID)).get();
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
         Profile profile = new Profile();
         profile.setName(name);
-        profile.setClient(client);
+        profile.setClient(client.get());
         return profileService.create(profile);
     }
 
@@ -247,15 +252,24 @@ public class MutationController {
             @Argument final String review,
             @Argument final Double rating
     ) {
+        System.out.println("createRating");
+        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
+        if (!profile.isPresent()) {
+            System.out.println("profile not present");
+            return null;
+        }
+
+        Optional<Movie> movie = movieService.findById(Long.parseLong(movieId));
+        if (!movie.isPresent()) {
+            System.out.println("movie is not present");
+            return null;
+        }
+
         return ratingService.create(
                 Rating
                         .builder()
-                        .profile(
-                            profileService.findById(Long.parseLong(profileId))
-                                    .get())
-                        .movie(
-                            movieService.findById(Long.parseLong(movieId))
-                                    .get())
+                        .profile(profile.get())
+                        .movie(movie.get())
                         .review(review)
                         .rating(rating)
                         .build()

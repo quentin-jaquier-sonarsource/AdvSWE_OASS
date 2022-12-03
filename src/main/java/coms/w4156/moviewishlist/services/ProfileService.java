@@ -1,9 +1,13 @@
 package coms.w4156.moviewishlist.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.repositories.ProfileRepository;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +37,9 @@ public class ProfileService
     }
 
     public List<Profile> getAllForClient(Long clientId) {
-        return this.getRepository().findByClientId(clientId);
+        return ((Collection<Profile>) this.getRepository().findAll()).stream()
+            .filter(p -> p.getClientId() == clientId)
+            .collect(Collectors.toCollection(ArrayList:: new));
     }
 
     public Optional<Profile> findById(final Long id) throws Error {
