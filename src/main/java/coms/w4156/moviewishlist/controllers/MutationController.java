@@ -10,6 +10,8 @@ import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WishlistService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,44 +207,80 @@ public class MutationController {
         final int movie_runtime;
         final int critic_score;
 
+
         movie_name = watchModeService.getMovieName(movieID);
         movie_gener = watchModeService.getMovieGenre(movieID);
         movie_release_year = watchModeService.getMovieReleaseYear(movieID);
         movie_runtime = watchModeService.getMovieRuntime(movieID);
         critic_score = watchModeService.getMoviesByCriticScore(movieID);
 
-        var wishlist = wishlistService
-            .findById(Long.parseLong(wishlistID))
-            .get();
+        Wishlist wishlist = wishlistService
+                .findById(Long.parseLong(wishlistID))
+                .get();
 
         return movieService
-            .findById(Long.parseLong(movieID))
-            .map(m -> {
-                Long matchingWishlists = m
-                    .getWishlists()
-                    .stream()
-                    .filter(w -> w.getId().equals(wishlist.getId()))
-                    .count();
+                .findById(Long.parseLong(movieID))
+                .map(m -> {
+                    Long matchingWishlists = m
+                            .getWishlists()
+                            .stream()
+                            .filter(w -> w.getId().equals(wishlist.getId()))
+                            .count();
 
-                if (matchingWishlists == 0) {
-                    m.getWishlists().add(wishlist);
-                    return movieService.update(m);
-                }
-                return m;
-            })
-            .orElseGet(() ->
-                movieService.create(
-                    Movie
-                        .builder()
-                        .id(Long.parseLong(movieID))
-                        .wishlists(List.of(wishlist))
-                        .movie_name(movie_name)
-                        .movie_gener(movie_gener)
-                        .movie_release_year(movie_release_year)
-                        .movie_runtime(movie_runtime)
-                        .critic_score(critic_score)
-                        .build()
-                )
-            );
+                    if (matchingWishlists == 0) {
+                        m.getWishlists().add(wishlist);
+                        return movieService.update(m);
+                    }
+                    return m;
+                })
+                .orElseGet(() ->
+                        movieService.create(
+                                Movie
+                                        .builder()
+                                        .id(Long.parseLong(movieID))
+                                        .wishlists(List.of(wishlist))
+                                        .movie_name(movie_name)
+                                        .movie_gener(movie_gener)
+                                        .movie_release_year(movie_release_year)
+                                        .movie_runtime(movie_runtime)
+                                        .critic_score(critic_score)
+                                        .build()
+                        )
+                );
+
+
+//        Movie m = movieService.findById(Long.parseLong(movieID)).get();
+
+//        if () {
+//
+//            m = movieService.create(
+//                    Movie
+//                            .builder()
+//                            .id(Long.parseLong(movieID))
+//                            .wishlists(List.of(wishlist))
+//                            .movie_name(movie_name)
+//                            .movie_gener(movie_gener)
+//                            .movie_release_year(movie_release_year)
+//                            .movie_runtime(movie_runtime)
+//                            .critic_score(critic_score)
+//                            .build()
+//            );
+//            m.getWishlists().add(wishlist);
+//            movieService.update(m);
+//        }
+//        else {
+//            Long matchingWishlists = m
+//                    .getWishlists()
+//                    .stream()
+//                    .filter(w -> w.getId().equals(wishlist.getId()))
+//                    .count();
+//
+//            if (matchingWishlists == 0) {
+//                m.getWishlists().add(wishlist);
+//                movieService.update(m);
+//                return m;
+//            }
+//        }
+//        return m;
     }
 }

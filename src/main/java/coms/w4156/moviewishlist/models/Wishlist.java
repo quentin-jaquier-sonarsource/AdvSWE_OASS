@@ -69,6 +69,7 @@ public class Wishlist implements ModelInterface<Long> {
                             
     )
     @Setter
+    @Getter
     private List<Movie> movies;
 
     /**
