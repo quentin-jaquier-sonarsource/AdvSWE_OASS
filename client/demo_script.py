@@ -26,6 +26,24 @@ def get_rand_email() -> str:
 
     return main_part + suffix
 
+def create_auth_header(token : str) -> dict:
+    """
+    Creates an auth header from a token
+
+    Params
+    -----------
+    token : str
+        the JWT returned by the /new-client endpoint
+    
+    Returns
+    -----------
+    auth_header : dict
+        the authorization header
+    """
+
+    return {"Authorization": f"Bearer {token}"}
+
+
 def sign_up(client_email : str):
     """
     Signs up the client using the email addr
@@ -43,7 +61,7 @@ def sign_up(client_email : str):
         json_data = json.loads(r.text)
         token = json_data["token"]
 
-        return {"Authorization": f"Bearer {token}"}
+        return create_auth_header(token)
 
     except Exception as e:
         return e.__str__()
@@ -105,7 +123,11 @@ def use_service(thread_id, client_email : str, profile_names : list):
     
     logging.info("Thread %s: finishing", thread_id)
 
-def driver():
+def mult_clients():
+    """
+    Creates 3 threads with three different clients performing similar but
+    distinct queries
+    """
     logging.info("Main    : before creating threads")
     
     t1 = threading.Thread(target=use_service, args=(1, get_rand_email(), ["Group A", "Group B"]))
@@ -125,7 +147,55 @@ def driver():
 
     logging.info("Main    : all done")
 
+def unauthenticated_client():
+    """
+    Simulate a random client trying to use bad creds
+    """
+
+    query = """query {
+        profiles {
+            id
+            name
+        }
+    }
+    """
+
+    logging.info("Unauthenticated   : trying %s with no credentials", query)
+
+    auth_header = {}
+
+    r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
+    
+    logging.info("Unauthenticated   : result of query for profiles with no creds was %s", r)
+
+
+    logging.info("Unauthenticated   : trying %s with arbitrary bad token 'JWT'", query)
+
+    auth_header = create_auth_header("JWT")
+
+    r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
+    
+    logging.info("Unauthenticated   : result of query for profiles with bad creds was %s", r)
+
+    
+
+
+def driver():
+    print("MULTI CLIENT DEMO")
+
+    mult_clients()
+
+    print("END MULTI CLIENT DEMO")
+
+    input("Press enter to demo unauthenticated clients using fake credentials\n\n\n\n\n")
+
+    print("UNAUTHENTICATED CLIENTS DEMO")
+
+    unauthenticated_client()
+
+    print("END UNAUTHENTICATED CLIENTS DEMO")
+
+
 
 if __name__ == "__main__":
-    driver()
-    # print(get_rand_email())
+    driver()    
