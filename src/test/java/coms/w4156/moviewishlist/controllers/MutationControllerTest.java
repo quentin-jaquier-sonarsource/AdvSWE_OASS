@@ -7,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @GraphQlTest(GraphqlController.class)
 class MutationControllerTest {
 
@@ -29,6 +27,9 @@ class MutationControllerTest {
 
     @MockBean
     MovieService movieService;
+
+    @MockBean
+    RatingService ratingService;
 
     @Test
     void createClientTest() {
