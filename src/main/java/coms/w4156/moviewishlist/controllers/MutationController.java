@@ -19,6 +19,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
+/* TODO: add authentication to the MutationController */
+
 @Controller
 public class MutationController {
 

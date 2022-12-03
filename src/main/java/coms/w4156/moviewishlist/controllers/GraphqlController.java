@@ -4,6 +4,7 @@ import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
@@ -12,6 +13,7 @@ import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.services.WishlistService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 
@@ -46,6 +48,8 @@ public class GraphqlController {
     @Autowired
     private WatchModeService watchModeService;
 
+    @Autowired
+    private WishlistService wishlistService;
 
     @Autowired
     private RatingService ratingService;
@@ -369,5 +373,47 @@ public class GraphqlController {
                 watchModeService.getTitleDetail(id.toString(), hasSources)
             )
             .toList();
+    }
+
+    /**
+     * Fetch all wishlists
+     *
+     * @return List of the wishlists
+     */
+    @QueryMapping
+    public Collection<Wishlist> wishlists(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return new ArrayList<Wishlist>();
+        }
+
+        return wishlistService.getAllForClient(client.get().getId());
+    }
+
+    /**
+     * Fetch a wishlist by id
+     *
+     * @return The Wishlist object
+     */
+    @QueryMapping
+    public Optional<Wishlist> wishlistById(@Argument String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(id));
+        if (!wishlist.isPresent()) {
+            return null;
+        }
+
+        Profile profile = profileService.findById(wishlist.get().getProfileId()).get();
+        if (profile.getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist;
     }
 }
