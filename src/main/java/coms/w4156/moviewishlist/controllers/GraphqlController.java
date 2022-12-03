@@ -2,25 +2,17 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Ratings;
+import coms.w4156.moviewishlist.services.*;
+import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.services.RatingService;
-import coms.w4156.moviewishlist.services.ClientService;
-import coms.w4156.moviewishlist.services.MovieService;
-import coms.w4156.moviewishlist.services.ProfileService;
-import coms.w4156.moviewishlist.services.WatchModeService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Set;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -44,11 +36,14 @@ public class GraphqlController {
     private MovieService movieService;
 
     @Autowired
-    private WatchModeService watchModeService;
+    private WishlistService wishlistService;
 
+    @Autowired
+    private WatchModeService watchModeService;
 
     @Autowired
     private RatingService ratingService;
+
 
     /**
      * Fetch all clients in the database.
@@ -154,6 +149,64 @@ public class GraphqlController {
     public Collection<Movie> movies() {
         return movieService.getAll();
     }
+
+    /**
+     * filter all movies by genre in a specific wishlist
+     * @param id - Wishlist id
+     * @param genre - Genre
+     *
+     * @return List of movies of that genre in the wishlist
+     */
+
+    @QueryMapping
+    public Collection<Movie> moviesByGenre(
+            @Argument final String id,
+            @Argument final String genre
+    ){
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByGenre(genre);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByReleaseYear(
+            @Argument final String id,
+            @Argument final String release_year
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByReleaseYear(release_year);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByRuntime(
+            @Argument final String id,
+            @Argument final int runtime
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByRuntime(runtime);
+    }
+
+    @QueryMapping
+    public Collection<Movie> moviesByCriticScore(
+            @Argument final String id,
+            @Argument final int critic_score
+    ){
+
+        return wishlistService.findById(Long.parseLong(id)).get().getMoviesByCriticScore(critic_score);
+    }
+
+    /**
+     * Fetch movie by name in the waishlist.
+     *
+     * @return List of User objects
+     */
+//    @QueryMapping
+//    public Collection<Movie> movieByName(@Argument) {
+//        //get wishlist by id
+//
+//        // find movie name inside the wishlist
+//
+//        //return wishlistService.get
+//    }
+
 
     /**
      * Fetch a movie by id.

@@ -44,8 +44,57 @@ public class Movie implements ModelInterface<Long> {
     @ManyToMany(mappedBy = "movies")
     @Setter
     @Builder.Default
-    @Getter
     private List<Wishlist> wishlists = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_name",
+            nullable = true,
+            unique = false,
+            updatable = false
+    )
+    private String movie_name;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_gener",
+            nullable = true,
+            unique = false,
+            updatable = true
+    )
+    private String movie_gener;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_release_year",
+            nullable = true,
+            unique = false,
+            updatable = false
+    )
+    private String movie_release_year;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "movie_runtime",
+            nullable = true,
+            unique = false,
+            updatable = false
+    )
+    private int movie_runtime;
+
+    @Getter
+    @Setter
+    @Column(
+            name = "critic_score",
+            nullable = true,
+            unique = false,
+            updatable = false
+    )
+    private int critic_score;
 
 
     /**
@@ -55,18 +104,34 @@ public class Movie implements ModelInterface<Long> {
     @Getter
     private List<Ratings> ratings;
 
+
     /**
      * Create a new Movie object.
      *
      * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
+     * @param movie_name - Name of the movie
+     * @param movie_gener - Movie genre
+     * @param movie_release_year - Release year of the movie
+     * @param movie_runtime - runtime of the movie
+     * @param critic_score - critic score of the movie
      */
     public Movie(
         @JsonProperty final Long id,
-        @JsonProperty final List<Wishlist> wishlists
+        @JsonProperty final List<Wishlist> wishlists,
+        @JsonProperty final String movie_name,
+        @JsonProperty final String movie_gener,
+        @JsonProperty final String movie_release_year,
+        @JsonProperty final int movie_runtime,
+        @JsonProperty final int critic_score
     ) {
         this.id = id;
         this.wishlists = wishlists;
+        this.movie_name = movie_name;
+        this.movie_gener = movie_gener;
+        this.movie_release_year = movie_release_year;
+        this.movie_runtime = movie_runtime;
+        this.critic_score = critic_score;
         if (this.wishlists == null) {
             this.wishlists = List.of();
         }
