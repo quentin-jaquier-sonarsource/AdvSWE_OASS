@@ -129,7 +129,7 @@ public class MutationController {
     }
 
     /**
-     * Delete a profile by email.
+     * Delete a profile by id.
      *
      * @param id - id of the profile to delete
      * @return the deleted profile
@@ -236,6 +236,7 @@ public class MutationController {
     }
 
 
+    /* TODO: create a movie if it does not exist */
     /**
      * Create a new Rating for a profile and movie.
      *
@@ -252,16 +253,13 @@ public class MutationController {
             @Argument final String review,
             @Argument final Double rating
     ) {
-        System.out.println("createRating");
         Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
         if (!profile.isPresent()) {
-            System.out.println("profile not present");
             return null;
         }
 
         Optional<Movie> movie = movieService.findById(Long.parseLong(movieId));
         if (!movie.isPresent()) {
-            System.out.println("movie is not present");
             return null;
         }
 

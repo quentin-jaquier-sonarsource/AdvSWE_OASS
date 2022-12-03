@@ -78,10 +78,32 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a profile by ID.
+     * Fetch a profile by id
      *
      * @param id - The id of the profile
-     * @return List of Profile objects
+     * @return The Profile object
+     */
+    @QueryMapping
+    public Optional<Profile> profileById(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(id));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return profile;
+    }
+
+    /**
+     * Fetch a profile by name.
+     *
+     * @param name - The name of the profile
+     * @return The Profile object
      */
     @QueryMapping
     public Optional<Profile> profileByName(@Argument final String name, Authentication authentication) {
@@ -97,22 +119,6 @@ public class GraphqlController {
         }
 
         return profile;
-    }
-
-    @QueryMapping
-    public Optional<Profile> profileById(@Argument final String id, Authentication authentication) {
-        String clientEmail = authentication.getName();
-        Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
-        }
-
-        Optional<Profile> profile = profileService.findById(Long.parseLong(id));
-        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
-            return null;
-        }
-
-        return profileService.findById(Long.parseLong(id));
     }
 
 
@@ -207,7 +213,17 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a movie by id.
+     * Fetch a movie by Id
+     *
+     * @return The Movie object
+     */
+    @QueryMapping
+    public Optional<Movie> movieById(@Argument final Long id) {
+        return movieService.findById(id);
+    }
+
+    /**
+     * Fetch a movie by title.
      *
      * @param title - The title of the movie
      *
