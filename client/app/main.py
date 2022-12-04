@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import (auth, clients, profiles, search, sources, test,
+from app.routers import (auth, profiles, search, sources,
                          wishlists, movies)
 
 from .constants import CLIENT_DESCRIPTION, TAG_METADATA
@@ -12,9 +12,7 @@ app = FastAPI(
 )
 
 # Add all the different routers
-app.include_router(test.router)
 app.include_router(sources.router)
-app.include_router(clients.router)
 app.include_router(profiles.router)
 app.include_router(search.router)
 app.include_router(auth.router)
