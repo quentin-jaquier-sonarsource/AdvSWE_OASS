@@ -60,7 +60,6 @@ public abstract class ServiceForRepository<
      * @return - The object that was just added to the repository
      */
     public Model create(final Model object) {
-        System.out.println("here");
         return this.repository.save(object);
     }
 
