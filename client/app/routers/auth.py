@@ -42,3 +42,28 @@ async def sign_up(email : str = "dummy@test.com"):
     
     except Exception as e:
         return {"Exception ocurred" : e.__str__()}
+
+@router.get("/signin")
+async def sign_up(token : str):
+    """
+    Signs into the service using a previously generated token
+
+    Example response:
+    ```json
+    {
+        "token" : "input token"
+    }
+    ```
+    """
+
+    try:
+        outfile = open(TOKEN_PATH, "w")
+        outfile.write(token)
+        outfile.close()
+
+        return {
+            "set token to" : token
+        }
+        
+    except Exception as e:
+        return {"Exception ocurred" : e.__str__()}

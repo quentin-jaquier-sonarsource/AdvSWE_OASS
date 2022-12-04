@@ -26,7 +26,7 @@ import javax.persistence.JoinColumn;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Builder
-public class Ratings implements ModelInterface<Long> {
+public class Rating implements ModelInterface<Long> {
 
 
     /**
@@ -76,7 +76,7 @@ public class Ratings implements ModelInterface<Long> {
      * @param review - Comment left with the rating
      * @param rating - The numerical rating given to a movie
      */
-    public Ratings(
+    public Rating(
             @JsonProperty final String review,
             @JsonProperty final Double rating
     ) {
@@ -92,7 +92,7 @@ public class Ratings implements ModelInterface<Long> {
      * @param review - Comment left with the rating
      * @param rating - The numerical rating given to a movie
      */
-    public Ratings(
+    public Rating(
             @JsonProperty final Profile profile,
             @JsonProperty final Movie movie,
             @JsonProperty final String review,
@@ -113,7 +113,7 @@ public class Ratings implements ModelInterface<Long> {
      * @param review - Comment left with the rating
      * @param rating - The numerical rating given to a movie
      */
-    public Ratings(
+    public Rating(
             @JsonProperty final Long id,
             @JsonProperty final Profile profile,
             @JsonProperty final Movie movie,
@@ -140,11 +140,20 @@ public class Ratings implements ModelInterface<Long> {
     }
 
     /**
+     * Get the Id of the client responsible for this rating.
+     *
+     * @return the Id of the client
+     */
+    public Long getClientId() {
+        return this.profile.getClient().getId();
+    }
+
+    /**
      * Get the ID of the movie for which the rating is given.
      *
      * @return A Long Id
      */
-    public Long getMovieIds() {
+    public Long getMovieId() {
         return this.movie.getId();
     }
 
