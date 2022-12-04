@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.repositories.ClientRepository;
 import coms.w4156.moviewishlist.services.*;
@@ -327,6 +328,100 @@ class GraphqlControllerTest {
                 .entity(Movie.class)
                 .satisfies(movie -> {
                     assertEquals("The Notebook", movie.getMovie_name());
+                });
+    }
+
+    @Test
+    void ratingsTest(){
+        String query = """
+                query{
+                  ratings{
+                    review,
+                    rating,
+                    profile{
+                      name
+                    },
+                    movie{
+                      movieName,
+                      movieCriticScore
+                    }
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("ratings")
+                .entityList(Rating.class)
+                .satisfies(ratings -> {
+                    //TODO
+                });
+    }
+
+    @Test
+    void ratingsByIdTest(){
+        String query = """
+                query ratingsById($id:ID!){
+                  ratingsById(id: $id){
+                    review,
+                    rating
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .variable("id", 2)
+                .execute()
+                .path("ratingsById")
+                .entity(Rating.class)
+                .satisfies(rating -> {
+                    assertEquals(1,rating.getId());
+                });
+    }
+
+    @Test
+    void ratingsByProfileTest(){
+        String query = """
+                query ratingsByProfile($profileId : String!){
+                  ratingsByProfile(profileId: $id){
+                    review,
+                    rating,
+                    profile{
+                      id
+                    }
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .variable("id", 23)
+                .execute()
+                .path("ratingsByProfile")
+                .entityList(Rating.class)
+                .satisfies(ratings -> {
+                    assertEquals(23, ratings.get(0).getProfileId());
+                });
+    }
+
+    @Test
+    void ratingsByMovieTest(){
+        String query = """
+                query ratingsByMovie($movieId : String!){
+                  ratingsByMovie(movieId: $id)
+                  {
+                    review,
+                    rating
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .variable("id", "1250035")
+                .execute()
+                .path("ratingsByMovie")
+                .entityList(Rating.class)
+                .satisfies(ratings -> {
+                    assertEquals(1250035, ratings.get(0).getMovieId());
                 });
     }
 }
