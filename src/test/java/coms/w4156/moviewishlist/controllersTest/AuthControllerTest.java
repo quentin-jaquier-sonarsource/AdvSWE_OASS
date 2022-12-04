@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc()
 @SpringBootTest
 public class AuthControllerTest {
     /**
@@ -44,13 +44,11 @@ public class AuthControllerTest {
         .email("client@gmail.com")
         .build();
 
-        private String clientJwt = "";
-
         /**
      * Test the create client endpoint.
      * @throws Exception
      */
-        @Test
+    @Test
         public void shouldCreateClientTest() throws Exception {
                 UserDetails clientDetails = new org.springframework.security.core.userdetails.User(client.getEmail(), "", new ArrayList<>());
                 Mockito.when(clientService.create(client)).thenReturn(client);
@@ -62,12 +60,9 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON);
 
-                MvcResult result = mockMvc.perform(request)
+                mockMvc.perform(request)
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.token", notNullValue()))
-                        .andReturn();
-
-                this.clientJwt = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+                        .andExpect(jsonPath("$.token", notNullValue()));
         }
 
 
@@ -78,7 +73,8 @@ public class AuthControllerTest {
     public void shouldForbidUnauthenticatedRequestsTest() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post("/graphql")
-            .content("{\"query\": query { profiles { id } } }")
+            .content("{\"query\": \"query { profiles { id } }\" }")
+            .characterEncoding("utf-8")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON);
 
@@ -91,11 +87,27 @@ public class AuthControllerTest {
      */
     @Test
     public void shouldAllowAuthenticatedRequestsTest() throws Exception {
+        UserDetails clientDetails = new org.springframework.security.core.userdetails.User(client.getEmail(), "", new ArrayList<>());
+        Mockito.when(clientService.create(client)).thenReturn(client);
+        Mockito.when(clientService.createClientAndReturnDetails(client.getEmail())).thenReturn(clientDetails);
+        Mockito.when(clientService.loadUserByUsername(client.getEmail())).thenReturn(clientDetails);
+
+
+        MockHttpServletRequestBuilder createClientRequest = MockMvcRequestBuilders
+                .post("/new-client?email=" + client.getEmail())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(createClientRequest).andReturn();
+
+        String token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
             .post("/graphql")
-            .content("{\"query\": query { profiles { id } } }")
+            .content("{\"query\": \"query { profiles { id } }\" }")
             .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", "Bearer " + this.clientJwt)
+            .characterEncoding("utf-8")
+            .header("Authorization", "Bearer " + token)
             .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
