@@ -116,6 +116,15 @@ public class Wishlist implements ModelInterface<Long> {
     }
 
     /**
+     * Get the Id of the cleint responsible for this wishlist.
+     *
+     * @return the Id of the client
+     */
+    public Long getClientId() {
+        return this.profile.getClientId();
+    }
+
+    /**
      * The get list of IDs of the movies that are stored within this wishlist.
      *
      * @return A list of Long Ids

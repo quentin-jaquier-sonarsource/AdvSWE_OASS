@@ -2,22 +2,34 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
-import coms.w4156.moviewishlist.models.Ratings;
-import coms.w4156.moviewishlist.services.*;
 import coms.w4156.moviewishlist.models.Profile;
+import coms.w4156.moviewishlist.models.Rating;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
+import coms.w4156.moviewishlist.services.RatingService;
+import coms.w4156.moviewishlist.services.ClientService;
+import coms.w4156.moviewishlist.services.MovieService;
+import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.WatchModeService;
+import coms.w4156.moviewishlist.services.WishlistService;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.DataFetchingFieldSelectionSet;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -46,24 +58,14 @@ public class GraphqlController {
 
 
     /**
-     * Fetch all clients in the database.
+     * Fetch the client making the request.
      *
-     * @return List of Profile objects
+     * @return The Client object
      */
     @QueryMapping
-    public Collection<Client> clients() {
-        return clientService.getAll();
-    }
-
-    /**
-     * Fetch a client by ID.
-     *
-     * @param id - ID of the client to fetch
-     * @return Client
-     */
-    @QueryMapping
-    public Optional<Client> clientById(@Argument final String id) {
-        return clientService.findById(Long.parseLong(id));
+    public Optional<Client> client(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        return clientService.findByEmail(clientEmail);
     }
 
     /**
@@ -72,19 +74,58 @@ public class GraphqlController {
      * @return List of Profile objects
      */
     @QueryMapping
-    public Collection<Profile> profiles() {
-        return profileService.getAll();
+    public Collection<Profile> profiles(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return new ArrayList<Profile>();
+        }
+
+        return profileService.getAllForClient(client.get().getId());
     }
 
     /**
-     * Fetch a profile by ID.
+     * Fetch a profile by id
      *
      * @param id - The id of the profile
-     * @return List of Profile objects
+     * @return The Profile object
      */
     @QueryMapping
-    public Optional<Profile> profileByUD(@Argument final String id) {
-        return profileService.findById(Long.parseLong(id));
+    public Optional<Profile> profileById(@Argument final String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(id));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return profile;
+    }
+
+    /**
+     * Fetch a profile by name.
+     *
+     * @param name - The name of the profile
+     * @return The Profile object
+     */
+    @QueryMapping
+    public Optional<Profile> profileByName(@Argument final String name, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findByName(name);
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return profile;
     }
 
 
@@ -94,8 +135,14 @@ public class GraphqlController {
      * @return List of ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratings() {
-        return ratingService.getAll();
+    public Collection<Rating> ratings(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return new ArrayList<Rating>();
+        }
+
+        return ratingService.getAllForClient(client.get().getId());
     }
 
     /**
@@ -106,8 +153,19 @@ public class GraphqlController {
      * @return Ratings objects
      */
     @QueryMapping
-    public Optional<Ratings> ratingsById(@Argument final Long id) {
-        return ratingService.findById(id);
+    public Optional<Rating> ratingById(@Argument final Long id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Rating> rating = ratingService.findById(id);
+        if (!rating.isPresent() || rating.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return rating;
     }
 
     /**
@@ -118,11 +176,19 @@ public class GraphqlController {
      * @return Ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratingsByProfile(
-            @Argument final String profileId) {
-        return ratingService.getAll().stream()
-                .filter(p -> p.getProfileId() == Long.parseLong(profileId))
-                .collect(Collectors.toCollection(ArrayList:: new));
+    public Collection<Rating> ratingsByProfile(@Argument final String profileId, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
+        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return ratingService.getAllForProfileId(Long.parseLong(profileId));
     }
 
     /**
@@ -133,17 +199,20 @@ public class GraphqlController {
      * @return List of Ratings objects
      */
     @QueryMapping
-    public Collection<Ratings> ratingsByMovie(
-            @Argument final String movieId) {
-        return ratingService.getAll().stream()
-                .filter(p -> p.getMovieIds() == Long.parseLong(movieId))
-                .collect(Collectors.toCollection(ArrayList:: new));
+    public Collection<Rating> ratingsByMovie(@Argument final String movieId, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        return ratingService.getByMovieIdForClient(Long.parseLong(movieId), client.get().getId());
     }
 
     /**
      * Fetch all movies in the database.
      *
-     * @return List of Profile objects
+     * @return List of Movie objects
      */
     @QueryMapping
     public Collection<Movie> movies() {
@@ -151,12 +220,14 @@ public class GraphqlController {
     }
 
     /**
-     * filter all movies by genre in a specific wishlist
-     * @param id - Wishlist id
-     * @param genre - Genre
+     * Fetch a movie by Id
      *
-     * @return List of movies of that genre in the wishlist
+     * @return The Movie object
      */
+    @QueryMapping
+    public Optional<Movie> movieById(@Argument final Long id) {
+        return movieService.findById(id);
+    }
 
     @QueryMapping
     public Collection<Movie> moviesByGenre(
@@ -201,19 +272,20 @@ public class GraphqlController {
 //    @QueryMapping
 //    public Collection<Movie> movieByName(@Argument) {
 //        //get wishlist by id
-//
+
 //        // find movie name inside the wishlist
-//
+
 //        //return wishlistService.get
 //    }
 
 
     /**
-     * Fetch a movie by id.
+     * Fetch a movie by title.
+     * filter all movies by genre in a specific wishlist
+     * @param id - Wishlist id
+     * @param genre - Genre
      *
-     * @param title - The title of the movie
-     *
-     * @return List of Profile objects
+     * @return List of movies of that genre in the wishlist
      */
     @QueryMapping
     public Collection<TitleSearchResult> searchTitles(
@@ -355,5 +427,47 @@ public class GraphqlController {
                 watchModeService.getTitleDetail(id.toString(), hasSources)
             )
             .toList();
+    }
+
+    /**
+     * Fetch all wishlists
+     *
+     * @return List of the wishlists
+     */
+    @QueryMapping
+    public Collection<Wishlist> wishlists(Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return new ArrayList<Wishlist>();
+        }
+
+        return wishlistService.getAllForClient(client.get().getId());
+    }
+
+    /**
+     * Fetch a wishlist by id
+     *
+     * @return The Wishlist object
+     */
+    @QueryMapping
+    public Optional<Wishlist> wishlistById(@Argument String id, Authentication authentication) {
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(id));
+        if (!wishlist.isPresent()) {
+            return null;
+        }
+
+        Profile profile = profileService.findById(wishlist.get().getProfileId()).get();
+        if (profile.getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist;
     }
 }
