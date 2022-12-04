@@ -29,7 +29,7 @@ public class AuthController {
         try {
             clientDetails = clientService.createClientAndReturnDetails(email);
         } catch (ClientAlreadyExistsException e) {
-            return new ResponseEntity<>(new JwtResponse(""), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new JwtResponse(""), HttpStatus.BAD_REQUEST);
         }
 
         final String token = jwtUtility.generateToken(clientDetails);
