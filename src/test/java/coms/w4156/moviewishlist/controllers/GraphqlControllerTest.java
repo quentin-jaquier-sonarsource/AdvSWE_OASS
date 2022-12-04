@@ -22,8 +22,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 
+
+//@TestInstance(Lifecycle.PER_CLASS)
 @GraphQlTest(GraphqlController.class)
-@TestInstance(Lifecycle.PER_CLASS)
 class GraphqlControllerTest {
 
     @Autowired
@@ -47,16 +48,16 @@ class GraphqlControllerTest {
     @MockBean
     RatingService ratingService;
 
-    Client client;
+//    Client client;
 
-    @BeforeAll
-    void setUp() {
-      client = Client.builder().id(Long.valueOf("1")).email("user").build();
-      Mockito
-          .when(clientService.findByEmail("client"))
-          .thenReturn(Optional.of(client));
-    }
-
+//    @BeforeAll
+//    void setUp() {
+//      client = Client.builder().id(Long.valueOf("1")).email("user").build();
+//      Mockito
+//          .when(clientService.findByEmail("client"))
+//          .thenReturn(Optional.of(client));
+//    }
+//    @WithMockUser
     @Test
     void clientsTest() {
         String query = """
@@ -66,10 +67,12 @@ class GraphqlControllerTest {
                     }
                 }
                 """;
+
         graphQlTester.document(query)
                 .execute()
-                .path("clients");
-                // .entityList(Client.class);
+                .path("clients")
+                .entityList(Client.class)
+                .hasSize(0);
     }
 
     @Test
@@ -108,9 +111,6 @@ class GraphqlControllerTest {
         String query = """
                 query {
                   profiles{
-                    client{
-                      id
-                    }
                     id
                   }
                 }
@@ -121,7 +121,6 @@ class GraphqlControllerTest {
                 .path("profiles")
                 .entityList(Profile.class)
                 .satisfies(profiles -> {
-                    assertEquals("1", profiles.get(0).getClient().getId());
                     assertEquals("2", profiles.get(0).getId());
                 });
     }

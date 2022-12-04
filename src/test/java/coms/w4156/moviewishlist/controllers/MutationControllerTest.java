@@ -1,19 +1,34 @@
 package coms.w4156.moviewishlist.controllers;
 
+import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.services.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
+import org.springframework.graphql.test.tester.WebGraphQlTester;
+import org.springframework.security.test.context.support.WithMockUser;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@GraphQlTest(GraphqlController.class)
+//@GraphQlTest(MutationControllerTest.class)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest
+@AutoConfigureHttpGraphQlTester
 class MutationControllerTest {
 
+//    @Autowired
+//    GraphQlTester graphQlTester;
     @Autowired
-    GraphQlTester graphQlTester;
+    private WebGraphQlTester graphQlTester;
 
     @MockBean
     ClientService clientService;
@@ -33,8 +48,44 @@ class MutationControllerTest {
     @MockBean
     RatingService ratingService;
 
+    Client client;
+
+    String token = "Bearer ";
+
+//    @BeforeAll
+//    void setUp() {
+//        client = Client.builder().id(Long.valueOf("1")).email("user").build();
+//        Mockito
+//                .when(clientService.findByEmail("client"))
+//                .thenReturn(Optional.of(client));
+//    }
+
+//    @WithMockUser
     @Test
     void createClientTest() {
+
+        WebGraphQlTester tester = this.graphQlTester.mutate()
+                .headers(headers -> headers.setBearerAuth(token))
+                .build();
+
+        String query = """
+                mutation {
+                  createClient(
+                    email: test92@test.com){
+                    email
+                  } 
+                }
+                """;
+
+        tester.document(query)
+//                .variable("email", "test92@test.com")
+                .execute()
+                .path("createClient")
+                .entity(Client.class)
+                .satisfies(client -> {
+                    assertEquals("test92@test.com", client.getEmail());
+                    // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
+                });
     }
 
     @Test
