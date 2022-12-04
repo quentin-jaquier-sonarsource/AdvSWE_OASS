@@ -6,12 +6,14 @@ import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @GraphQlTest(GraphqlController.class)
+@AutoConfigureMockMvc(addFilters =  false)
 class GraphqlControllerTest {
 
     @Autowired
