@@ -35,6 +35,9 @@ class GraphqlControllerTest {
     @MockBean
     MovieService movieService;
 
+    @MockBean
+    RatingService ratingService;
+
     @Test
     void clientsTest() {
         String query = """
@@ -47,7 +50,10 @@ class GraphqlControllerTest {
         graphQlTester.document(query)
                 .execute()
                 .path("clients")
-                .entityList(Client.class);
+                .entityList(Client.class)
+                .satisfies(clients -> {
+                    assertEquals(0, clients.size());
+                });
     }
 
     @Test
@@ -85,9 +91,6 @@ class GraphqlControllerTest {
         String query = """
                 query {
                   profiles{
-                    client{
-                      id
-                    }
                     id
                   }
                 }
@@ -98,8 +101,7 @@ class GraphqlControllerTest {
                 .path("profiles")
                 .entityList(Profile.class)
                 .satisfies(profiles -> {
-                    assertEquals("1", profiles.get(0).getClient().getId());
-                    assertEquals("2", profiles.get(0).getId());
+                    assertEquals(0, profiles.size());
                 });
     }
 
