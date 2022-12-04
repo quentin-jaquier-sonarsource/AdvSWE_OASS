@@ -48,10 +48,10 @@ class GraphqlControllerTest {
     Client client;
 
     @BeforeAll
-    void setUp() {
+    void createClient() {
       client = Client.builder().id(Long.valueOf("1")).email("user").build();
       Mockito
-          .when(clientService.findByEmail("client"))
+          .when(clientService.findByEmail("user"))
           .thenReturn(Optional.of(client));
     }
 
