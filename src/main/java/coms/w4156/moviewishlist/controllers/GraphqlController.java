@@ -69,6 +69,27 @@ public class GraphqlController {
     }
 
     /**
+     * Fetch all clients in the database.
+     *
+     * @return List of Profile objects
+     */
+    @QueryMapping
+    public Collection<Client> clients() {
+        return clientService.getAll();
+    }
+
+    /**
+     * Fetch a client by ID.
+     *
+     * @param id - ID of the client to fetch
+     * @return Client
+     */
+    @QueryMapping
+    public Optional<Client> clientById(@Argument final String id) {
+        return clientService.findById(Long.parseLong(id));
+    }
+
+    /**
      * Fetch all profiles in the database.
      *
      * @return List of Profile objects

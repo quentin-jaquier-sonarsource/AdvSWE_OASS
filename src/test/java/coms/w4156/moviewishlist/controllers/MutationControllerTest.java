@@ -50,7 +50,7 @@ class MutationControllerTest {
 
     Client client;
 
-    String token = "Bearer ";
+    String token = "";
 
 //    @BeforeAll
 //    void setUp() {
@@ -65,6 +65,7 @@ class MutationControllerTest {
     void createClientTest() {
 
         WebGraphQlTester tester = this.graphQlTester.mutate()
+                .url("http://localhost:8081/graphql")
                 .headers(headers -> headers.setBearerAuth(token))
                 .build();
 
