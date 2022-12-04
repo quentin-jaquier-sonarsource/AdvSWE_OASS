@@ -1,0 +1,22 @@
+"""
+A rating is a profile's feedback on the movie which comprises of the rating
+they want to give and the review they want to leave. The client can decide
+what to do with the ratings and review and define a scale for the rating its users
+can give, for example on a scale of 5 or 10.
+"""
+type Ratings {
+    # The unique identifier our service uses for this rating
+    id : ID!
+
+    # The profile that gave this rating
+    profile : Profile
+
+    # The movie for which this rating is given
+    movie : Movie
+
+    # The comment left by the profile
+    review : String
+
+    # The numerical rating given
+    rating : Float
+}

@@ -5,6 +5,7 @@ import coms.w4156.moviewishlist.models.watchMode.TitleSearchResponse;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -258,5 +259,74 @@ public class WatchModeService {
         var uri = builder.build().toUri();
 
         return restTemplate.getForEntity(uri, TitleDetail.class).getBody();
+    }
+
+    public String getMovieName(
+            final String id
+    ) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getOriginalTitle();
+    }
+
+    public String getMovieReleaseYear(
+            final String id
+    ) {
+        int year;
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        year = restTemplate.getForEntity(uri, TitleDetail.class).getBody().getYear();
+        return Integer.toString(year);
+    }
+
+    public String getMovieGenre(
+            final String id
+    ) {
+        List<String> genreNames = new ArrayList<>();
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        genreNames = restTemplate.getForEntity(uri, TitleDetail.class).getBody().getGenreNames();
+        return genreNames.get(0);
+    }
+
+    public int getMovieRuntime(
+            final String id
+    ) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getRuntimeMinutes();
+    }
+
+    public int getMoviesByCriticScore(
+            final String id
+    ) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", id, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        return restTemplate.getForEntity(uri, TitleDetail.class).getBody().getCriticScore();
     }
 }
