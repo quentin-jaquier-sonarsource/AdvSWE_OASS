@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -51,7 +52,7 @@ class GraphqlControllerTest {
 
     Client client;
 
-    @BeforeAll
+    @BeforeEach
     void createClient() {
         client = Client.builder().id(Long.valueOf("1")).email("user").build();
         Mockito
