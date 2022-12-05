@@ -4,7 +4,7 @@ type Query {
     profiles: [Profile]
 
     # get a particular profile by id
-    profileByID(id: ID!): Profile
+    profileById(id: ID!): Profile
 
     # get the client making the request
     client: Client
