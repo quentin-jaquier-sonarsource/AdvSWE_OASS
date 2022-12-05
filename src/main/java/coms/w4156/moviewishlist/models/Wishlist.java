@@ -142,7 +142,7 @@ public class Wishlist implements ModelInterface<Long> {
      */
     public List<Movie> getMoviesByGenre(final String genre) {
         return this.movies.stream()
-            .filter(movie -> movie.getMovie_gener().equalsIgnoreCase(genre))
+            .filter(movie -> movie.getGenre().equalsIgnoreCase(genre))
             .collect(Collectors.toList());
     }
 
@@ -155,7 +155,7 @@ public class Wishlist implements ModelInterface<Long> {
     public List<Movie> getMoviesByReleaseYear(final String releaseYear) {
         return this.movies.stream()
             .filter(movie ->
-                movie.getMovie_release_year().equalsIgnoreCase(releaseYear)
+                movie.getReleaseYear().equalsIgnoreCase(releaseYear)
             )
             .collect(Collectors.toList());
     }
@@ -168,7 +168,7 @@ public class Wishlist implements ModelInterface<Long> {
      */
     public List<Movie> getMoviesByRuntime(final Integer runtime) {
         return this.movies.stream()
-            .filter(movie -> movie.getMovie_runtime() == runtime)
+            .filter(movie -> movie.getRuntime() == runtime)
             .collect(Collectors.toList());
     }
 
@@ -180,7 +180,7 @@ public class Wishlist implements ModelInterface<Long> {
      */
     public List<Movie> getMoviesByCriticScore(final Integer criticScore) {
         return this.movies.stream()
-            .filter(movie -> movie.getCritic_score() == criticScore)
+            .filter(movie -> movie.getCriticScore() == criticScore)
             .collect(Collectors.toList());
     }
 }

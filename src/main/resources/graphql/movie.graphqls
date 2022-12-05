@@ -5,11 +5,10 @@ type Movie {
     id: ID!
     # All the wishlists on which this movie resides
     wishlists: [Wishlist]
-    movieName: String!
+    name: String!
     genre: String
-    movieReleaseYear: String
-    movieRuntime: Int
-    movieCriticScore: Int
+    releaseYear: String
+    runtime: Int
+    criticScore: Int
     details: TitleDetail
-
 }

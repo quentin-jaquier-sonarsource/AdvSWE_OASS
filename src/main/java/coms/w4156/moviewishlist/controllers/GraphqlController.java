@@ -251,6 +251,7 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> movies() {
+        Collection<Movie> movies = movieService.getAll();
         return movieService.getAll();
     }
 

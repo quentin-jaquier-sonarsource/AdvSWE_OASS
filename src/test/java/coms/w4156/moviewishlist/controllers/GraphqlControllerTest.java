@@ -157,17 +157,17 @@ class GraphqlControllerTest {
 
     @Test
     void moviesTest(){
-        Movie m = Movie.builder().id(Long.valueOf(137939)).movie_name("Test").movie_gener("comedy").build();
-        Movie m2 = Movie.builder().id(Long.valueOf(1939)).movie_name("Test2").movie_gener("drama").build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").genre("comedy").build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").genre("drama").build();
         Mockito
                 .when(movieService.getAll())
-                .thenReturn(List.of(m));
+                .thenReturn(List.of(movieOne, movieTwo));
 
         String query = """
                 query {
                   movies{
-                    id,
-                    movieName
+                    id
+                    name
                   }
                 }
                 """;
@@ -200,7 +200,7 @@ class GraphqlControllerTest {
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("drama", movies.get(0).getMovie_gener());
+                    assertEquals("drama", movies.get(0).getGenre());
                 });
     }
 
@@ -225,7 +225,7 @@ class GraphqlControllerTest {
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("2004", movies.get(0).getMovie_release_year());
+                    assertEquals("2004", movies.get(0).getReleaseYear());
                 });
     }
 
@@ -250,7 +250,7 @@ class GraphqlControllerTest {
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("53", movies.get(0).getMovie_runtime());
+                    assertEquals("53", movies.get(0).getRuntime());
                 });
     }
 
@@ -275,7 +275,7 @@ class GraphqlControllerTest {
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("53", movies.get(0).getCritic_score());
+                    assertEquals("53", movies.get(0).getCriticScore());
                 });
 
     }
@@ -331,7 +331,7 @@ class GraphqlControllerTest {
                 .path("titleDetail")
                 .entity(Movie.class)
                 .satisfies(movie -> {
-                    assertEquals("The Notebook", movie.getMovie_name());
+                    assertEquals("The Notebook", movie.getName());
                 });
     }
 

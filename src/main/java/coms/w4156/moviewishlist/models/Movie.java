@@ -52,52 +52,47 @@ public class Movie implements ModelInterface<Long> {
     @Getter
     @Setter
     @Column(
-        name = "movie_name",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private String movie_name;
+    private String name;
 
     @Getter
     @Setter
     @Column(
-        name = "movie_gener",
         nullable = true,
         unique = false,
         updatable = true
     )
-    private String movie_gener;
+    private String genre;
 
     @Getter
     @Setter
     @Column(
-        name = "movie_release_year",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private String movie_release_year;
+    private String releaseYear;
 
     @Getter
     @Setter
     @Column(
-        name = "movie_runtime",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private int movie_runtime;
+    private int runtime;
 
     @Getter
     @Setter
     @Column(
-        name = "critic_score",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private int critic_score;
+    private int criticScore;
 
     /**
      * The ratings given for this movie.
@@ -120,19 +115,19 @@ public class Movie implements ModelInterface<Long> {
     public Movie(
         @JsonProperty final Long id,
         @JsonProperty final List<Wishlist> wishlists,
-        @JsonProperty final String movie_name,
-        @JsonProperty final String movie_gener,
-        @JsonProperty final String movie_release_year,
-        @JsonProperty final int movie_runtime,
-        @JsonProperty final int critic_score
+        @JsonProperty final String name,
+        @JsonProperty final String genre,
+        @JsonProperty final String releaseYear,
+        @JsonProperty final int runtime,
+        @JsonProperty final int criticScore
     ) {
         this.id = id;
         this.wishlists = wishlists;
-        this.movie_name = movie_name;
-        this.movie_gener = movie_gener;
-        this.movie_release_year = movie_release_year;
-        this.movie_runtime = movie_runtime;
-        this.critic_score = critic_score;
+        this.name = name;
+        this.genre = genre;
+        this.releaseYear = releaseYear;
+        this.runtime = runtime;
+        this.criticScore = criticScore;
         if (this.wishlists == null) {
             this.wishlists = List.of();
         }
