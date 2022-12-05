@@ -49,21 +49,21 @@ async def get_all_profiles():
 #     return "TODO need this working on the service side first"
 
 @router.get("/create")
-async def create_profile(profile_name : str = "Group A"):
+async def create_profile(client_id : int, profile_name : str = "Group A"):
     """
-    Creates a profile with the given name, associated with the currently 
-    authenticated and authorized client.
+    Creates a profile with the given name, associated with the client of the
+    given id
     """
 
-    mutation = """mutation ($var_name : String!) {
-        createProfile (name : $var_name) {
+    mutation = """mutation ($var_id : ID!, $var_name : String!) {
+        createProfile (clientID : $var_id, name : $var_name) {
             id
             name
         }
     }
     """
 
-    variables = {"var_name" : profile_name}
+    variables = {"var_id" : client_id,"var_name" : profile_name}
 
     json_data = query_graphql_service(mutation, variables)
 

@@ -47,9 +47,14 @@ def test_profile_create():
     """
     Tests /profiles/create
     """
+    # get client id in order to create the profiles
+    response = client.get("/clients/info")
+    client_id = response.json()["Result"]["client"]["id"]
+
     # Create a profile for the client
     params = {
-            "profile_name" : PROFILE_NAME
+            "profile_name" : PROFILE_NAME,
+            "client_id" : client_id,
         }
     creation_response = client.get("/profiles/create", params=params)
     creation_json = creation_response.json()
