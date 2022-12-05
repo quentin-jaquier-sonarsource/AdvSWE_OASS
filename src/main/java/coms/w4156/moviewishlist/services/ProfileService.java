@@ -30,10 +30,10 @@ public class ProfileService
      * @return the profile
      * @throws Error
      */
-    public Optional<Profile> findByName(final String name) throws Error {
-        Optional<Profile> profile = this.getRepository().findByName(name);
-        return profile;
-    }
+//    public Optional<Profile> findByName(final String name) throws Error {
+//        Optional<Profile> profile = this.getRepository().findByName(name);
+//        return profile;
+//    }
 
     public Iterable<Profile> findAll() {
         return this.getRepository().findAll();
