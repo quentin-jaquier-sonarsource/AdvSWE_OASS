@@ -27,19 +27,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@GraphQlTest(MutationControllerTest.class)
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@SpringBootTest
-//@AutoConfigureHttpGraphQlTester
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureHttpGraphQlTester
-class MutationControllerTest {
+import org.junit.jupiter.api.BeforeAll;
 
-//    @Autowired
-//    GraphQlTester graphQlTester;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@GraphQlTest(GraphqlController.class)
+class MutationControllerTest {
     @Autowired
-    private WebGraphQlTester graphQlTester;
+    GraphQlTester graphQlTester;
 
     @MockBean
     ClientService clientService;
@@ -61,32 +56,17 @@ class MutationControllerTest {
 
     Client client;
 
-    String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0cUB0ZXN0LmNvbSIsImlhdCI6MTY3MDE4OTA2Mn0.mtJXlvDRX9r6JP1KmRpuVjMnp90IgQqKGWTxk3s_fM4_6jjG-3KtIWZOo6E8sNdwB-JASBlkozN76eWGe-rB6Q";
-
-    @BeforeEach
-    public void beforeEach(@Autowired WebGraphQlTester webGraphQlTester) {
-        this.graphQlTester = webGraphQlTester;
+    @BeforeAll
+    void createClient() {
+        client = Client.builder().id(Long.valueOf("1")).email("user").build();
+        Mockito
+                .when(clientService.findByEmail("user"))
+                .thenReturn(Optional.of(client));
     }
 
-//    @BeforeAll
-//    void setUp() {
-//        client = Client.builder().id(Long.valueOf("1")).email("user").build();
-//        Mockito
-//                .when(clientService.findByEmail("client"))
-//                .thenReturn(Optional.of(client));
-//    }
-
-//    @WithMockUser
+    @WithMockUser
     @Test
     void createClientTest() {
-
-        WebGraphQlTester tester = this.graphQlTester.mutate()
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
-//                .headers(headers -> headers.setBearerAuth(token))
-//                .header(HttpHeaders.CONTENT_TYPE, "JWT")
-                .headers((headers) -> headers.setBearerAuth(token))
-                .build();
-
         String query = """
                 mutation createClient($email: String!){
                   createClient(email: $email){
@@ -95,7 +75,7 @@ class MutationControllerTest {
                 }
                 """;
 
-        tester.document(query)
+        graphQlTester.document(query)
                 .variable("email", "test92@test.com")
                 .execute()
                 .path("createClient")
