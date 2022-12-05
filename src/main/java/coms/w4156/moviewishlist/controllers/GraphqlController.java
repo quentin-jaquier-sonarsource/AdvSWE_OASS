@@ -78,8 +78,8 @@ public class GraphqlController {
             return new ArrayList<Profile>();
         }
 
-        Collection<Profile> profiles2 =  profileService.getAllForClient(client.get().getId());
-        return profiles2;
+        Collection<Profile> profiles =  profileService.getAllForClient(client.get().getId());
+        return profiles;
     }
 
     /**
