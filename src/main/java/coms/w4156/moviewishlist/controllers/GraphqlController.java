@@ -78,7 +78,8 @@ public class GraphqlController {
             return new ArrayList<Profile>();
         }
 
-        return profileService.getAllForClient(client.get().getId());
+        Collection<Profile> profiles2 =  profileService.getAllForClient(client.get().getId());
+        return profiles2;
     }
 
     /**
@@ -262,80 +263,116 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by genre from a wishlist.
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param genre - The genre of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByGenre(
-        @Argument final String id,
-        @Argument final String genre
+        @Argument final String wishlistID,
+        @Argument final String genre,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByGenre(genre);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByGenre(genre);
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by release year from a wishlist.
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param releaseYear - The release year of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
-        @Argument final String id,
-        @Argument final Integer releaseYear
+        @Argument final String wishlistID,
+        @Argument final Integer releaseYear,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByReleaseYear(releaseYear);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByReleaseYear(releaseYear);
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by runtime from a wishlist.
      *
-     * @param id - The id of the wishlist.
-     * @param runtime - The runtime of the movie
+     * @param wishlistID - The id of the wishlist.
+     * @param runtimeMinutes - The runtime of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByRuntime(
-        @Argument final String id,
-        @Argument final int runtime
+        @Argument final String wishlistID,
+        @Argument final Integer runtimeMinutes,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByRuntime(runtime);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByRuntime(runtimeMinutes);
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by critic score from a wishlist
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param criticScore - The critic score of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByCriticScore(
-        @Argument final String id,
-        @Argument final int criticScore
+        @Argument final String wishlistID,
+        @Argument final int criticScore,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByCriticScore(criticScore);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByCriticScore(criticScore);
     }
 
     /**
      * Fetch a movie by title.
-     * filter all movies by genre in a specific wishlist
+     *
      * @param title - The title of the movie
      * @return List of movies of that genre in the wishlist
      */

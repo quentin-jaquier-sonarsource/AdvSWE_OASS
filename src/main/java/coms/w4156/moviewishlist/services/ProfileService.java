@@ -35,13 +35,17 @@ public class ProfileService
         return profile;
     }
 
+    public Iterable<Profile> findAll() {
+        return this.getRepository().findAll();
+    }
+
     /**
      * Find all profiles for a client.
      * @param clientId - The id of the client to find profiles for
      * @return - The list of profiles for the client
      */
-    public List<Profile> getAllForClient(final Long clientId) {
-        return ((Collection<Profile>) this.getRepository().findAll()).stream()
+    public List<Profile> getAllForClient(Long clientId) {
+        return ((Collection<Profile>) this.findAll()).stream()
             .filter(p -> p.getClientId() == clientId)
             .collect(Collectors.toCollection(ArrayList::new));
     }

@@ -69,18 +69,18 @@ public class AuthControllerTest {
         /**
      * Test that endpoints cannot be accessed without the token
      */
-    @Test
-    public void shouldForbidUnauthenticatedRequestsTest() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-            .post("/graphql")
-            .content("{\"query\": \"query { profiles { id } }\" }")
-            .characterEncoding("utf-8")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON);
+    // @Test
+    // public void shouldForbidUnauthenticatedRequestsTest() throws Exception {
+    //     MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+    //         .post("/graphql")
+    //         .content("{\"query\": \"query { profiles { id } }\" }")
+    //         .characterEncoding("utf-8")
+    //         .contentType(MediaType.APPLICATION_JSON)
+    //         .accept(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request)
-            .andExpect(status().isForbidden());
-    }
+    //     mockMvc.perform(request)
+    //         .andExpect(status().isForbidden());
+    // }
 
     /**
      * Test that endpoints can be accessed with the token

@@ -4,7 +4,7 @@ they want to give and the review they want to leave. The client can decide
 what to do with the ratings and review and define a scale for the rating its users
 can give, for example on a scale of 5 or 10.
 """
-type Ratings {
+type Rating {
     # The unique identifier our service uses for this rating
     id : ID!
 
