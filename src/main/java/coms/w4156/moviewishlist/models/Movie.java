@@ -2,7 +2,9 @@ package coms.w4156.moviewishlist.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,37 +59,30 @@ public class Movie implements ModelInterface<Long> {
         unique = false,
         updatable = false
     )
-    private String movie_name;
+    private String title;
+
+    @Column(nullable = true, unique = false, updatable = true)
+    private String genreString;
 
     @Getter
     @Setter
     @Column(
-        name = "movie_gener",
-        nullable = true,
-        unique = false,
-        updatable = true
-    )
-    private String movie_gener;
-
-    @Getter
-    @Setter
-    @Column(
-        name = "movie_release_year",
+        name = "release_year",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private String movie_release_year;
+    private Integer releaseYear;
 
     @Getter
     @Setter
     @Column(
-        name = "movie_runtime",
+        name = "runtime_minutes",
         nullable = true,
         unique = false,
         updatable = false
     )
-    private int movie_runtime;
+    private Integer runtimeMinutes;
 
     @Getter
     @Setter
@@ -97,7 +92,7 @@ public class Movie implements ModelInterface<Long> {
         unique = false,
         updatable = false
     )
-    private int critic_score;
+    private Integer criticScore;
 
     /**
      * The ratings given for this movie.
@@ -111,28 +106,28 @@ public class Movie implements ModelInterface<Long> {
      *
      * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
-     * @param movie_name - Name of the movie
-     * @param movie_gener - Movie genre
-     * @param movie_release_year - Release year of the movie
-     * @param movie_runtime - runtime of the movie
-     * @param critic_score - critic score of the movie
+     * @param title - Name of the movie
+     * @param genres - Movie genres
+     * @param releaseYear - Release year of the movie
+     * @param runtimeMinutes - runtime of the movie
+     * @param criticScore - critic score of the movie
      */
     public Movie(
         @JsonProperty final Long id,
         @JsonProperty final List<Wishlist> wishlists,
-        @JsonProperty final String movie_name,
-        @JsonProperty final String movie_gener,
-        @JsonProperty final String movie_release_year,
-        @JsonProperty final int movie_runtime,
-        @JsonProperty final int critic_score
+        @JsonProperty final String title,
+        @JsonProperty final List<String> genres,
+        @JsonProperty final Integer releaseYear,
+        @JsonProperty final Integer runtimeMinutes,
+        @JsonProperty final Integer criticScore
     ) {
         this.id = id;
         this.wishlists = wishlists;
-        this.movie_name = movie_name;
-        this.movie_gener = movie_gener;
-        this.movie_release_year = movie_release_year;
-        this.movie_runtime = movie_runtime;
-        this.critic_score = critic_score;
+        this.title = title;
+        this.setGenres(genres);
+        this.releaseYear = releaseYear;
+        this.runtimeMinutes = runtimeMinutes;
+        this.criticScore = criticScore;
         if (this.wishlists == null) {
             this.wishlists = List.of();
         }
@@ -148,5 +143,23 @@ public class Movie implements ModelInterface<Long> {
             return List.of();
         }
         return wishlists;
+    }
+
+    /**
+     * Get the genres of the movie as a list.
+     * @return The genres of the movie as a list.
+     */
+    public List<String> getGenres() {
+        return Arrays
+            .stream(this.genreString.split(","))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Set the genres of the movie as a list.
+     * @param genres The genres of the movie as a list.
+     */
+    public void setGenres(final List<String> genres) {
+        this.genreString = String.join(",", genres);
     }
 }

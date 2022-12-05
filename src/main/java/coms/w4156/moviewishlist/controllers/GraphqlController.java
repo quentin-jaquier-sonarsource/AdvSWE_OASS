@@ -289,7 +289,7 @@ public class GraphqlController {
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
         @Argument final String id,
-        @Argument final String releaseYear
+        @Argument final Integer releaseYear
     ) {
         return wishlistService
             .findById(Long.parseLong(id))
