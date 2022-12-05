@@ -273,7 +273,6 @@ public class GraphqlController {
         @Argument final String id,
         @Argument final String genre
     ) {
-        System.out.println("wishlist id is: " + id);
         return wishlistService
             .findById(Long.parseLong(id))
             .get()
