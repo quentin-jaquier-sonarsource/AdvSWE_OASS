@@ -5,7 +5,6 @@ import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Wishlist;
-import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,7 +17,6 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Answers.valueOf;
 
 import java.util.List;
 import java.util.Optional;
@@ -482,48 +480,130 @@ class GraphqlControllerTest {
     }
 
     @Test
+    @WithMockUser
     void ratingsByProfileTest(){
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").criticScore(8).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").criticScore(3).build();
+        Profile profileOne = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+        Profile profileTwo = Profile.builder().id(Long.valueOf(5)).name("profile5").client(client).build();
+
+        Rating ratingOne = Rating.builder()
+              .id(Long.valueOf(1))
+              .profile(profileOne)
+              .rating(Double.valueOf(8))
+              .review("Excellent")
+              .movie(movieOne)
+              .build();
+
+        Rating ratingTwo = Rating.builder()
+              .id(Long.valueOf(2))
+              .profile(profileTwo)
+              .rating(Double.valueOf(3))
+              .review("I hated it")
+              .movie(movieTwo)
+              .build();
+
+        Mockito
+                .when(ratingService.getAllForProfileId(profileOne.getId()))
+                .thenReturn(List.of(ratingOne));
+        Mockito
+                .when(ratingService.getAllForProfileId(profileTwo.getId()))
+                .thenReturn(List.of(ratingTwo));
+
+        Mockito
+                .when(profileService.findById(profileOne.getId()))
+                .thenReturn(Optional.of(profileOne));
+        Mockito
+                .when(profileService.findById(profileTwo.getId()))
+                .thenReturn(Optional.of(profileTwo));
+
+
         String query = """
-                query ratingsByProfile($profileId : String!){
-                  ratingsByProfile(profileId: $id){
-                    review,
-                    rating,
-                    profile{
-                      id
-                    }
-                  }
+            query {
+              ratingsByProfile(profileId: \"5\") {
+                id
+                review,
+                rating,
+                profile {
+                  id
                 }
-                """;
+              }
+            }
+            """;
 
         graphQlTester.document(query)
-                .variable("id", 23)
                 .execute()
                 .path("ratingsByProfile")
                 .entityList(Rating.class)
+                .hasSize(1)
                 .satisfies(ratings -> {
-                    assertEquals(23, ratings.get(0).getProfileId());
+                    assertEquals(ratings.get(0).getId(), ratingTwo.getId());
                 });
     }
 
     @Test
+    @WithMockUser
     void ratingsByMovieTest(){
+        Movie movieOne = Movie.builder().id(Long.valueOf(10)).name("Test").criticScore(8).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(15)).name("Test2").criticScore(3).build();
+
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+
+        Rating ratingOne = Rating.builder()
+              .id(Long.valueOf(1))
+              .profile(profile)
+              .rating(Double.valueOf(8))
+              .review("Excellent")
+              .movie(movieOne)
+              .build();
+
+        Rating ratingTwo = Rating.builder()
+              .id(Long.valueOf(2))
+              .profile(profile)
+              .rating(Double.valueOf(3))
+              .review("I hated it")
+              .movie(movieOne)
+              .build();
+
+        Rating ratingThree = Rating.builder()
+              .id(Long.valueOf(4))
+              .profile(profile)
+              .rating(Double.valueOf(5))
+              .review("I would not see it again")
+              .movie(movieOne)
+              .build();
+
+
+        Rating ratingOtherMovie = Rating.builder()
+              .id(Long.valueOf(3))
+              .profile(profile)
+              .rating(Double.valueOf(5))
+              .review("meh")
+              .movie(movieTwo)
+              .build();
+
+        Mockito
+              .when(ratingService.getByMovieIdForClient(movieOne.getId(), client.getId()))
+              .thenReturn(List.of(ratingOne, ratingTwo, ratingThree));
+
+        Mockito
+              .when(ratingService.getByMovieIdForClient(movieTwo.getId(), client.getId()))
+              .thenReturn(List.of(ratingOtherMovie));
+
         String query = """
-                query ratingsByMovie($movieId : String!){
-                  ratingsByMovie(movieId: $id)
-                  {
-                    review,
-                    rating
-                  }
-                }
-                """;
+            query {
+              ratingsByMovie(movieId: \"10\") {
+                review,
+                rating,
+                id,
+              }
+            }
+            """;
 
         graphQlTester.document(query)
-                .variable("id", "1250035")
                 .execute()
                 .path("ratingsByMovie")
                 .entityList(Rating.class)
-                .satisfies(ratings -> {
-                    assertEquals(1250035, ratings.get(0).getMovieId());
-                });
+                .hasSize(3);
     }
 }
