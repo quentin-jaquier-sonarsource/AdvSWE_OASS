@@ -257,52 +257,77 @@ class GraphqlControllerTest {
     }
 
     @Test
+    @WithMockUser
     void moviesByRuntimeTest() {
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").runtime(28).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").runtime(123).build();
+
+        Wishlist wishlist = Wishlist.builder()
+            .id(Long.valueOf(4)).name("wishlist of profile3")
+            .profile(profile)
+            .movies(List.of(movieOne, movieTwo))
+            .build();
+
+        Mockito
+                .when(wishlistService.findById(Long.valueOf(4)))
+                .thenReturn(Optional.of(wishlist));
+
         String query = """
-                query moviesByReleaseYear($wishlistID: ID!,
-                 $runtime: Int){
-                  moviesByRuntime(wishlistID: $id,
-                    runtime: $runtime){
-                    id,
-                    movieName,
-                    movieRuntime
-                  }
-                }
-                """;
+            query {
+              moviesByRuntime(wishlistID: 4, runtime: 123) {
+                id,
+                name,
+                runtime,
+                releaseYear
+              }
+            }
+            """;
+
         graphQlTester.document(query)
-                .variable("id", 4)
-                .variable("runtime", "53")
                 .execute()
                 .path("moviesByRuntime")
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("53", movies.get(0).getRuntime());
+                    assertEquals(123, movies.get(0).getRuntime());
                 });
     }
 
     @Test
+    @WithMockUser
     void moviesByCriticScoreTest() {
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").criticScore(8).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").runtime(3).build();
+
+        Wishlist wishlist = Wishlist.builder()
+            .id(Long.valueOf(4)).name("wishlist of profile3")
+            .profile(profile)
+            .movies(List.of(movieOne, movieTwo))
+            .build();
+
+        Mockito
+                .when(wishlistService.findById(Long.valueOf(4)))
+                .thenReturn(Optional.of(wishlist));
+
         String query = """
-                query moviesByReleaseYear($wishlistID: ID!,
-                 $criticScore: Int){
-                  moviesByGenre(wishlistID: $id,
-                    criticScore: $score){
-                    id,
-                    movieName,
-                    movieRuntime
-                  }
-                }
-                """;
+            query {
+              moviesByCriticScore(wishlistID: 4, criticScore: 8) {
+                id,
+                name,
+                criticScore
+              }
+            }
+            """;
+
         graphQlTester.document(query)
-                .variable("id", 4)
-                .variable("score", "110")
                 .execute()
                 .path("moviesByCriticScore")
                 .entityList(Movie.class)
                 .hasSize(1)
                 .satisfies(movies -> {
-                    assertEquals("53", movies.get(0).getCriticScore());
+                    assertEquals(8, movies.get(0).getCriticScore());
                 });
 
     }

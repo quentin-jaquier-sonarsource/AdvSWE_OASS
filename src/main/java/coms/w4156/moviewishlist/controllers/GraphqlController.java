@@ -314,44 +314,61 @@ public class GraphqlController {
             return null;
         }
 
-
         return wishlist.get().getMoviesByReleaseYear(releaseYear);
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by runtime from a wishlist.
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param runtime - The runtime of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByRuntime(
-        @Argument final String id,
-        @Argument final int runtime
+        @Argument final String wishlistID,
+        @Argument final int runtime,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByRuntime(runtime);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByRuntime(runtime);
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by critic score from a wishlist
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param criticScore - The critic score of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByCriticScore(
-        @Argument final String id,
-        @Argument final int criticScore
+        @Argument final String wishlistID,
+        @Argument final int criticScore,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByCriticScore(criticScore);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByCriticScore(criticScore);
     }
 
     /**
