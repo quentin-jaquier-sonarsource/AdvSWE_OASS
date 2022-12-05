@@ -7,7 +7,11 @@ import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Wishlist;
+import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
 import coms.w4156.moviewishlist.services.*;
+
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -976,6 +980,48 @@ class GraphqlControllerTest {
                 .entityList(Rating.class)
                 .satisfies(ratings -> {
                     assertFalse(ratings.size() > 10);
+                });
+    }
+
+    // TITLE DETAIL TESTS
+    @Test
+    @WithMockUser
+    void titleDetailTest(){
+        WatchModeSource src = new WatchModeSource();
+        src.setName("Hulu");
+        src.setType("sub");
+
+        List<WatchModeSource> sources = new ArrayList<>();
+        sources.add(src);
+
+        TitleDetail td = new TitleDetail();
+        td.setTitle("Movie 1");
+        td.setSources(sources);
+
+        Mockito
+                .when(watchModeService.getTitleDetail("1616666", true))
+                .thenReturn(td);
+
+        String query = """
+        query {
+          titleDetail(id : 1616666) {
+            title
+            sources {
+              name
+              type
+            }
+          }
+        }
+        """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("titleDetail")
+                .entity(TitleDetail.class)
+                .satisfies(titleDetail -> {
+                    assertEquals(td.getTitle(), titleDetail.getTitle());
+                    assertEquals(td.getSources().get(0).getName(), src.getName());
+                    assertEquals(td.getSources().get(0).getType(), src.getType());
                 });
     }
 }
