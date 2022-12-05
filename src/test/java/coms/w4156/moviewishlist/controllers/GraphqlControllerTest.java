@@ -5,7 +5,6 @@ import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
-import coms.w4156.moviewishlist.repositories.ClientRepository;
 import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,9 +12,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -61,12 +58,37 @@ class GraphqlControllerTest {
                 .when(clientService.findByEmail("user"))
                 .thenReturn(Optional.of(client));
     }
+
     @Test
     @WithMockUser
     void clientTest() {
         String query = """
                 query {
                     client {
+                        id,
+                        email
+                    }
+                }
+                """;
+        graphQlTester.document(query)
+            .execute()
+            .path("client")
+            .entity(Client.class)
+            .satisfies(c -> {
+                assertEquals(1, c.getId());
+                assertEquals("user", c.getEmail());
+            });
+    }
+
+    @Test
+    void clientByIdTest() {
+        String query = """
+                query clientById($id: ID){
+                  clientById(id: $id){
+                    email,
+                    profiles{
+                      id,
+                      wishlists{
                         id,
                         email
                     }

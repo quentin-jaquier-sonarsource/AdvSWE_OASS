@@ -6,13 +6,8 @@ type Query {
     # get a particular profile by id
     profileByID(id: ID!): Profile
 
+    # get the client making the request
     client: Client
-
-    # get all clients
-    clients: [Client]
-
-    # get a particular client by id
-    clientById(id: ID!): Client
 
     # get all movies in the database
     movies: [Movie]
@@ -44,17 +39,17 @@ type Query {
     titleDetail(id: ID!): TitleDetail
 
     # user ratings api
-    ratings : [Ratings]
+    ratings: [Ratings]
 
     # get user rating by id
-    ratingsById(id:ID!) : Ratings
+    ratingsById(id: ID!): Ratings
 
     # get ratings done by a specific profile
-    ratingsByProfile(profileId : String!) : [Ratings]
+    ratingsByProfile(profileId: String!): [Ratings]
 
     # get ratings for a specific movie
-    ratingsByMovie(movieId : String!) : [Ratings]
+    ratingsByMovie(movieId: String!): [Ratings]
 
     # get wishlists
-    wishlists : [Wishlist]
+    wishlists: [Wishlist]
 }

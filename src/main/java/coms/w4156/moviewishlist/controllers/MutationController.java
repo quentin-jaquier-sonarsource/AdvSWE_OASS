@@ -1,19 +1,18 @@
 package coms.w4156.moviewishlist.controllers;
 
-import java.util.List;
-import java.util.Optional;
-
 import coms.w4156.moviewishlist.models.Client;
-import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
-import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.Rating;
-import coms.w4156.moviewishlist.services.RatingService;
-import coms.w4156.moviewishlist.services.MovieService;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.ClientService;
+import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
+import coms.w4156.moviewishlist.services.RatingService;
+import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.services.WishlistService;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -46,7 +45,9 @@ public class MutationController {
     @Autowired
     private WatchModeService watchModeService;
 
-    /* TODO: this should also generate a JWT; for now we should be using the AuthController */
+    /* TODO: this should also generate a JWT.
+       for now we should be using the AuthController.
+    */
     /**
      * Create a new client with the given email ID.
      *
@@ -83,12 +84,13 @@ public class MutationController {
     }
 
     /**
-     * Delete the client that makes the call
+     * Delete the client that makes the call.
      *
+     * @param authentication The authentication object
      * @return the deleted client
      */
     @MutationMapping
-    public Optional<Client> deleteClient(Authentication authentication) {
+    public Optional<Client> deleteClient(final Authentication authentication) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
@@ -102,12 +104,13 @@ public class MutationController {
      * Create a new profile with the given name.
      *
      * @param name - Name of the profile
+     * @param authentication The authentication object
      * @return the new profile
      */
     @MutationMapping
     public Profile createProfile(
         @Argument final String name,
-        Authentication authentication
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -126,13 +129,14 @@ public class MutationController {
      *
      * @param id - id of the profile to update
      * @param name - New name of the profile
+     * @param authentication The authentication object
      * @return the updated profile
      */
     @MutationMapping
     public Optional<Profile> updateProfile(
         @Argument final String id,
         @Argument final String name,
-        Authentication authentication
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -153,10 +157,14 @@ public class MutationController {
      * Delete a profile by id.
      *
      * @param id - id of the profile to delete
+     * @param authentication The authentication object
      * @return the deleted profile
      */
     @MutationMapping
-    public Optional<Profile> deleteProfile(@Argument final String id, Authentication authentication) {
+    public Optional<Profile> deleteProfile(
+        @Argument final String id,
+        final Authentication authentication
+    ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
@@ -164,7 +172,10 @@ public class MutationController {
         }
 
         Optional<Profile> profile = profileService.findById(Long.parseLong(id));
-        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+        if (
+            !profile.isPresent() ||
+            profile.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
@@ -176,13 +187,14 @@ public class MutationController {
      *
      * @param profileID - Email of the profile to create the wishlist for
      * @param wishlistName - Name of the wishlist
+     * @param authentication The authentication object
      * @return the new wishlist
      */
     @MutationMapping
     public Wishlist createWishlist(
         @Argument final String profileID,
         @Argument final String wishlistName,
-        Authentication authentication
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -190,17 +202,18 @@ public class MutationController {
             return null;
         }
 
-        Optional<Profile> profile = profileService.findById(Long.parseLong(profileID));
-        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+        Optional<Profile> profile = profileService.findById(
+            Long.parseLong(profileID)
+        );
+        if (
+            !profile.isPresent() ||
+            profile.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
         return wishlistService.create(
-            Wishlist
-                .builder()
-                .name(wishlistName)
-                .profile(profile.get())
-                .build()
+            Wishlist.builder().name(wishlistName).profile(profile.get()).build()
         );
     }
 
@@ -209,13 +222,14 @@ public class MutationController {
      *
      * @param id - ID of the wishlist to update
      * @param name - New name of the wishlist
+     * @param authentication The authentication object
      * @return the updated wishlist
      */
     @MutationMapping
     public Optional<Wishlist> updateWishlist(
         @Argument final String id,
         @Argument final String name,
-        Authentication authentication
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -223,7 +237,8 @@ public class MutationController {
             return null;
         }
 
-        return wishlistService.findById(Long.parseLong(id))
+        return wishlistService
+            .findById(Long.parseLong(id))
             .filter(w -> w.getClientId() == client.get().getId())
             .map(w -> {
                 w.setName(name);
@@ -235,18 +250,27 @@ public class MutationController {
      * Delete a wishlist by ID.
      *
      * @param id - ID of the wishlist to delete
+     * @param authentication The authentication object
      * @return the deleted wishlist
      */
     @MutationMapping
-    public Optional<Wishlist> deleteWishlist(@Argument final String id, Authentication authentication) {
+    public Optional<Wishlist> deleteWishlist(
+        @Argument final String id,
+        final Authentication authentication
+    ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
             return null;
         }
 
-        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(id));
-        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+        Optional<Wishlist> wishlist = wishlistService.findById(
+            Long.parseLong(id)
+        );
+        if (
+            !wishlist.isPresent() ||
+            wishlist.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
@@ -258,13 +282,14 @@ public class MutationController {
      *
      * @param wishlistID - ID of the wishlist to create the movie for
      * @param movieID - ID of the movie
+     * @param authentication The authentication object
      * @return the new movie
      */
     @MutationMapping
     public Movie addMovieToWishlist(
         @Argument final String wishlistID,
         @Argument final String movieID,
-        Authentication authentication
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -272,18 +297,27 @@ public class MutationController {
             return null;
         }
 
-        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
-        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+        Optional<Wishlist> wishlist = wishlistService.findById(
+            Long.parseLong(wishlistID)
+        );
+        if (
+            !wishlist.isPresent() ||
+            wishlist.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
         var wishlistObj = wishlist.get();
 
-        final String movie_name = watchModeService.getMovieName(movieID);
-        final String movie_genre = watchModeService.getMovieGenre(movieID);
-        final String movie_release_year = watchModeService.getMovieReleaseYear(movieID);
-        final int movie_runtime = watchModeService.getMovieRuntime(movieID);
-        final int critic_score = watchModeService.getMoviesByCriticScore(movieID);
+        final String movieName = watchModeService.getMovieName(movieID);
+        final String movieGenre = watchModeService.getMovieGenre(movieID);
+        final String releaseYear = watchModeService.getMovieReleaseYear(
+            movieID
+        );
+        final int runtime = watchModeService.getMovieRuntime(movieID);
+        final int criticScore = watchModeService.getMoviesByCriticScore(
+            movieID
+        );
 
         return movieService
             .findById(Long.parseLong(movieID))
@@ -306,16 +340,15 @@ public class MutationController {
                         .builder()
                         .id(Long.parseLong(movieID))
                         .wishlists(List.of(wishlistObj))
-                        .movie_name(movie_name)
-                        .movie_gener(movie_genre)
-                        .movie_release_year(movie_release_year)
-                        .movie_runtime(movie_runtime)
-                        .critic_score(critic_score)
+                        .movie_name(movieName)
+                        .movie_gener(movieGenre)
+                        .movie_release_year(releaseYear)
+                        .movie_runtime(runtime)
+                        .critic_score(criticScore)
                         .build()
                 )
             );
     }
-
 
     /* TODO: create a movie if it does not exist */
     /**
@@ -325,15 +358,16 @@ public class MutationController {
      * @param movieId - ID of the movie for which the rating is given
      * @param review - Comment left with the numerical rating
      * @param rating - The numerical rating given to a movie
+     * @param authentication The authentication object
      * @return the new ratings object
      */
     @MutationMapping
     public Rating createRating(
-            @Argument final String profileId,
-            @Argument final String movieId,
-            @Argument final String review,
-            @Argument final Double rating,
-            Authentication authentication
+        @Argument final String profileId,
+        @Argument final String movieId,
+        @Argument final String review,
+        @Argument final Double rating,
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -341,8 +375,13 @@ public class MutationController {
             return null;
         }
 
-        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
-        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+        Optional<Profile> profile = profileService.findById(
+            Long.parseLong(profileId)
+        );
+        if (
+            !profile.isPresent() ||
+            profile.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
@@ -352,16 +391,15 @@ public class MutationController {
         }
 
         return ratingService.create(
-                Rating
-                        .builder()
-                        .profile(profile.get())
-                        .movie(movie.get())
-                        .review(review)
-                        .rating(rating)
-                        .build()
+            Rating
+                .builder()
+                .profile(profile.get())
+                .movie(movie.get())
+                .review(review)
+                .rating(rating)
+                .build()
         );
     }
-
 
     /**
      * Update a rating with the given ID.
@@ -371,16 +409,17 @@ public class MutationController {
      * @param movieId - ID of the movie for which the rating is given
      * @param review - Comment left with the numerical rating
      * @param rating - The numerical rating given to a movie
+     * @param authentication The authentication object
      * @return the updated ratings object
      */
     @MutationMapping
     public Optional<Rating> updateRating(
-            @Argument final String id,
-            @Argument final String profileId,
-            @Argument final String movieId,
-            @Argument final String review,
-            @Argument final Double rating,
-            Authentication authentication
+        @Argument final String id,
+        @Argument final String profileId,
+        @Argument final String movieId,
+        @Argument final String review,
+        @Argument final Double rating,
+        final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
@@ -388,8 +427,13 @@ public class MutationController {
             return null;
         }
 
-        Optional<Profile> profile = profileService.findById(Long.parseLong(profileId));
-        if (!profile.isPresent() || profile.get().getClientId() != client.get().getId()) {
+        Optional<Profile> profile = profileService.findById(
+            Long.parseLong(profileId)
+        );
+        if (
+            !profile.isPresent() ||
+            profile.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
@@ -410,15 +454,18 @@ public class MutationController {
             });
     }
 
-
     /**
      * Delete a rating by ID.
      *
      * @param id - ID of the rating to delete
+     * @param authentication The authentication object
      * @return the deleted Rating object
      */
     @MutationMapping
-    public Optional<Rating> deleteRating(@Argument final String id, Authentication authentication) {
+    public Optional<Rating> deleteRating(
+        @Argument final String id,
+        final Authentication authentication
+    ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
@@ -426,11 +473,13 @@ public class MutationController {
         }
 
         Optional<Rating> rating = ratingService.findById(Long.parseLong(id));
-        if (!rating.isPresent() || rating.get().getClientId() != client.get().getId()) {
+        if (
+            !rating.isPresent() ||
+            rating.get().getClientId() != client.get().getId()
+        ) {
             return null;
         }
 
         return ratingService.deleteById(Long.parseLong(id));
     }
-
 }

@@ -11,13 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "profiles")
@@ -52,7 +52,6 @@ public class Profile implements ModelInterface<Long> {
     @Getter
     @Setter
     private Client client;
-
 
     /**
      * The ratings given by this profile.
@@ -118,7 +117,7 @@ public class Profile implements ModelInterface<Long> {
     }
 
     /**
-     * Get the Id of the client responsible for this profile
+     * Get the Id of the client responsible for this profile.
      *
      * @return the Id of the client responsible for this profile
      */
