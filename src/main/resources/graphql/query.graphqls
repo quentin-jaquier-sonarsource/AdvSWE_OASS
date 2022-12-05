@@ -6,8 +6,12 @@ type Query {
     # get a particular profile by id
     profileByID(id: ID!): Profile
 
+    # This has been removed from the schema
     # get all clients
-    clients: [Client]
+    # clients: [Client]
+
+    # get the client making the request
+    client: Client
 
     # get a particular client by id
     clientById(id: ID!): Client
@@ -42,17 +46,17 @@ type Query {
     titleDetail(id: ID!): TitleDetail
 
     # user ratings api
-    ratings : [Ratings]
+    ratings: [Ratings]
 
     # get user rating by id
-    ratingsById(id:ID!) : Ratings
+    ratingsById(id: ID!): Ratings
 
     # get ratings done by a specific profile
-    ratingsByProfile(profileId : String!) : [Ratings]
+    ratingsByProfile(profileId: String!): [Ratings]
 
     # get ratings for a specific movie
-    ratingsByMovie(movieId : String!) : [Ratings]
+    ratingsByMovie(movieId: String!): [Ratings]
 
     # get wishlists
-    wishlists : [Wishlist]
+    wishlists: [Wishlist]
 }

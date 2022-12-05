@@ -3,17 +3,20 @@ package coms.w4156.moviewishlist.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.*;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "movies")
@@ -49,53 +52,52 @@ public class Movie implements ModelInterface<Long> {
     @Getter
     @Setter
     @Column(
-            name = "movie_name",
-            nullable = true,
-            unique = false,
-            updatable = false
+        name = "movie_name",
+        nullable = true,
+        unique = false,
+        updatable = false
     )
     private String movie_name;
 
     @Getter
     @Setter
     @Column(
-            name = "movie_gener",
-            nullable = true,
-            unique = false,
-            updatable = true
+        name = "movie_gener",
+        nullable = true,
+        unique = false,
+        updatable = true
     )
     private String movie_gener;
 
     @Getter
     @Setter
     @Column(
-            name = "movie_release_year",
-            nullable = true,
-            unique = false,
-            updatable = false
+        name = "movie_release_year",
+        nullable = true,
+        unique = false,
+        updatable = false
     )
     private String movie_release_year;
 
     @Getter
     @Setter
     @Column(
-            name = "movie_runtime",
-            nullable = true,
-            unique = false,
-            updatable = false
+        name = "movie_runtime",
+        nullable = true,
+        unique = false,
+        updatable = false
     )
     private int movie_runtime;
 
     @Getter
     @Setter
     @Column(
-            name = "critic_score",
-            nullable = true,
-            unique = false,
-            updatable = false
+        name = "critic_score",
+        nullable = true,
+        unique = false,
+        updatable = false
     )
     private int critic_score;
-
 
     /**
      * The ratings given for this movie.
@@ -103,7 +105,6 @@ public class Movie implements ModelInterface<Long> {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     @Getter
     private List<Rating> ratings;
-
 
     /**
      * Create a new Movie object.
