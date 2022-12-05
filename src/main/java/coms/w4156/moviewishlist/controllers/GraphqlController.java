@@ -118,27 +118,27 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return The Profile object
      */
-    @QueryMapping
-    public Optional<Profile> profileByName(
-        @Argument final String name,
-        final Authentication authentication
-    ) {
-        String clientEmail = authentication.getName();
-        Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
-        }
-
-        Optional<Profile> profile = profileService.findByName(name);
-        if (
-            !profile.isPresent() ||
-            profile.get().getClientId() != client.get().getId()
-        ) {
-            return null;
-        }
-
-        return profile;
-    }
+//    @QueryMapping
+//    public Optional<Profile> profileByName(
+//        @Argument final String name,
+//        final Authentication authentication
+//    ) {
+//        String clientEmail = authentication.getName();
+//        Optional<Client> client = clientService.findByEmail(clientEmail);
+//        if (!client.isPresent()) {
+//            return null;
+//        }
+//
+//        Optional<Profile> profile = profileService.findByName(name);
+//        if (
+//            !profile.isPresent() ||
+//            profile.get().getClientId() != client.get().getId()
+//        ) {
+//            return null;
+//        }
+//
+//        return profile;
+//    }
 
     /**
      * Fetch all ratings in the database.
