@@ -10,8 +10,10 @@ type Mutation {
 
     # Create a new profile for the currently authenticated client
     createProfile(
+        # ID of the client that this profile belongs to
+        clientID: ID!
         # Display name of the profile
-        name: String!
+        name: String
     ): Profile!
 
     # Update a profile's name
