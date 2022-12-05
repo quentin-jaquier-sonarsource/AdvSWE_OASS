@@ -82,54 +82,6 @@ class GraphqlControllerTest {
                 });
     }
 
-//    @WithMockUser
-//    @Test
-//    void clientsTest() {
-//        String query = """
-//                query{
-//                    clients{
-//                        id
-//                    }
-//                }
-//                """;
-//
-//        graphQlTester.document(query)
-//                .execute()
-//                .path("clients")
-//                .entityList(Client.class)
-//                .hasSize(1);
-//    }
-
-//    @Test
-//    void clientByIdTest() {
-//        String query = """
-//                query clientById($id: ID!){
-//                  clientById(id: $id){
-//                    email,
-//                    profiles{
-//                      id,
-//                      wishlists{
-//                        id,
-//                        movies{
-//                          movieName,
-//                          movieRuntime
-//                        }
-//                      }
-//                    }
-//                  }
-//                }
-//                """;
-//        graphQlTester.document(query)
-//                .variable("id", 1)
-//                .execute()
-//                .path("clientById")
-//                .entity(Client.class)
-//                .satisfies(client -> {
-//                    assertEquals("testGrahphQL2@test.com",client.getEmail());
-//                    assertEquals("1", client.getId());
-//                });
-//    }
-
     @WithMockUser
     @Test
     void profilesTest() {
@@ -160,20 +112,19 @@ class GraphqlControllerTest {
     void profileByUDTest(){
         Profile profile = Profile.builder().id(Long.valueOf(6)).name("profile6").client(client).build();
         Mockito
-                .when(profileService.create(profile))
-                .thenReturn(profile);
+                .when(profileService.findById(Long.valueOf(6)))
+                .thenReturn(Optional.ofNullable(profile));
 
         String query = """
-                query {
-                  profileByID(id: 6){
-                    id,
-                    name
+                query profileByID($id: ID!){
+                  profileByID(id: $id){
+                    id
                   }
                 }
                 """;
 
         graphQlTester.document(query)
-//                .variable("id", 1)
+                .variable("id", 6)
                 .execute()
                 .path("profileByID")
                 .entity(Profile.class)

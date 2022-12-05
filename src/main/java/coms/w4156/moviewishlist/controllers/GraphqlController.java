@@ -118,6 +118,7 @@ public class GraphqlController {
     @QueryMapping
     public Optional<Profile> profileById(@Argument final String id, Authentication authentication) {
         String clientEmail = authentication.getName();
+        System.out.println("client email: " + clientEmail.toString());
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
             return null;

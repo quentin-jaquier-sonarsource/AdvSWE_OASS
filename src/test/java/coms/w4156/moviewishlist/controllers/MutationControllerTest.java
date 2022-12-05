@@ -8,12 +8,14 @@ import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.services.*;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
@@ -27,7 +29,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //@GraphQlTest(MutationControllerTest.class)
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@SpringBootTest
+//@AutoConfigureHttpGraphQlTester
 @SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureHttpGraphQlTester
 class MutationControllerTest {
 
@@ -58,6 +63,11 @@ class MutationControllerTest {
 
     String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0cUB0ZXN0LmNvbSIsImlhdCI6MTY3MDE4OTA2Mn0.mtJXlvDRX9r6JP1KmRpuVjMnp90IgQqKGWTxk3s_fM4_6jjG-3KtIWZOo6E8sNdwB-JASBlkozN76eWGe-rB6Q";
 
+    @BeforeEach
+    public void beforeEach(@Autowired WebGraphQlTester webGraphQlTester) {
+        this.graphQlTester = webGraphQlTester;
+    }
+
 //    @BeforeAll
 //    void setUp() {
 //        client = Client.builder().id(Long.valueOf("1")).email("user").build();
@@ -70,29 +80,29 @@ class MutationControllerTest {
     @Test
     void createClientTest() {
 
-//        WebGraphQlTester tester = this.graphQlTester.mutate()
-////                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
-////                .headers(headers -> headers.setBearerAuth(token))
+        WebGraphQlTester tester = this.graphQlTester.mutate()
+//                .header(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
+//                .headers(headers -> headers.setBearerAuth(token))
 //                .header(HttpHeaders.CONTENT_TYPE, "JWT")
-//                .headers((headers) -> headers.setBearerAuth(token))
-//                .build();
-//
-//        String query = """
-//                mutation createClient($email: String!){
-//                  createClient(email: $email){
-//                    email
-//                  }
-//                }
-//                """;
-//
-//        tester.document(query)
-//                .variable("email", "test92@test.com")
-//                .execute()
-//                .path("createClient")
-//                .entity(Client.class)
-//                .satisfies(client -> {assertEquals("test92@test.com", client.getEmail());
-//                    // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
-//                });
+                .headers((headers) -> headers.setBearerAuth(token))
+                .build();
+
+        String query = """
+                mutation createClient($email: String!){
+                  createClient(email: $email){
+                    email
+                  }
+                }
+                """;
+
+        tester.document(query)
+                .variable("email", "test92@test.com")
+                .execute()
+                .path("createClient")
+                .entity(Client.class)
+                .satisfies(client -> {assertEquals("test92@test.com", client.getEmail());
+                    // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
+                });
     }
 
 //    @Test
