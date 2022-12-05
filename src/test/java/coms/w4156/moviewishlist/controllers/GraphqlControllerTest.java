@@ -4,6 +4,7 @@ import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
+import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.Test;
@@ -180,21 +181,33 @@ class GraphqlControllerTest {
     }
 
     @Test
+    @WithMockUser
     void moviesByGenreTest(){
+        Profile profile = Profile.builder().id(Long.valueOf(2)).name("profile4").client(client).build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").genre("comedy").build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").genre("drama").build();
+
+        Wishlist wishlist = Wishlist.builder()
+            .id(Long.valueOf(4)).name("wishlist of profile4")
+            .profile(profile)
+            .movies(List.of(movieOne, movieTwo))
+            .build();
+
+        Mockito
+                .when(wishlistService.findById(Long.valueOf(4)))
+                .thenReturn(Optional.of(wishlist));
+
         String query = """
-                query moviesByGenre($wishlistID: ID!,
-                 $genre: String){
-                  moviesByGenre(wishlistID: $id,
-                    genre: $genre){
-                    id,
-                    movieName,
-                    movieRuntime
-                  }
-                }
-                """;
+            query {
+              moviesByGenre(wishlistID: 4, genre: \"drama\") {
+                id,
+                genre,
+                runtime
+              }
+            }
+            """;
+
         graphQlTester.document(query)
-                .variable("id", 4)
-                .variable("genre", "drama")
                 .execute()
                 .path("moviesByGenre")
                 .entityList(Movie.class)

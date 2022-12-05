@@ -78,8 +78,6 @@ public class GraphqlController {
             return new ArrayList<Profile>();
         }
 
-        Iterable<Profile> profiles = profileService.findAll();
-
         Collection<Profile> profiles2 =  profileService.getAllForClient(client.get().getId());
         return profiles2;
     }
@@ -251,7 +249,6 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> movies() {
-        Collection<Movie> movies = movieService.getAll();
         return movieService.getAll();
     }
 
@@ -267,7 +264,7 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by genre from a wishlist.
      *
      * @param id - The id of the wishlist.
      * @param genre - The genre of the movie
@@ -275,13 +272,22 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> moviesByGenre(
-        @Argument final String id,
-        @Argument final String genre
+        @Argument final String wishlistID,
+        @Argument final String genre,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByGenre(genre);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+        return wishlist.get().getMoviesByGenre(genre);
     }
 
     /**
