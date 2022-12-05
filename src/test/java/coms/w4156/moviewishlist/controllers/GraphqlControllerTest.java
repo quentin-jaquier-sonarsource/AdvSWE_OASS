@@ -57,13 +57,13 @@ class GraphqlControllerTest {
     void clientTest() {
         String query =
             """
-                query {
-                    client {
-                        id,
-                        email
-                    }
+            query {
+                client {
+                    id
+                    email
                 }
-                """;
+            }
+            """;
         graphQlTester
             .document(query)
             .execute()
@@ -87,8 +87,8 @@ class GraphqlControllerTest {
                       wishlists{
                         id,
                         movies{
-                          movieName,
-                          movieRuntime
+                          title,
+                          runtimeMinutes
                         }
                       }
                     }
