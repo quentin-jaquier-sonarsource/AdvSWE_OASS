@@ -95,7 +95,6 @@ public class GraphqlController {
         final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
-        System.out.println("client email: " + clientEmail.toString());
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
             return null;
@@ -300,7 +299,7 @@ public class GraphqlController {
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
         @Argument final String wishlistID,
-        @Argument final String releaseYear,
+        @Argument final Integer releaseYear,
         Authentication authentication
     ) {
         String clientEmail = authentication.getName();
@@ -321,13 +320,13 @@ public class GraphqlController {
      * Fetch movies by runtime from a wishlist.
      *
      * @param wishlistID - The id of the wishlist.
-     * @param runtime - The runtime of the movie
+     * @param runtimeMinutes - The runtime of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByRuntime(
         @Argument final String wishlistID,
-        @Argument final int runtime,
+        @Argument final Integer runtimeMinutes,
         Authentication authentication
     ) {
         String clientEmail = authentication.getName();
@@ -341,7 +340,7 @@ public class GraphqlController {
             return null;
         }
 
-        return wishlist.get().getMoviesByRuntime(runtime);
+        return wishlist.get().getMoviesByRuntime(runtimeMinutes);
     }
 
     /**

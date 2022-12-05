@@ -2,7 +2,9 @@ package coms.w4156.moviewishlist.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,25 +58,10 @@ public class Movie implements ModelInterface<Long> {
         unique = false,
         updatable = false
     )
-    private String name;
+    private String title;
 
-    @Getter
-    @Setter
-    @Column(
-        nullable = true,
-        unique = false,
-        updatable = true
-    )
-    private String genre;
-
-    @Getter
-    @Setter
-    @Column(
-        nullable = true,
-        unique = false,
-        updatable = false
-    )
-    private String releaseYear;
+    @Column(nullable = true, unique = false, updatable = true)
+    private String genreString;
 
     @Getter
     @Setter
@@ -83,7 +70,7 @@ public class Movie implements ModelInterface<Long> {
         unique = false,
         updatable = false
     )
-    private int runtime;
+    private Integer releaseYear;
 
     @Getter
     @Setter
@@ -92,7 +79,16 @@ public class Movie implements ModelInterface<Long> {
         unique = false,
         updatable = false
     )
-    private int criticScore;
+    private Integer runtimeMinutes;
+
+    @Getter
+    @Setter
+    @Column(
+        nullable = true,
+        unique = false,
+        updatable = false
+    )
+    private Integer criticScore;
 
     /**
      * The ratings given for this movie.
@@ -106,27 +102,27 @@ public class Movie implements ModelInterface<Long> {
      *
      * @param id - ID of the movie on WatchMode
      * @param wishlists - The wishlists that contain this movie
-     * @param movie_name - Name of the movie
-     * @param movie_gener - Movie genre
-     * @param movie_release_year - Release year of the movie
-     * @param movie_runtime - runtime of the movie
-     * @param critic_score - critic score of the movie
+     * @param title - Name of the movie
+     * @param genres - Movie genres
+     * @param releaseYear - Release year of the movie
+     * @param runtimeMinutes - runtime of the movie
+     * @param criticScore - critic score of the movie
      */
     public Movie(
         @JsonProperty final Long id,
         @JsonProperty final List<Wishlist> wishlists,
-        @JsonProperty final String name,
-        @JsonProperty final String genre,
-        @JsonProperty final String releaseYear,
-        @JsonProperty final int runtime,
-        @JsonProperty final int criticScore
+        @JsonProperty final String title,
+        @JsonProperty final List<String> genres,
+        @JsonProperty final Integer releaseYear,
+        @JsonProperty final Integer runtimeMinutes,
+        @JsonProperty final Integer criticScore
     ) {
         this.id = id;
         this.wishlists = wishlists;
-        this.name = name;
-        this.genre = genre;
+        this.title = title;
+        this.setGenres(genres);
         this.releaseYear = releaseYear;
-        this.runtime = runtime;
+        this.runtimeMinutes = runtimeMinutes;
         this.criticScore = criticScore;
         if (this.wishlists == null) {
             this.wishlists = List.of();
@@ -143,5 +139,23 @@ public class Movie implements ModelInterface<Long> {
             return List.of();
         }
         return wishlists;
+    }
+
+    /**
+     * Get the genres of the movie as a list.
+     * @return The genres of the movie as a list.
+     */
+    public List<String> getGenres() {
+        return Arrays
+            .stream(this.genreString.split(","))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Set the genres of the movie as a list.
+     * @param genres The genres of the movie as a list.
+     */
+    public void setGenres(final List<String> genres) {
+        this.genreString = String.join(",", genres);
     }
 }

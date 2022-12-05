@@ -16,10 +16,10 @@ type Query {
     moviesByGenre(wishlistID: ID!, genre: String): [Movie]
 
     # filter all movies by release date in a specific wishlist
-    moviesByReleaseYear(wishlistID: ID!, releaseYear: String): [Movie]
+    moviesByReleaseYear(wishlistID: ID!, releaseYear: Int): [Movie]
 
     # filter all movies by run time in a specific wishlist
-    moviesByRuntime(wishlistID: ID!, runtime: Int): [Movie]
+    moviesByRuntime(wishlistID: ID!, runtimeMinutes: Int): [Movie]
 
     # filter all movies by critic score in a specific wishlist
     moviesByCriticScore(wishlistID: ID!, criticScore: Int): [Movie]
