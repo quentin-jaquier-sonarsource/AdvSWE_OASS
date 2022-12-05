@@ -994,8 +994,42 @@ class GraphqlControllerTest {
         List<WatchModeSource> sources = new ArrayList<>();
         sources.add(src);
 
+        List<Long> genres = new ArrayList<>();
+        genres.add(666L);
+
+        List<String> genreNames = new ArrayList<>();
+        genreNames.add("Horror");
+
+        List<Long> networks = new ArrayList<>();
+        networks.add(3L);
+
+        List<String> networkNames = new ArrayList<>();
+        networkNames.add("HBO");
+
+
         TitleDetail td = new TitleDetail();
         td.setTitle("Movie 1");
+        td.setId(1L);
+        td.setOriginalTitle("Movie 1");
+        td.setPlotOverview("Plot");
+        td.setType("Type");
+        td.setRuntimeMinutes(120);
+        td.setYear(2022);
+        td.setEndYear(null);
+        td.setReleaseDate("1-1-1");
+        td.setImdbId("1");
+        td.setTmdbId(1L);
+        td.setGenres(genres);
+        td.setGenreNames(genreNames);
+        td.setUserRating(5.0);
+        td.setPoster("Poster");
+        td.setBackdrop("Backdrop");
+        td.setOriginalLanguage("English");
+        td.setNetworks(networks);
+        td.setNetworkNames(networkNames);
+        td.setTrailer("Trailer");
+        td.setTrailerThumbnail("Thumb");
+        td.setRelevancePercentile(0.9);
         td.setSources(sources);
 
         Mockito
@@ -1003,16 +1037,39 @@ class GraphqlControllerTest {
                 .thenReturn(td);
 
         String query = """
-        query {
-          titleDetail(id : 1616666) {
-            title
-            sources {
-              name
-              type
-            }
-          }
-        }
-        """;
+                query {
+                  titleDetail(id : 1616666) {
+                    title
+                    id
+                    originalTitle
+                    plotOverview
+                    type
+                    runtimeMinutes
+                    year
+                    endYear
+                    releaseDate
+                    imdbId
+                    tmdbId
+                    genres
+                    genreNames
+                    userRating
+                    criticScore
+                    usRating
+                    poster
+                    backdrop
+                    originalLanguage
+                    networks
+                    networkNames
+                    trailer
+                    trailerThumbnail
+                    relevancePercentile
+                    sources {
+                      name
+                      type
+                    }
+                  }
+                }
+                """;
 
         graphQlTester.document(query)
                 .execute()
@@ -1022,6 +1079,50 @@ class GraphqlControllerTest {
                     assertEquals(td.getTitle(), titleDetail.getTitle());
                     assertEquals(td.getSources().get(0).getName(), src.getName());
                     assertEquals(td.getSources().get(0).getType(), src.getType());
+                    assertEquals(td, titleDetail);
                 });
     }
+
+    // WISHLIST TESTS
+    @Test
+    @WithMockUser
+    void wishlistsTest(){
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).title("Test").genreString("comedy").build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).title("Test2").genreString("drama").build();
+
+        Wishlist wishlist = Wishlist.builder()
+                .id(Long.valueOf(4)).name("wishlist of profile3")
+                .profile(profile)
+                .movies(List.of(movieOne, movieTwo))
+                .build();
+
+        Mockito
+                .when(wishlistService.getAllForClient(Long.valueOf(1)))
+                .thenReturn(List.of(wishlist));
+
+        String query = """
+                query {
+                  wishlists {
+                    id
+                    name
+                    movies {
+                      details {
+                        title
+                      }
+                    }
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("wishlists")
+                .entityList(Wishlist.class)
+                .hasSize(1)
+                .satisfies(wishlists -> {
+                    assertEquals("wishlist of profile3", wishlists.get(0).getName());
+                });
+    }
+
 }
