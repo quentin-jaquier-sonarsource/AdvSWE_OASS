@@ -68,26 +68,27 @@ public class GraphqlController {
         return clientService.findByEmail(clientEmail);
     }
 
-    /**
-     * Fetch all clients in the database.
-     *
-     * @return List of Profile objects
-     */
-    @QueryMapping
-    public Collection<Client> clients() {
-        return clientService.getAll();
-    }
 
-    /**
-     * Fetch a client by ID.
-     *
-     * @param id - ID of the client to fetch
-     * @return Client
-     */
-    @QueryMapping
-    public Optional<Client> clientById(@Argument final String id) {
-        return clientService.findById(Long.parseLong(id));
-    }
+//    /**
+//     * Fetch all clients in the database.
+//     *
+//     * @return List of Profile objects
+//     */
+//    @QueryMapping
+//    public Collection<Client> clients() {
+//        return clientService.getAll();
+//    }
+//
+//    /**
+//     * Fetch a client by ID.
+//     *
+//     * @param id - ID of the client to fetch
+//     * @return Client
+//     */
+//    @QueryMapping
+//    public Optional<Client> clientById(@Argument final String id) {
+//        return clientService.findById(Long.parseLong(id));
+//    }
 
     /**
      * Fetch all profiles in the database.
@@ -102,7 +103,10 @@ public class GraphqlController {
             return new ArrayList<Profile>();
         }
 
-        return profileService.getAllForClient(client.get().getId());
+        Iterable<Profile> profiles = profileService.findAll();
+
+        Collection<Profile> profiles2 =  profileService.getAllForClient(client.get().getId());
+        return profiles2;
     }
 
     /**

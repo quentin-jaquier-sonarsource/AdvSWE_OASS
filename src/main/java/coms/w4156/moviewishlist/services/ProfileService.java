@@ -36,8 +36,14 @@ public class ProfileService
         return profile;
     }
 
+    public Iterable<Profile> findAll() {
+        return this.getRepository().findAll();
+    }
+
     public List<Profile> getAllForClient(Long clientId) {
-        return ((Collection<Profile>) this.getRepository().findAll()).stream()
+        System.out.println("ADRIEN: getALlForClient");
+        System.out.println("ADRIEN: clientId = " + clientId.toString());
+        return ((Collection<Profile>) this.findAll()).stream()
             .filter(p -> p.getClientId() == clientId)
             .collect(Collectors.toCollection(ArrayList:: new));
     }

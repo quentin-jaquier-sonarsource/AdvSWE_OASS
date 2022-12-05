@@ -6,6 +6,8 @@ type Query {
     # get a particular profile by id
     profileByID(id: ID!): Profile
 
+    client: Client
+
     # get all clients
     clients: [Client]
 

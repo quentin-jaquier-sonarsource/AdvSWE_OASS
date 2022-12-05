@@ -21,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -54,63 +55,89 @@ class GraphqlControllerTest {
     Client client;
 
     @BeforeAll
-    void setUp() {
-      client = Client.builder().id(Long.valueOf("1")).email("user").build();
-      Mockito
-          .when(clientService.findByEmail("client"))
-          .thenReturn(Optional.of(client));
+    void createClient() {
+        client = Client.builder().id(Long.valueOf("1")).email("user").build();
+        Mockito
+                .when(clientService.findByEmail("user"))
+                .thenReturn(Optional.of(client));
     }
+    @Test
     @WithMockUser
-    @Test
-    void clientsTest() {
+    void clientTest() {
         String query = """
-                query{
-                    clients{
-                        id
-                    }
-                }
-                """;
-
-        graphQlTester.document(query)
-                .execute()
-                .path("clients")
-                .entityList(Client.class)
-                .hasSize(1);
-    }
-
-    @Test
-    void clientByIdTest() {
-        String query = """
-                query clientById($id: ID!){
-                  clientById(id: $id){
-                    email,
-                    profiles{
-                      id,
-                      wishlists{
+                query {
+                    client {
                         id,
-                        movies{
-                          movieName,
-                          movieRuntime
-                        }
-                      }
+                        email
                     }
-                  }
                 }
                 """;
         graphQlTester.document(query)
-                .variable("id", 1)
                 .execute()
-                .path("clientById")
+                .path("client")
                 .entity(Client.class)
-                .satisfies(client -> {
-                    assertEquals("testGrahphQL2@test.com",client.getEmail());
-                    assertEquals("1", client.getId());
+                .satisfies(c -> {
+                    assertEquals(1, c.getId());
+                    assertEquals("user", c.getEmail());
                 });
     }
+
+//    @WithMockUser
+//    @Test
+//    void clientsTest() {
+//        String query = """
+//                query{
+//                    clients{
+//                        id
+//                    }
+//                }
+//                """;
+//
+//        graphQlTester.document(query)
+//                .execute()
+//                .path("clients")
+//                .entityList(Client.class)
+//                .hasSize(1);
+//    }
+
+//    @Test
+//    void clientByIdTest() {
+//        String query = """
+//                query clientById($id: ID!){
+//                  clientById(id: $id){
+//                    email,
+//                    profiles{
+//                      id,
+//                      wishlists{
+//                        id,
+//                        movies{
+//                          movieName,
+//                          movieRuntime
+//                        }
+//                      }
+//                    }
+//                  }
+//                }
+//                """;
+//        graphQlTester.document(query)
+//                .variable("id", 1)
+//                .execute()
+//                .path("clientById")
+//                .entity(Client.class)
+//                .satisfies(client -> {
+//                    assertEquals("testGrahphQL2@test.com",client.getEmail());
+//                    assertEquals("1", client.getId());
+//                });
+//    }
 
     @WithMockUser
     @Test
     void profilesTest() {
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile1").client(client).build();
+        Mockito
+                .when(profileService.getAllForClient(client.getId()))
+                .thenReturn(List.of(profile));
+
         String query = """
                 query {
                   profiles{
@@ -124,43 +151,51 @@ class GraphqlControllerTest {
                 .path("profiles")
                 .entityList(Profile.class)
                 .satisfies(profiles -> {
-                    assertEquals("2", profiles.get(0).getId());
+                    assertEquals(1, profiles.size());
                 });
     }
 
+    @WithMockUser
     @Test
     void profileByUDTest(){
+        Profile profile = Profile.builder().id(Long.valueOf(6)).name("profile6").client(client).build();
+        Mockito
+                .when(profileService.create(profile))
+                .thenReturn(profile);
+
         String query = """
-                query profileByID($id: ID!){
-                  profileByID(id: $id){
-                    id
+                query {
+                  profileByID(id: 6){
+                    id,
+                    name
                   }
                 }
                 """;
 
         graphQlTester.document(query)
-                .variable("id", 1)
+//                .variable("id", 1)
                 .execute()
                 .path("profileByID")
                 .entity(Profile.class)
-                .satisfies(profile -> {
-                    assertEquals(1, profile.getId());
+                .satisfies(p -> {
+                    assertEquals(6, p.getId());
                 });
     }
 
 
     @Test
     void moviesTest(){
+        Movie m = Movie.builder().id(Long.valueOf(137939)).movie_name("Test").movie_gener("comedy").build();
+        Movie m2 = Movie.builder().id(Long.valueOf(1939)).movie_name("Test2").movie_gener("drama").build();
+        Mockito
+                .when(movieService.getAll())
+                .thenReturn(List.of(m));
+
         String query = """
                 query {
                   movies{
                     id,
-                    wishlists{
-                      name
-                    },
-                    movieName,
-                    movieRuntime,
-                    movieReleaseYear
+                    movieName
                   }
                 }
                 """;
@@ -169,10 +204,7 @@ class GraphqlControllerTest {
                 .execute()
                 .path("movies")
                 .entityList(Movie.class)
-                .hasSize(2)
-                .satisfies(movies -> {
-                    //TODO:
-                });
+                .hasSize(2);
     }
 
     @Test
