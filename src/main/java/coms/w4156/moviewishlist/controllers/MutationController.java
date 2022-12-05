@@ -5,6 +5,7 @@ import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Wishlist;
+import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
@@ -103,25 +104,27 @@ public class MutationController {
     /**
      * Create a new profile with the given name.
      *
+     * @param clientID - ID of the client to create the profile for
      * @param name - Name of the profile
      * @param authentication The authentication object
      * @return the new profile
      */
     @MutationMapping
-    public Profile createProfile(
+    public Optional<Profile> createProfile(
+        @Argument final String clientID,
         @Argument final String name,
         final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
-        Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
-        }
 
-        Profile profile = new Profile();
-        profile.setName(name);
-        profile.setClient(client.get());
-        return profileService.create(profile);
+        return clientService
+            .findByEmail(clientEmail)
+            .map(client -> {
+                Profile profile = new Profile();
+                profile.setName(name);
+                profile.setClient(client);
+                return profileService.create(profile);
+            });
     }
 
     /**
@@ -286,68 +289,72 @@ public class MutationController {
      * @return the new movie
      */
     @MutationMapping
-    public Movie addMovieToWishlist(
+    public Optional<Movie> addMovieToWishlist(
         @Argument final String wishlistID,
         @Argument final String movieID,
         final Authentication authentication
     ) {
         String clientEmail = authentication.getName();
-        Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
+        Optional<Client> maybeClient = clientService.findByEmail(clientEmail);
+        if (!maybeClient.isPresent()) {
+            return Optional.empty();
         }
+        Client client = maybeClient.get();
 
-        Optional<Wishlist> wishlist = wishlistService.findById(
+        Optional<Wishlist> maybeWishlist = wishlistService.findById(
             Long.parseLong(wishlistID)
         );
-        if (
-            !wishlist.isPresent() ||
-            wishlist.get().getClientId() != client.get().getId()
-        ) {
-            return null;
+        if (!maybeWishlist.isPresent()) {
+            return Optional.empty();
         }
-
-        var wishlistObj = wishlist.get();
-
-        final String movieName = watchModeService.getMovieName(movieID);
-        final String movieGenre = watchModeService.getMovieGenre(movieID);
-        final String releaseYear = watchModeService.getMovieReleaseYear(
-            movieID
-        );
-        final int runtime = watchModeService.getMovieRuntime(movieID);
-        final int criticScore = watchModeService.getMoviesByCriticScore(
-            movieID
-        );
+        Wishlist wishlist = maybeWishlist.get();
+        if (wishlist.getClientId() != client.getId()) {
+            return Optional.empty();
+        }
 
         return movieService
             .findById(Long.parseLong(movieID))
-            .map(m -> {
-                Long matchingWishlists = m
+            .map((Movie m) -> {
+                Optional<Wishlist> containsWishlist = m
                     .getWishlists()
                     .stream()
-                    .filter(w -> w.getId().equals(wishlistObj.getId()))
-                    .count();
+                    .filter(w -> w.getId().equals(wishlist.getId()))
+                    .findFirst();
 
-                if (matchingWishlists == 0) {
-                    m.getWishlists().add(wishlistObj);
-                    return movieService.update(m);
+                if (containsWishlist.isEmpty()) {
+                    wishlist.getMovies().add(m);
+                    wishlistService.update(wishlist);
+                    m.getWishlists().add(wishlist);
+                    return Optional.of(movieService.update(m));
                 }
-                return m;
+
+                return Optional.of(m);
             })
-            .orElseGet(() ->
-                movieService.create(
-                    Movie
-                        .builder()
-                        .id(Long.parseLong(movieID))
-                        .wishlists(List.of(wishlistObj))
-                        .movie_name(movieName)
-                        .movie_gener(movieGenre)
-                        .movie_release_year(releaseYear)
-                        .movie_runtime(runtime)
-                        .critic_score(criticScore)
-                        .build()
-                )
-            );
+            .orElseGet(() -> {
+                TitleDetail details = watchModeService.getTitleDetail(
+                    movieID,
+                    false
+                );
+
+                if (details == null) {
+                    return Optional.empty();
+                }
+
+                Movie newMovie = new Movie();
+                newMovie.setId(Long.parseLong(movieID));
+                newMovie.setWishlists(List.of(wishlist));
+                newMovie.setTitle(details.getTitle());
+                newMovie.setGenres(details.getGenreNames());
+                newMovie.setReleaseYear(details.getYear());
+                newMovie.setRuntimeMinutes(details.getRuntimeMinutes());
+                newMovie.setCriticScore(details.getCriticScore());
+                newMovie = movieService.create(newMovie);
+
+                wishlist.getMovies().add(newMovie);
+                wishlistService.update(wishlist);
+
+                return Optional.of(newMovie);
+            });
     }
 
     /* TODO: create a movie if it does not exist */

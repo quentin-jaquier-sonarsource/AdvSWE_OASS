@@ -1,15 +1,13 @@
 # A movie in our database
 type Movie {
-
     # Our service's unique identifier for the movie
     id: ID!
     # All the wishlists on which this movie resides
     wishlists: [Wishlist]
-    movieName: String!
-    genre: String
-    movieReleaseYear: String
-    movieRuntime: Int
-    movieCriticScore: Int
+    title: String
+    genres: [String]
+    releaseYear: Int
+    runtimeMinutes: Int
+    criticScore: Int
     details: TitleDetail
-
 }
