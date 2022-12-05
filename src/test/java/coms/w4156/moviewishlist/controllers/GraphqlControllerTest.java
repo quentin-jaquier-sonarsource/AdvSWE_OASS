@@ -8,6 +8,9 @@ import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResponse;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
+import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
 import coms.w4156.moviewishlist.services.*;
 
@@ -1122,6 +1125,80 @@ class GraphqlControllerTest {
                 .hasSize(1)
                 .satisfies(wishlists -> {
                     assertEquals("wishlist of profile3", wishlists.get(0).getName());
+                });
+    }
+
+    @Test
+    @WithMockUser
+    void networksTest(){
+
+         WatchModeNetwork hbo = new WatchModeNetwork(1, "HBO", "USA", 1);
+        List<WatchModeNetwork> networks = List.of(hbo);
+
+        Mockito
+                .when(watchModeService.getAllNetworks())
+                .thenReturn(networks);
+
+        String query = """
+                query {
+                  networks {
+                    id
+                    name
+                    origin_country
+                    tmdb_id
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("networks")
+                .entityList(WatchModeNetwork.class)
+                .hasSize(1)
+                .satisfies(retNetworks -> {
+                    assertEquals(networks, retNetworks);
+                });
+    }
+
+    @Test
+    @WithMockUser
+    void searchTitlesTest(){
+
+        WatchModeNetwork hbo = new WatchModeNetwork(1, "HBO", "USA", 1);
+        List<WatchModeNetwork> networks = List.of(hbo);
+
+
+
+        TitleSearchResult tsr = new TitleSearchResult();
+        tsr.setName("Movie");
+        tsr.setId(1L);
+        tsr.setRelevance(10.0);
+
+        List<TitleSearchResult> results  = List.of(tsr);
+
+        TitleSearchResponse tsResponse = new TitleSearchResponse(results);
+
+        Mockito
+                .when(watchModeService.getTitlesBySearch("Movie"))
+                .thenReturn(tsResponse);
+
+        String query = """
+                query {
+                  searchTitles (title : "Movie") {
+                    id
+                    name
+                    relevance
+                  }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("searchTitles")
+                .entityList(TitleSearchResult.class)
+                .hasSize(1)
+                .satisfies(retResults -> {
+                    assertEquals(results, retResults);
                 });
     }
 
