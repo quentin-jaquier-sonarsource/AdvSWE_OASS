@@ -183,12 +183,12 @@ class GraphqlControllerTest {
     @Test
     @WithMockUser
     void moviesByGenreTest(){
-        Profile profile = Profile.builder().id(Long.valueOf(2)).name("profile4").client(client).build();
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
         Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").genre("comedy").build();
         Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").genre("drama").build();
 
         Wishlist wishlist = Wishlist.builder()
-            .id(Long.valueOf(4)).name("wishlist of profile4")
+            .id(Long.valueOf(4)).name("wishlist of profile3")
             .profile(profile)
             .movies(List.of(movieOne, movieTwo))
             .build();
@@ -218,21 +218,35 @@ class GraphqlControllerTest {
     }
 
     @Test
+    @WithMockUser
     void moviesByReleaseYearTest() {
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").releaseYear("1999").build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").releaseYear("2004").build();
+
+        Wishlist wishlist = Wishlist.builder()
+            .id(Long.valueOf(4)).name("wishlist of profile3")
+            .profile(profile)
+            .movies(List.of(movieOne, movieTwo))
+            .build();
+
+        Mockito
+                .when(wishlistService.findById(Long.valueOf(4)))
+                .thenReturn(Optional.of(wishlist));
+
+
         String query = """
-                query moviesByReleaseYear($wishlistID: ID!,
-                 $movieReleaseYear: String){
-                  moviesByGenre(wishlistID: $id,
-                    movieReleaseYear: $year){
-                    id,
-                    movieName,
-                    movieRuntime
-                  }
-                }
-                """;
+            query {
+              moviesByReleaseYear(wishlistID: 4, releaseYear: \"2004\") {
+                id,
+                name,
+                runtime,
+                releaseYear
+              }
+            }
+            """;
+
         graphQlTester.document(query)
-                .variable("id", 4)
-                .variable("year", "2004")
                 .execute()
                 .path("moviesByReleaseYear")
                 .entityList(Movie.class)

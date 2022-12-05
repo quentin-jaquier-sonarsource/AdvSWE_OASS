@@ -266,7 +266,7 @@ public class GraphqlController {
     /**
      * Fetch movies by genre from a wishlist.
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param genre - The genre of the movie
      * @return The Movie object
      */
@@ -291,21 +291,31 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a movie by genre.
+     * Fetch movies by release year from a wishlist.
      *
-     * @param id - The id of the wishlist.
+     * @param wishlistID - The id of the wishlist.
      * @param releaseYear - The release year of the movie
      * @return The Movie object
      */
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
-        @Argument final String id,
-        @Argument final String releaseYear
+        @Argument final String wishlistID,
+        @Argument final String releaseYear,
+        Authentication authentication
     ) {
-        return wishlistService
-            .findById(Long.parseLong(id))
-            .get()
-            .getMoviesByReleaseYear(releaseYear);
+        String clientEmail = authentication.getName();
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (!client.isPresent()) {
+            return null;
+        }
+
+        Optional<Wishlist> wishlist = wishlistService.findById(Long.parseLong(wishlistID));
+        if (!wishlist.isPresent() || wishlist.get().getClientId() != client.get().getId()) {
+            return null;
+        }
+
+
+        return wishlist.get().getMoviesByReleaseYear(releaseYear);
     }
 
     /**
