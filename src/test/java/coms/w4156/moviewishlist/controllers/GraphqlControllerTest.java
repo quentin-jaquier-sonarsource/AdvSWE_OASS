@@ -71,6 +71,27 @@ class GraphqlControllerTest {
     }
 
     @Test
+    @WithMockUser
+    void clientTest() {
+        String query = """
+                query {
+                    client {
+                        id,
+                        email
+                    }
+                }
+                """;
+        graphQlTester.document(query)
+            .execute()
+            .path("client")
+            .entity(Client.class)
+            .satisfies(c -> {
+                assertEquals(1, c.getId());
+                assertEquals("user", c.getEmail());
+            });
+    }
+
+    @Test
     void clientByIdTest() {
         String query = """
                 query clientById($id: ID){
