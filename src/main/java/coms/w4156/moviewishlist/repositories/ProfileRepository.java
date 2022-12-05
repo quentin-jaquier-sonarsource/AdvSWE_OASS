@@ -1,15 +1,23 @@
 package coms.w4156.moviewishlist.repositories;
 
+import coms.w4156.moviewishlist.models.Profile;
 import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import coms.w4156.moviewishlist.models.Profile;
-
 @Repository
 public interface ProfileRepository extends CrudRepository<Profile, Long> {
-    public Optional<Profile> findByName(String name);
+    /**
+     * Find a profile by its name.
+     * @param name - The name of the profile to find
+     * @return The profile with the given name
+     */
+    Optional<Profile> findByName(String name);
 
-    public Optional<Profile> findById(Long id);
+    /**
+     * Find a profile by its id.
+     * @param id - The id of the profile to find
+     * @return The profile with the given id
+     */
+    Optional<Profile> findById(Long id);
 }

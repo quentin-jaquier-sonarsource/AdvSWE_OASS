@@ -25,7 +25,9 @@ import org.springframework.lang.Nullable;
 @Entity
 @Table(
     name = "wishlists",
-    uniqueConstraints = @UniqueConstraint(columnNames = { "name", "profile_id" })
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = { "name", "profile_id" }
+    )
 )
 @ToString
 @EqualsAndHashCode
@@ -66,7 +68,6 @@ public class Wishlist implements ModelInterface<Long> {
         name = "wishlist_movies",
         joinColumns = @JoinColumn(name = "wishlist_id"),
         inverseJoinColumns = @JoinColumn(name = "movie_id")
-                            
     )
     @Setter
     @Getter
@@ -133,27 +134,51 @@ public class Wishlist implements ModelInterface<Long> {
         return this.movies.stream().map(movie -> movie.getId()).toList();
     }
 
-    public List<Movie> getMoviesByGenre(String genre){
-        return   this.movies.stream()
-                .collect(Collectors.filtering(
-                        movie -> movie.getMovie_gener().equalsIgnoreCase(genre), Collectors.toList()));
+    /**
+     * Get movies by a given genre.
+     *
+     * @param genre - The genre to filter by
+     * @return List of movies
+     */
+    public List<Movie> getMoviesByGenre(final String genre) {
+        return this.movies.stream()
+            .filter(movie -> movie.getGenres().contains(genre))
+            .collect(Collectors.toList());
     }
 
-    public List<Movie> getMoviesByReleaseYear(String movieReleaseYear){
+    /**
+     * Get movies by a release year.
+     *
+     * @param releaseYear - The release year of the movie
+     * @return List of movies
+     */
+    public List<Movie> getMoviesByReleaseYear(final Integer releaseYear) {
         return this.movies.stream()
-                .collect(Collectors.filtering(
-                        movie -> movie.getMovie_release_year().equalsIgnoreCase(movieReleaseYear) , Collectors.toList()));
+            .filter(movie -> movie.getReleaseYear().equals(releaseYear))
+            .collect(Collectors.toList());
     }
 
-    public List<Movie> getMoviesByRuntime(int runtime){
+    /**
+     * Get movies by a given runtime.
+     *
+     * @param runtime - The runtime of the movie
+     * @return List of movies
+     */
+    public List<Movie> getMoviesByRuntime(final Integer runtime) {
         return this.movies.stream()
-                .collect(Collectors.filtering(
-                        movie -> movie.getMovie_runtime() == runtime , Collectors.toList()));
+            .filter(movie -> movie.getRuntimeMinutes() == runtime)
+            .collect(Collectors.toList());
     }
 
-    public List<Movie> getMoviesByCriticScore(int critic_score){
+    /**
+     * Get movies by a given critics score.
+     *
+     * @param criticScore - The critic score of the movie
+     * @return List of movies
+     */
+    public List<Movie> getMoviesByCriticScore(final Integer criticScore) {
         return this.movies.stream()
-                .collect(Collectors.filtering(
-                        movie -> movie.getCritic_score() == critic_score , Collectors.toList()));
+            .filter(movie -> movie.getCriticScore() == criticScore)
+            .collect(Collectors.toList());
     }
 }

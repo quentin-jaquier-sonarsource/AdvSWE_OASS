@@ -4,13 +4,10 @@ type Query {
     profiles: [Profile]
 
     # get a particular profile by id
-    profileByID(id: ID!): Profile
+    profileById(id: ID!): Profile
 
-    # get all clients
-    clients: [Client]
-
-    # get a particular client by id
-    clientById(id: ID!): Client
+    # get the client making the request
+    client: Client
 
     # get all movies in the database
     movies: [Movie]
@@ -19,10 +16,10 @@ type Query {
     moviesByGenre(wishlistID: ID!, genre: String): [Movie]
 
     # filter all movies by release date in a specific wishlist
-    moviesByReleaseYear(wishlistID: ID!, movieReleaseYear: String): [Movie]
+    moviesByReleaseYear(wishlistID: ID!, releaseYear: Int): [Movie]
 
     # filter all movies by run time in a specific wishlist
-    moviesByRuntime(wishlistID: ID!, runtime: Int): [Movie]
+    moviesByRuntime(wishlistID: ID!, runtimeMinutes: Int): [Movie]
 
     # filter all movies by critic score in a specific wishlist
     moviesByCriticScore(wishlistID: ID!, criticScore: Int): [Movie]
@@ -42,17 +39,17 @@ type Query {
     titleDetail(id: ID!): TitleDetail
 
     # user ratings api
-    ratings : [Ratings]
+    ratings: [Rating]
 
     # get user rating by id
-    ratingsById(id:ID!) : Ratings
+    ratingById(id: ID!): Rating
 
     # get ratings done by a specific profile
-    ratingsByProfile(profileId : String!) : [Ratings]
+    ratingsByProfile(profileId: String!): [Rating]
 
     # get ratings for a specific movie
-    ratingsByMovie(movieId : String!) : [Ratings]
+    ratingsByMovie(movieId: String!): [Rating]
 
     # get wishlists
-    wishlists : [Wishlist]
+    wishlists: [Wishlist]
 }

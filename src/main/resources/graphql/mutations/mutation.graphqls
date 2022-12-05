@@ -8,10 +8,12 @@ type Mutation {
     # Delete a client
     deleteClient(id: ID!): Client!
 
-    # Create a new profile
+    # Create a new profile for the currently authenticated client
     createProfile(
+        # ID of the client that this profile belongs to
+        clientID: ID!
         # Display name of the profile
-        name: String!
+        name: String
     ): Profile!
 
     # Update a profile's name
@@ -48,11 +50,22 @@ type Mutation {
     ): Movie!
 
     # create a new rating
-    createRating( profileId : String!, movieId : String!, review : String, rating : Float) : Ratings!
+    createRating(
+        profileId: String!,
+        movieId: String!,
+        review: String,
+        rating: Float
+    ): Rating!
 
     # update a rating
-    updateRating( id : String!, profileId : String, movieId : String, review : String, rating : Float) : Ratings
+    updateRating(
+        id: String!,
+        profileId: String,
+        movieId: String,
+        review: String,
+        rating: Float
+    ): Rating
 
     # delete a rating
-    deleteRating( id : String!) : Ratings
+    deleteRating(id: String!): Rating
 }
