@@ -50,11 +50,11 @@ type Mutation {
     ): Movie!
 
     # create a new rating
-    createRating( profileId : String!, movieId : String!, review : String, rating : Float) : Ratings!
+    createRating( profileId : String!, movieId : String!, review : String, rating : Float) : Rating!
 
     # update a rating
-    updateRating( id : String!, profileId : String, movieId : String, review : String, rating : Float) : Ratings
+    updateRating( id : String!, profileId : String, movieId : String, review : String, rating : Float) : Rating
 
     # delete a rating
-    deleteRating( id : String!) : Ratings
+    deleteRating( id : String!) : Rating
 }

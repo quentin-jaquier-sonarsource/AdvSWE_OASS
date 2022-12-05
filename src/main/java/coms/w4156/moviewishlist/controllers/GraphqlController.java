@@ -373,7 +373,7 @@ public class GraphqlController {
 
     /**
      * Fetch a movie by title.
-     * filter all movies by genre in a specific wishlist
+     *
      * @param title - The title of the movie
      * @return List of movies of that genre in the wishlist
      */

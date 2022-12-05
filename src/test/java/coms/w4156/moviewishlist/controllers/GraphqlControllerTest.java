@@ -18,6 +18,7 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Answers.valueOf;
 
 import java.util.List;
 import java.util.Optional;
@@ -299,7 +300,7 @@ class GraphqlControllerTest {
     void moviesByCriticScoreTest() {
         Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
         Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").criticScore(8).build();
-        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").runtime(3).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").criticScore(3).build();
 
         Wishlist wishlist = Wishlist.builder()
             .id(Long.valueOf(4)).name("wishlist of profile3")
@@ -332,63 +333,81 @@ class GraphqlControllerTest {
 
     }
 
-    @Test
-    void searchTitlesTest() {
-        String query = """
-                query searchTitles($title: String!){
-                  searchTitles(title: $title){
-                    id,
-                    details{
-                      criticScore
-                    }
-                  }
-                }
-                """;
-        graphQlTester.document(query)
-                .variable("title", "Me Before You")
-                .execute()
-                .path("searchTitles")
-                .entityList(TitleSearchResult.class)
-                .satisfies(titleSearchResults -> {
-                    assertEquals(2016, titleSearchResults.get(0).getYear());
-                });
+    /* TODO: This test is not relevant, we shouldn't be testing the watchmode API */
+    // @Test
+    // void searchTitlesTest() {
+    //     String query = """
+    //         query {
+    //           searchTitles(title: \"Me Before You\") {
+    //             id,
+    //             details {
+    //               criticScore
+    //             }
+    //           }
+    //         }
+    //         """;
+    //     graphQlTester.document(query)
+    //             .execute()
+    //             .path("searchTitles")
+    //             .entityList(TitleSearchResult.class)
+    //             .satisfies(titleSearchResults -> {
+    //                 assertEquals(2016, titleSearchResults.get(0).getYear());
+    //             });
 
-    }
+    // }
 
-//    @Test
-//    void networksTest() {
-//        String query = """
-//                """;
-//        graphQlTester.document()
-//                .execute()
-//                .path()
-//    }
-
-    @Test
-    void titleDetailTest() {
-        String query = """
-                query titleDetail($id: ID!){
-                  titleDetail(id: $id){
-                    id,
-                    originalTitle,
-                    releaseDate,
-                    usRating,
-                    genreNames
-                  }
-                }
-                """;
-        graphQlTester.document(query)
-                .variable("id", 1409931)
-                .execute()
-                .path("titleDetail")
-                .entity(Movie.class)
-                .satisfies(movie -> {
-                    assertEquals("The Notebook", movie.getName());
-                });
-    }
+    /* TODO: This test is not relevant, we shouldn't be testing the watchmode API */
+    // @Test
+    // void titleDetailTest() {
+    //     String query = """
+    //             query titleDetail($id: ID!){
+    //               titleDetail(id: $id){
+    //                 id,
+    //                 originalTitle,
+    //                 releaseDate,
+    //                 usRating,
+    //                 genreNames
+    //               }
+    //             }
+    //             """;
+    //     graphQlTester.document(query)
+    //             .variable("id", 1409931)
+    //             .execute()
+    //             .path("titleDetail")
+    //             .entity(Movie.class)
+    //             .satisfies(movie -> {
+    //                 assertEquals("The Notebook", movie.getName());
+    //             });
+    // }
 
     @Test
+    @WithMockUser
     void ratingsTest(){
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").criticScore(8).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").criticScore(3).build();
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+
+        Rating ratingOne = Rating.builder()
+              .id(Long.valueOf(1))
+              .profile(profile)
+              .rating(Double.valueOf(8))
+              .review("Excellent")
+              .movie(movieOne)
+              .build();
+
+        Rating ratingTwo = Rating.builder()
+              .id(Long.valueOf(2))
+              .profile(profile)
+              .rating(Double.valueOf(3))
+              .review("I hated it")
+              .movie(movieTwo)
+              .build();
+
+        Mockito
+                .when(ratingService.getAllForClient(client.getId()))
+                .thenReturn(List.of(ratingOne, ratingTwo));
+
+
         String query = """
                 query{
                   ratings{
@@ -398,8 +417,8 @@ class GraphqlControllerTest {
                       name
                     },
                     movie{
-                      movieName,
-                      movieCriticScore
+                      name,
+                      criticScore
                     }
                   }
                 }
@@ -409,29 +428,56 @@ class GraphqlControllerTest {
                 .execute()
                 .path("ratings")
                 .entityList(Rating.class)
-                .satisfies(ratings -> {
-                    //TODO
-                });
+                .hasSize(2);
     }
 
     @Test
-    void ratingsByIdTest(){
+    @WithMockUser
+    void ratingByIdTest(){
+        Movie movieOne = Movie.builder().id(Long.valueOf(137939)).name("Test").criticScore(8).build();
+        Movie movieTwo = Movie.builder().id(Long.valueOf(1939)).name("Test2").criticScore(3).build();
+        Profile profile = Profile.builder().id(Long.valueOf(3)).name("profile3").client(client).build();
+
+        Rating ratingOne = Rating.builder()
+              .id(Long.valueOf(1))
+              .profile(profile)
+              .rating(Double.valueOf(8))
+              .review("Excellent")
+              .movie(movieOne)
+              .build();
+
+        Rating ratingTwo = Rating.builder()
+              .id(Long.valueOf(2))
+              .profile(profile)
+              .rating(Double.valueOf(3))
+              .review("I hated it")
+              .movie(movieTwo)
+              .build();
+
+        Mockito
+                .when(ratingService.findById(Long.valueOf(1)))
+                .thenReturn(Optional.of(ratingOne));
+        Mockito
+                .when(ratingService.findById(Long.valueOf(2)))
+                .thenReturn(Optional.of(ratingTwo));
+
         String query = """
-                query ratingsById($id:ID!){
-                  ratingsById(id: $id){
-                    review,
-                    rating
-                  }
-                }
-                """;
+            query {
+              ratingById(id: 2) {
+                id,
+                review,
+                rating
+              }
+            }
+            """;
 
         graphQlTester.document(query)
-                .variable("id", 2)
                 .execute()
-                .path("ratingsById")
+                .path("ratingById")
                 .entity(Rating.class)
                 .satisfies(rating -> {
-                    assertEquals(1,rating.getId());
+                    assertEquals(ratingTwo.getId(), rating.getId());
+                    assertEquals(ratingTwo.getReview(), rating.getReview());
                 });
     }
 

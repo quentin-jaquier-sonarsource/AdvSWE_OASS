@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.services;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.repositories.RatingRepository;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -28,6 +29,10 @@ public class RatingService
         this.setRepository(repository);
     }
 
+    public Iterable<Rating> findAll() {
+        return this.getRepository().findAll();
+    }
+
     /**
      * Find all ratings for a client.
      *
@@ -35,8 +40,7 @@ public class RatingService
      * @return The list of ratings for the client
      */
     public List<Rating> getAllForClient(final Long clientId) {
-        return this.getRepository()
-            .findAll()
+        return ((Collection<Rating>) this.findAll())
             .stream()
             .filter(r -> r.getClientId() == clientId)
             .collect(Collectors.toCollection(ArrayList::new));

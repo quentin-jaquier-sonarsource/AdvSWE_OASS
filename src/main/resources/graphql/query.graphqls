@@ -39,16 +39,16 @@ type Query {
     titleDetail(id: ID!): TitleDetail
 
     # user ratings api
-    ratings: [Ratings]
+    ratings: [Rating]
 
     # get user rating by id
-    ratingsById(id: ID!): Ratings
+    ratingById(id: ID!): Rating
 
     # get ratings done by a specific profile
-    ratingsByProfile(profileId: String!): [Ratings]
+    ratingsByProfile(profileId: String!): [Rating]
 
     # get ratings for a specific movie
-    ratingsByMovie(movieId: String!): [Ratings]
+    ratingsByMovie(movieId: String!): [Rating]
 
     # get wishlists
     wishlists: [Wishlist]
