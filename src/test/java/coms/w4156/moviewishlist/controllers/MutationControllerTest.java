@@ -51,26 +51,26 @@ class MutationControllerTest {
                 .thenReturn(Optional.of(client));
     }
 
-    @WithMockUser
-    @Test
-    void createClientTest() {
-        String query = """
-                mutation createClient($email: String!){
-                  createClient(email: $email){
-                    email
-                  }
-                }
-                """;
+    // @WithMockUser
+    // @Test
+    // void createClientTest() {
+    //     String query = """
+    //             mutation createClient($email: String!){
+    //               createClient(email: $email){
+    //                 email
+    //               }
+    //             }
+    //             """;
 
-        graphQlTester.document(query)
-                .variable("email", "test92@test.com")
-                .execute()
-                .path("createClient")
-                .entity(Client.class)
-                .satisfies(client -> {assertEquals("test92@test.com", client.getEmail());
-                    // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
-                });
-    }
+    //     graphQlTester.document(query)
+    //             .variable("email", "test92@test.com")
+    //             .execute()
+    //             .path("createClient")
+    //             .entity(Client.class)
+    //             .satisfies(client -> {assertEquals("test92@test.com", client.getEmail());
+    //                 // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
+    //             });
+    // }
 
 //    @Test
 //    void updateClientTest() {
