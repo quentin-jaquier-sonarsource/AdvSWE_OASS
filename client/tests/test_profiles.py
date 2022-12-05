@@ -46,19 +46,15 @@ def test_all():
 def test_profile_create():
     """
     Tests /profiles/create
-    Also tests /clients/all-verbose
     """
-
-    # Fetch client id for us to use
-    response = client.get("/clients/all-verbose")
-    json_response = response.json()
-    id = int(json_response["Result"]["clients"][0]["id"])
-    print(f"The fetched id: {id}")
-    print(f"Email of the fetched client: {json_response['Result']['clients'][0]['email']}")
+    # get client id in order to create the profiles
+    response = client.get("/clients/info")
+    client_id = response.json()["Result"]["client"]["id"]
 
     # Create a profile for the client
     params = {
-            "profile_name" : PROFILE_NAME
+            "profile_name" : PROFILE_NAME,
+            "client_id" : client_id,
         }
     creation_response = client.get("/profiles/create", params=params)
     creation_json = creation_response.json()
@@ -71,11 +67,10 @@ def test_profile_create():
     assert result["createProfile"]["name"] == PROFILE_NAME
 
 
-    # now fetch the updated client again to see it has changed
-    response = client.get("/clients/all-verbose")
+    # now fetch the updated profiles again to see it has changed
+    response = client.get("/profiles/all")
     json_response = response.json()
-    profile = json_response["Result"]["clients"][0]["profiles"][0]
+    result = json_response["Result"]
+    profiles = result["profiles"]
 
-    assert "id" in profile
-    assert profile["name"] == PROFILE_NAME
-    assert "wishlists" in profile
+    assert len(profiles) == 1

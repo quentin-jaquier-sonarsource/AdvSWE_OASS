@@ -9,6 +9,7 @@ from requests import Response
 import json
 
 SERVICE_URL = "http://localhost:8080"
+# SERVICE_URL = "https://movie-wishlist-ase.herokuapp.com/"
 SIGNUP_URL = SERVICE_URL+"/new-client"
 GRAPHQL_URL = SERVICE_URL + "/graphql"
 
@@ -34,7 +35,7 @@ def create_auth_header(token : str) -> dict:
     -----------
     token : str
         the JWT returned by the /new-client endpoint
-    
+
     Returns
     -----------
     auth_header : dict
@@ -73,22 +74,39 @@ def query_service(query : str, auth_header : dict, variables : dict = {}):
 
     return json_data
 
-def create_profile(auth_header : dict, profile_name:str):
-    mutation = """mutation ($var_name : String!) {
-        createProfile (name : $var_name) {
+def create_profile(client_id, auth_header : dict, profile_name:str):
+    mutation = """mutation ($var_id : ID!, $var_name : String!) {
+        createProfile (clientID : $var_id, name : $var_name) {
             id
             name
         }
     }
     """
 
-    variables = {"var_name" : profile_name}
+    variables = {"var_id" : client_id,"var_name" : profile_name}
 
     query_service(query=mutation, variables=variables, auth_header=auth_header)
 
-def create_profiles(auth_header, profile_names : list):
+def create_profiles(client_id, auth_header, profile_names : list):
     for profile_name in profile_names:
-        create_profile(auth_header=auth_header, profile_name=profile_name)
+        create_profile(client_id, auth_header=auth_header, profile_name=profile_name)
+
+def fetch_id(auth_header):
+    query = """
+    query {
+        client {
+            id
+        }
+    }
+    """
+
+    data = query_service(query=query, auth_header=auth_header)
+
+    print(f"THE DATA : {data}")
+
+    return data["client"]["id"]
+
+
 
 def get_profiles(auth_header):
     query = """query {
@@ -111,16 +129,21 @@ def use_service(thread_id, client_email : str, profile_names : list):
     logging.info("Thread %s: signing up with email %s", thread_id, client_email)
     auth_header = sign_up(client_email=client_email)
 
+    logging.info("Thread %s: fetching its id", thread_id)
+    client_id = fetch_id(auth_header)
+
+    print(f"Using client ID: {client_id}")
+
     # create some profiles
     logging.info("Thread %s: creating profiles", thread_id)
-    create_profiles(auth_header=auth_header, profile_names=profile_names)
-    
+    create_profiles(client_id = client_id, auth_header=auth_header, profile_names=profile_names)
+
     # query the profiles
     logging.info("Thread %s: querying profiles", thread_id)
     profile_data = get_profiles(auth_header=auth_header)
 
     logging.info("Thread %s: returned profiles: %s", thread_id, profile_data)
-    
+
     logging.info("Thread %s: finishing", thread_id)
 
 def mult_clients():
@@ -129,7 +152,7 @@ def mult_clients():
     distinct queries
     """
     logging.info("Main    : before creating threads")
-    
+
     t1 = threading.Thread(target=use_service, args=(1, get_rand_email(), ["Group A", "Group B"]))
     t1.start()
 
@@ -138,9 +161,9 @@ def mult_clients():
 
     t3 = threading.Thread(target=use_service, args=(3, get_rand_email(), ["Jordan Peele", "Robert Eggers"]))
     t3.start()
-    
+
     # logging.info("Main    : wait for the threads to finish")
-    
+
     t1.join()
     t2.join()
     t3.join()
@@ -165,19 +188,28 @@ def unauthenticated_client():
     auth_header = {}
 
     r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
-    
-    logging.info("Unauthenticated   : result of query for profiles with no creds was %s", r)
+
+    logging.info("Unauthenticated   : result of query for profiles with no creds was %s", r.text)
+
+    data = json.loads(r.text)["data"]
+    profiles = data["profiles"]
+
+    if len(profiles) == 0:
+        logging.info("Unauthenticated   : [PASS] fetched no profiles")
+    else:
+        logging.info("Unauthenticated   : [FAIL] fetched profiles")
 
 
     logging.info("Unauthenticated   : trying %s with arbitrary bad token 'JWT'", query)
 
-    auth_header = create_auth_header("JWT")
+    # Valid format but not actually valid JWT. Can be parsed but shouldn't work
+    auth_header = create_auth_header("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjcwMjYwMjQ4fQ.0VxKpbhWPqQFZLT4Mnb7VKZhAQQHLLy4lOyZIdZ8gRbFGWPKjb2bkm8z0")
 
     r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
-    
-    logging.info("Unauthenticated   : result of query for profiles with bad creds was %s", r)
 
-    
+    logging.info("Unauthenticated   : result of query for profiles with bad creds was %s", r.text)
+
+
 
 
 def driver():
@@ -198,4 +230,4 @@ def driver():
 
 
 if __name__ == "__main__":
-    driver()    
+    driver()

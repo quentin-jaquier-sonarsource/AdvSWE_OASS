@@ -22,7 +22,7 @@ movies. Movie sources are one of 3 types:
 """
 
 CLIENT_TAG = "Client Endpoints"
-CLIENT_TAG_DESCRIPTION = "Endpoints related to client data"
+CLIENT_TAG_DESCRIPTION = "Endpoints related to signing up and signing in"
 
 PROFILE_TAG = "Profile Endpoints"
 USER_TAG_DESCRIPTION = """"Endpoints related to profiles.
@@ -35,11 +35,10 @@ WISHLIST_TAG_DESCRIPTION = """ Endpoints related to wishlists
 SEARCH_TAG = "Search Endpoints"
 SEARCH_TAG_DESCRIPTION = "Endpoints related to searching movies by title"
 
+MOVIES_TAG = "Movie Endpoints"
+MOVIES_TAG_DESCRIPTION = "Endpoitns related to fetching movies from DB"
+
 TAG_METADATA = [
-    {
-        "name" : TEST_TAG,
-        "description" : TEST_DESCRIPTION
-    },
     {
         "name": SEARCH_TAG,
         "description": SEARCH_TAG_DESCRIPTION
@@ -59,5 +58,9 @@ TAG_METADATA = [
     {
         "name": WISHLIST_TAG,
         "description": WISHLIST_TAG_DESCRIPTION
+    },
+    {
+        "name": MOVIES_TAG,
+        "description": MOVIES_TAG_DESCRIPTION
     },
 ]

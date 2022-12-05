@@ -33,7 +33,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if(null != authorization && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
-            email = jwtTokenUtil.getSubFromToken(token);
+            try {
+                email = jwtTokenUtil.getSubFromToken(token);
+            } catch (Exception e) {
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                return;
+            }
         }
 
         if(null != email && SecurityContextHolder.getContext().getAuthentication() == null) {

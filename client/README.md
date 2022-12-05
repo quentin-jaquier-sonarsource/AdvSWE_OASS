@@ -44,6 +44,9 @@ I'm running 3.10 but any Python 3 should be fine
     should work. If you try to access the other endpoints before signing up you should receive an error
 7. Testing
     - In order to test, you must have an instance of our service up and running
-    locally. To test, run `pytest` in the root directory. Make sure you have
+    locally.
+    - To test, first run the SQL script `movies.sql` in order to have a
+    consistent state for the `movies` DB. 
+    - To run the rests, run `pytest` in the root directory. Make sure you have
     taken the steps to activate the virtual environment and install all the
     requirements first

@@ -69,6 +69,27 @@ async def update_wishlist(wishlistID : int, newName : str = "MyWatchlist2.0"):
 
     return {"Result" : json_data}
 
+# @router.get("/add-movie")
+# async def add_movie_to_wishlist(wishlistID : int):
+#     """
+#     Adds a movie
+
+#     **wishlistID** the id of the wishlist we want to delete
+#     """
+
+#     mutation = """mutation ($var_id : ID!) {
+#         deleteWishlist (id : $var_id) {
+#             name
+#         }
+#     }
+#     """
+
+#     variables = {"var_id" : wishlistID}
+
+#     json_data = query_graphql_service(query=mutation, variables=variables)
+
+#     return {"Result" : json_data}
+
 @router.get("/delete")
 async def delete_wishlist(wishlistID : int):
     """

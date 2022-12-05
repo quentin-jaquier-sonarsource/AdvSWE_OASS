@@ -1,23 +1,25 @@
 from fastapi import APIRouter
 
-from app.constants import CLIENT_TAG
+from app.constants import MOVIES_TAG
 from app.routers.utils import query_graphql_service
 
 router = APIRouter(
-    prefix="/clients",
-    tags=[CLIENT_TAG]
+    prefix="/movies",
+    tags=[MOVIES_TAG]
 )
 
-@router.get("/info")
-async def get_client_info():
+@router.get("/all")
+async def get_all_movies():
     """
-    Returns client info
+    Returns all movies
     """
 
     query = """query {
-        client {
+        movies {
             id
-            email
+            details {
+                title
+            }
         }
     }
     """
