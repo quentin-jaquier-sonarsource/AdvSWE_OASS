@@ -35,7 +35,7 @@ def create_auth_header(token : str) -> dict:
     -----------
     token : str
         the JWT returned by the /new-client endpoint
-    
+
     Returns
     -----------
     auth_header : dict
@@ -137,13 +137,13 @@ def use_service(thread_id, client_email : str, profile_names : list):
     # create some profiles
     logging.info("Thread %s: creating profiles", thread_id)
     create_profiles(client_id = client_id, auth_header=auth_header, profile_names=profile_names)
-    
+
     # query the profiles
     logging.info("Thread %s: querying profiles", thread_id)
     profile_data = get_profiles(auth_header=auth_header)
 
     logging.info("Thread %s: returned profiles: %s", thread_id, profile_data)
-    
+
     logging.info("Thread %s: finishing", thread_id)
 
 def mult_clients():
@@ -152,7 +152,7 @@ def mult_clients():
     distinct queries
     """
     logging.info("Main    : before creating threads")
-    
+
     t1 = threading.Thread(target=use_service, args=(1, get_rand_email(), ["Group A", "Group B"]))
     t1.start()
 
@@ -161,9 +161,9 @@ def mult_clients():
 
     t3 = threading.Thread(target=use_service, args=(3, get_rand_email(), ["Jordan Peele", "Robert Eggers"]))
     t3.start()
-    
+
     # logging.info("Main    : wait for the threads to finish")
-    
+
     t1.join()
     t2.join()
     t3.join()
@@ -188,7 +188,7 @@ def unauthenticated_client():
     auth_header = {}
 
     r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
-    
+
     logging.info("Unauthenticated   : result of query for profiles with no creds was %s", r.text)
 
     data = json.loads(r.text)["data"]
@@ -206,10 +206,10 @@ def unauthenticated_client():
     auth_header = create_auth_header("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjcwMjYwMjQ4fQ.0VxKpbhWPqQFZLT4Mnb7VKZhAQQHLLy4lOyZIdZ8gRbFGWPKjb2bkm8z0")
 
     r : Response = requests.post(GRAPHQL_URL, json={'query' : query}, headers=auth_header)
-    
-    logging.info("Unauthenticated   : result of query for profiles with bad creds was %s", r)
 
-    
+    logging.info("Unauthenticated   : result of query for profiles with bad creds was %s", r.text)
+
+
 
 
 def driver():
@@ -230,4 +230,4 @@ def driver():
 
 
 if __name__ == "__main__":
-    driver()    
+    driver()
