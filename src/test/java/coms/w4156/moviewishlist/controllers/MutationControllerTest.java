@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
@@ -43,7 +44,7 @@ class MutationControllerTest {
 
     Client client;
 
-    @BeforeAll
+    @BeforeEach
     void createClient() {
         client = Client.builder().id(Long.valueOf("1")).email("user").build();
         Mockito
@@ -51,40 +52,19 @@ class MutationControllerTest {
                 .thenReturn(Optional.of(client));
     }
 
-    // @WithMockUser
-    // @Test
-    // void createClientTest() {
-    //     String query = """
-    //             mutation createClient($email: String!){
-    //               createClient(email: $email){
-    //                 email
-    //               }
-    //             }
-    //             """;
-
-    //     graphQlTester.document(query)
-    //             .variable("email", "test92@test.com")
-    //             .execute()
-    //             .path("createClient")
-    //             .entity(Client.class)
-    //             .satisfies(client -> {assertEquals("test92@test.com", client.getEmail());
-    //                 // assertEquals("test90@test.com", client.getProfiles().get(0).getClient().getEmail());
-    //             });
-    // }
-
 //    @Test
+//    @WithMockUser
 //    void updateClientTest() {
 //        String q = """
 //                mutation updateClient($id: ID!, $email: String!){
 //                  updateClient(id: $id,
 //                  email: $email){
-//                    id,
 //                    email
 //                  }
 //                }
 //                """;
 //
-//        tester.document(q)
+//        graphQlTester.document(q)
 //                .variable("id", 1)
 //                .variable("email","new@test.com")
 //                .execute()
