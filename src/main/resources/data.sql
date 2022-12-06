@@ -1,0 +1,2 @@
+insert into role (id, name, description) select 1, 'admin', 'admin' where not exists (select id from role where id=1);
+insert into role (id, name, description) select 2, 'client', 'basic client' where not exists (select id from role where id=2);

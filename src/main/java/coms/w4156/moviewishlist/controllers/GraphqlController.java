@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
@@ -70,9 +71,11 @@ public class GraphqlController {
      * @param authentication The authentication object
      * @return List of Profile objects
      */
+    @PreAuthorize("hasRole('ROLE_client')")
     @QueryMapping
     public Collection<Profile> profiles(final Authentication authentication) {
         String clientEmail = authentication.getName();
+        System.out.println("ADRIEN: authorities = " + authentication.getAuthorities().toString());
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
             return new ArrayList<Profile>();

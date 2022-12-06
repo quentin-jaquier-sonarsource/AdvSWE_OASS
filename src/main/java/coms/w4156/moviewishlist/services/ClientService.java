@@ -2,10 +2,15 @@ package coms.w4156.moviewishlist.services;
 
 import coms.w4156.moviewishlist.exceptions.ClientAlreadyExistsException;
 import coms.w4156.moviewishlist.models.Client;
+import coms.w4156.moviewishlist.models.Role;
 import coms.w4156.moviewishlist.repositories.ClientRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +21,9 @@ public class ClientService
     extends ServiceForRepository<Long, Client, ClientRepository>
     implements UserDetailsService {
 
+    @Autowired
+    RoleService roleService;
+
     /**
      * Contstructor to set up dependency injection for the ClientRepository.
      *
@@ -24,6 +32,14 @@ public class ClientService
     @Autowired
     public ClientService(final ClientRepository repository) {
         this.setRepository(repository);
+    }
+
+    private Set<SimpleGrantedAuthority> getAuthority(Client client) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        client.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        });
+        return authorities;
     }
 
     /**
@@ -42,7 +58,7 @@ public class ClientService
             return new org.springframework.security.core.userdetails.User(
                 client.get().getEmail(),
                 "",
-                new ArrayList<>()
+                getAuthority(client.get())
             );
         } else {
             throw new UsernameNotFoundException(
@@ -68,8 +84,14 @@ public class ClientService
             );
         }
 
-        Client client = new Client(email);
+        Set<Role> roles = new HashSet<Role>();
+        Role basicClientRole = roleService.findByName("client");
+        roles.add(basicClientRole);
+
+        Client client = new Client(email, roles);
+        System.out.println("ADRIEN: before saving");
         this.getRepository().save(client);
+        System.out.println("ADRIEN: after saving");
 
         UserDetails userDetails = this.loadUserByUsername(client.getEmail());
 
