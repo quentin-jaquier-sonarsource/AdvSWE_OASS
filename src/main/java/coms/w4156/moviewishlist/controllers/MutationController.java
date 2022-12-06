@@ -1,11 +1,13 @@
 package coms.w4156.moviewishlist.controllers;
 
+import coms.w4156.moviewishlist.exceptions.ClientAlreadyExistsException;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
 /* TODO: add authentication to the MutationController */
@@ -46,22 +49,28 @@ public class MutationController {
     @Autowired
     private WatchModeService watchModeService;
 
-    /* TODO: this should also generate a JWT.
-       for now we should be using the AuthController.
-    */
+    @Autowired
+    private JwtTokenUtil jwtUtility;
+
     /**
-     * Create a new client with the given email ID.
+     * Create a new client with the given email.
      *
-     * @param email - Email ID of the client
-     * @return the new client
+     * @param email - Email of the client
+     * @return the JWT of the client
      */
     @MutationMapping
-    public Optional<Client> createClient(@Argument final String email) {
-        Client client = new Client();
-        client.setEmail(email);
-        var newClient = clientService.create(client);
-        return clientService.findById(newClient.getId());
-        // TODO: handle error when client is not created
+    public String createClient(@Argument final String email) {
+        UserDetails clientDetails;
+
+        try {
+            clientDetails = clientService.createClientAndReturnDetails(email);
+        } catch (ClientAlreadyExistsException e) {
+            return "";
+        }
+
+        final String token = jwtUtility.generateToken(clientDetails);
+
+        return token;
     }
 
     /* TODO: remove because this is obsolete */
