@@ -5,6 +5,7 @@ import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
+import coms.w4156.moviewishlist.models.Role;
 import coms.w4156.moviewishlist.models.Wishlist;
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
@@ -12,6 +13,7 @@ import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.RatingService;
+import coms.w4156.moviewishlist.services.RoleService;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.services.WishlistService;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -50,6 +53,9 @@ public class MutationController {
     private WatchModeService watchModeService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private JwtTokenUtil jwtUtility;
 
     /**
@@ -73,13 +79,13 @@ public class MutationController {
         return token;
     }
 
-    /* TODO: remove because this is obsolete */
     /**
      * Update a client with the given ID.
      * @param id - ID of the client to update
      * @param email - New email ID of the client
      * @return the updated client
      */
+    @PreAuthorize("hasRole('ROLE_admin')")
     @MutationMapping
     public Optional<Client> updateClient(
         @Argument final String id,
@@ -89,6 +95,22 @@ public class MutationController {
             .findById(Long.parseLong(id))
             .map(c -> {
                 c.setEmail(email);
+                return clientService.update(c);
+            });
+    }
+
+    @PreAuthorize("hasRole('ROLE_admin')")
+    @MutationMapping
+    public Optional<Client> addRoleToClient(
+        @Argument final String clientID,
+        @Argument final String roleName
+    ) {
+        Role role = roleService.findByName(roleName);
+
+        return clientService
+            .findById(Long.parseLong(roleName))
+            .map(c -> {
+                c.addRole(role);
                 return clientService.update(c);
             });
     }

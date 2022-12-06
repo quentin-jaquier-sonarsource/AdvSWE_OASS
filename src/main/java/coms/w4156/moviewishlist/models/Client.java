@@ -105,4 +105,8 @@ public class Client implements ModelInterface<Long> {
         }
         return profiles;
     }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 }

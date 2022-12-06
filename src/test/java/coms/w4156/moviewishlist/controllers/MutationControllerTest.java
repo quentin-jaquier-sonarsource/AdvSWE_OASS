@@ -1,6 +1,7 @@
 package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
+import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
 import coms.w4156.moviewishlist.services.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@GraphQlTest(GraphqlController.class)
+@GraphQlTest(MutationController.class)
 class MutationControllerTest {
     @Autowired
     GraphQlTester graphQlTester;
@@ -42,6 +43,9 @@ class MutationControllerTest {
     @MockBean
     RatingService ratingService;
 
+    @MockBean
+    JwtTokenUtil jwtTokenUtil;
+
     Client client;
 
     @BeforeEach
@@ -50,6 +54,24 @@ class MutationControllerTest {
         Mockito
                 .when(clientService.findByEmail("user"))
                 .thenReturn(Optional.of(client));
+    }
+
+    @Test
+    void createClientTest() {
+
+        String mutation = """
+        mutation {
+            createClient(email: \"test@tester.com\")
+        }
+        """;
+
+        graphQlTester.document(mutation)
+                    .execute()
+                    .path("createClient")
+                    .entity(String.class)
+                    .satisfies(token -> {
+                        assertNotEquals("", token);
+                    });
     }
 
 //    @Test
