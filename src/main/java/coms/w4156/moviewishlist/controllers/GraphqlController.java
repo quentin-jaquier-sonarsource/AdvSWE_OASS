@@ -78,7 +78,9 @@ public class GraphqlController {
             return new ArrayList<Profile>();
         }
 
-        Collection<Profile> profiles =  profileService.getAllForClient(client.get().getId());
+        Collection<Profile> profiles = profileService.getAllForClient(
+            client.get().getId()
+        );
         return profiles;
     }
 
@@ -111,34 +113,34 @@ public class GraphqlController {
         return profile;
     }
 
-    /**
-     * Fetch a profile by name.
-     *
-     * @param name - The name of the profile
-     * @param authentication - The authentication object
-     * @return The Profile object
-     */
-//    @QueryMapping
-//    public Optional<Profile> profileByName(
-//        @Argument final String name,
-//        final Authentication authentication
-//    ) {
-//        String clientEmail = authentication.getName();
-//        Optional<Client> client = clientService.findByEmail(clientEmail);
-//        if (!client.isPresent()) {
-//            return null;
-//        }
-//
-//        Optional<Profile> profile = profileService.findByName(name);
-//        if (
-//            !profile.isPresent() ||
-//            profile.get().getClientId() != client.get().getId()
-//        ) {
-//            return null;
-//        }
-//
-//        return profile;
-//    }
+    // /**
+    //  * Fetch a profile by name.
+    //  *
+    //  * @param name - The name of the profile
+    //  * @param authentication - The authentication object
+    //  * @return The Profile object
+    //  */
+    //    @QueryMapping
+    //    public Optional<Profile> profileByName(
+    //        @Argument final String name,
+    //        final Authentication authentication
+    //    ) {
+    //        String clientEmail = authentication.getName();
+    //        Optional<Client> client = clientService.findByEmail(clientEmail);
+    //        if (!client.isPresent()) {
+    //            return null;
+    //        }
+    //
+    //        Optional<Profile> profile = profileService.findByName(name);
+    //        if (
+    //            !profile.isPresent() ||
+    //            profile.get().getClientId() != client.get().getId()
+    //        ) {
+    //            return null;
+    //        }
+    //
+    //        return profile;
+    //    }
 
     /**
      * Fetch all ratings in the database.
@@ -271,14 +273,14 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> moviesByGenre(
-            @Argument final String id,
-            @Argument final String genre
+        @Argument final String id,
+        @Argument final String genre
     ) {
         System.out.println("wishlist id is: " + id);
         return wishlistService
-                .findById(Long.parseLong(id))
-                .get()
-                .getMoviesByGenre(genre);
+            .findById(Long.parseLong(id))
+            .get()
+            .getMoviesByGenre(genre);
     }
 
     /**
@@ -290,13 +292,13 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> moviesByReleaseYear(
-            @Argument final String id,
-            @Argument final Integer releaseYear
+        @Argument final String id,
+        @Argument final Integer releaseYear
     ) {
         return wishlistService
-                .findById(Long.parseLong(id))
-                .get()
-                .getMoviesByReleaseYear(releaseYear);
+            .findById(Long.parseLong(id))
+            .get()
+            .getMoviesByReleaseYear(releaseYear);
     }
 
     /**
@@ -308,13 +310,13 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> moviesByRuntime(
-            @Argument final String id,
-            @Argument final int runtime
+        @Argument final String id,
+        @Argument final int runtime
     ) {
         return wishlistService
-                .findById(Long.parseLong(id))
-                .get()
-                .getMoviesByRuntime(runtime);
+            .findById(Long.parseLong(id))
+            .get()
+            .getMoviesByRuntime(runtime);
     }
 
     /**
@@ -326,13 +328,13 @@ public class GraphqlController {
      */
     @QueryMapping
     public Collection<Movie> moviesByCriticScore(
-            @Argument final String id,
-            @Argument final int criticScore
+        @Argument final String id,
+        @Argument final int criticScore
     ) {
         return wishlistService
-                .findById(Long.parseLong(id))
-                .get()
-                .getMoviesByCriticScore(criticScore);
+            .findById(Long.parseLong(id))
+            .get()
+            .getMoviesByCriticScore(criticScore);
     }
 
     /**
