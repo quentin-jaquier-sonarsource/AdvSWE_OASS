@@ -241,7 +241,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByGenre(wishlistID: 4, genre: \"drama\") {
+              moviesByGenre(id: 4, genre: \"drama\") {
                 id,
                 genres,
                 runtimeMinutes
@@ -278,7 +278,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByGenre(wishlistID: 4, genre: \"drama\") {
+              moviesByGenre(id: 4, genre: \"drama\") {
                 id,
                 genres,
                 runtimeMinutes
@@ -317,7 +317,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByReleaseYear(wishlistID: 4, releaseYear: 2004) {
+              moviesByReleaseYear(id: 4, releaseYear: 2004) {
                 id,
                 title,
                 runtimeMinutes,
@@ -356,7 +356,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByReleaseYear(wishlistID: 4, releaseYear: 2004) {
+              moviesByReleaseYear(id: 4, releaseYear: 2004) {
                 id,
                 title,
                 runtimeMinutes,
@@ -394,7 +394,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByRuntime(wishlistID: 4, runtimeMinutes: 123) {
+              moviesByRuntime(id: 4, runtime: 123) {
                 id,
                 title,
                 runtimeMinutes,
@@ -432,7 +432,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByRuntime(wishlistID: 4, runtimeMinutes: 123) {
+              moviesByRuntime(id: 4, runtime: 123) {
                 id,
                 title,
                 runtimeMinutes,
@@ -470,7 +470,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByCriticScore(wishlistID: 4, criticScore: 8) {
+              moviesByCriticScore(id: 4, criticScore: 8) {
                 id,
                 title,
                 criticScore
@@ -508,7 +508,7 @@ class GraphqlControllerTest {
 
         String query = """
             query {
-              moviesByCriticScore(wishlistID: 4, criticScore: 8) {
+              moviesByCriticScore(id: 4, criticScore: 8) {
                 id,
                 title,
                 criticScore
