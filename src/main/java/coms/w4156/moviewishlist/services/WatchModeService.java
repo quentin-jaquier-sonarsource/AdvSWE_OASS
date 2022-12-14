@@ -250,7 +250,7 @@ public class WatchModeService {
             .pathSegment("title", id, "details")
             .queryParam("apiKey", apiKey);
 
-        if (includeSources) {
+        if (Boolean.TRUE.equals(includeSources)) {
             builder = builder.queryParam("append_to_response", "sources");
         }
 

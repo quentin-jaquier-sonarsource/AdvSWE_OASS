@@ -2,6 +2,7 @@ package coms.w4156.moviewishlist.serviceTests;
 
 import static coms.w4156.moviewishlist.utils.StreamingConstants.*;
 
+import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import java.lang.reflect.Array;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class WatchModeServiceTests {
@@ -46,6 +48,8 @@ public class WatchModeServiceTests {
     private static Source[] allBuy;
     private static Source[] rentAndBuySources;
     private static Source[] allSources;
+
+    private static TitleDetail matrixTitleDetail;
 
     @Value("${apiKey}")
     private String apiKey;
@@ -153,6 +157,10 @@ public class WatchModeServiceTests {
         allSources = concatArrays(rentAndBuySources, allSub);
 
         allSources = concatArrays(rentAndBuySources, allSub);
+
+        // Start title detail
+        matrixTitleDetail = new TitleDetail();
+        matrixTitleDetail.setTitle("The Matrix");
     }
 
     /**
@@ -656,4 +664,73 @@ public class WatchModeServiceTests {
         }
     }
     /*******************END Test Uniqueness of Sources*************************/
+
+    /******************START TITLE DETAIL TESTS********************************/
+    @Test
+    public void testTitleDetailNoSources() {
+        /** Let's say that movie 1 is available only to buy
+         */
+        String titleId = "72";
+        Boolean includeSources = false;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    public void testTitleDetailNullIncludeSources() {
+        // Should function the same as above now that we check for nulls
+        String titleId = "72";
+        Boolean includeSources = null;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    public void testTitleDetailIncludeSources() {
+        // Check we wired up the true case to work properly as well
+        String titleId = "72";
+        Boolean includeSources = true;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+        builder = builder.queryParam("append_to_response", "sources");
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
 }
