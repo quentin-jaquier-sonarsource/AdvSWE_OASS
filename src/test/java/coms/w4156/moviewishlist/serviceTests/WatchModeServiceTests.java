@@ -3,21 +3,21 @@ package coms.w4156.moviewishlist.serviceTests;
 import static coms.w4156.moviewishlist.utils.StreamingConstants.*;
 
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResponse;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
 import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
-import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import java.lang.reflect.Array;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.util.CollectionUtils;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -58,6 +58,11 @@ public class WatchModeServiceTests {
     private static WatchModeNetwork hboNetwork;
     private static WatchModeNetwork shoNetwork;
     private static WatchModeNetwork[] allNetworks;
+
+    private static TitleSearchResult titleSearchResult;
+    private static List<TitleSearchResult> titleSearchResultList;
+
+    private static TitleSearchResponse matrixTitleSearchResponse;
 
     @Value("${apiKey}")
     private String apiKey;
@@ -175,6 +180,21 @@ public class WatchModeServiceTests {
         hboNetwork = new WatchModeNetwork(72, "HBO", "USA", 27);
         shoNetwork = new WatchModeNetwork(141, "SHO", "USA", 141);
         allNetworks = new WatchModeNetwork[] {hboNetwork, shoNetwork};
+
+        titleSearchResult = new TitleSearchResult();
+        titleSearchResult.setId(56L);
+        titleSearchResult.setName("The Matrix");
+        titleSearchResult.setYear(1999);
+        titleSearchResult.setTmdbId(43L);
+        titleSearchResult.setType("Buy");
+        titleSearchResult.setRelevance(9.99);
+        titleSearchResult.setTmdbType("Blue");
+        titleSearchResult.setImageUrl("imageurl");
+
+        titleSearchResultList = new ArrayList<>();
+        titleSearchResultList.add(titleSearchResult);
+        matrixTitleSearchResponse = new TitleSearchResponse(titleSearchResultList);
+
     }
 
     /**
@@ -746,6 +766,28 @@ public class WatchModeServiceTests {
         TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
 
         Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    void testGetTitlesBySearch() {
+        String searchQuery = "Matrix";
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("autocomplete-search")
+                .queryParam("apiKey", apiKey)
+                .queryParam("search_value", searchQuery)
+                .queryParam("search_type", 2)
+                .build()
+                .toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleSearchResponse.class))
+                .thenReturn(new ResponseEntity<TitleSearchResponse>(
+                        matrixTitleSearchResponse, HttpStatus.OK));
+
+        TitleSearchResponse returnedResponse = wms.getTitlesBySearch(searchQuery);
+
+        Assertions.assertEquals(matrixTitleSearchResponse, returnedResponse);
     }
 
     @Test
