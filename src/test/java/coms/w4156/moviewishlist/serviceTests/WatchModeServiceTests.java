@@ -3,16 +3,21 @@ package coms.w4156.moviewishlist.serviceTests;
 import static coms.w4156.moviewishlist.utils.StreamingConstants.*;
 
 import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
+import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.util.CollectionUtils;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -49,6 +54,10 @@ public class WatchModeServiceTests {
     private static Source[] allSources;
 
     private static TitleDetail matrixTitleDetail;
+
+    private static WatchModeNetwork hboNetwork;
+    private static WatchModeNetwork shoNetwork;
+    private static WatchModeNetwork[] allNetworks;
 
     @Value("${apiKey}")
     private String apiKey;
@@ -160,6 +169,11 @@ public class WatchModeServiceTests {
         // Start title detail
         matrixTitleDetail = new TitleDetail();
         matrixTitleDetail.setTitle("The Matrix");
+
+        // Setup the networks
+        hboNetwork = new WatchModeNetwork(72, "HBO", "USA", 27);
+        shoNetwork = new WatchModeNetwork(141, "SHO", "USA", 141);
+        allNetworks = new WatchModeNetwork[] {hboNetwork, shoNetwork};
     }
 
     /**
@@ -731,5 +745,30 @@ public class WatchModeServiceTests {
         TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
 
         Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    public void testGetAllNetworks() {
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("networks")
+                .queryParam("apiKey", apiKey)
+                .queryParam("regions", "US")
+                .build()
+                .toUri();
+
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, WatchModeNetwork[].class))
+                .thenReturn(new ResponseEntity<WatchModeNetwork[]>(allNetworks, HttpStatus.OK));
+
+        List<WatchModeNetwork> returnedNetworks = wms.getAllNetworks();
+        List<WatchModeNetwork> origNetworks = Arrays.asList(allNetworks);
+
+        // Assert that they are subsets of each other and are the same size
+        // Need the size constraint because they are not sets but are lists
+        Assertions.assertEquals(returnedNetworks.size(), origNetworks.size());
+        Assertions.assertTrue(returnedNetworks.containsAll(origNetworks));
+        Assertions.assertTrue(origNetworks.containsAll(returnedNetworks));
     }
 }
