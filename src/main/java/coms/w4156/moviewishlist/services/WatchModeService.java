@@ -26,6 +26,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class WatchModeService {
 
+    public static final String WATCHMODE_API_BASE_URL =
+            "https://api.watchmode.com/v1/";
     /**
      * A test ID for the movie Skyfall.
      */
@@ -201,7 +203,7 @@ public class WatchModeService {
      */
     public List<WatchModeNetwork> getAllNetworks() {
         URI uri = UriComponentsBuilder
-            .fromHttpUrl("https://api.watchmode.com/v1/")
+            .fromHttpUrl(WATCHMODE_API_BASE_URL)
             .pathSegment("networks")
             .queryParam("apiKey", apiKey)
             .queryParam("regions", "US")
@@ -222,7 +224,7 @@ public class WatchModeService {
      */
     public TitleSearchResponse getTitlesBySearch(final String query) {
         URI uri = UriComponentsBuilder
-            .fromHttpUrl("https://api.watchmode.com/v1/")
+            .fromHttpUrl(WATCHMODE_API_BASE_URL)
             .pathSegment("autocomplete-search")
             .queryParam("apiKey", apiKey)
             .queryParam("search_value", query)
@@ -246,7 +248,7 @@ public class WatchModeService {
         final Boolean includeSources
     ) {
         UriComponentsBuilder builder = UriComponentsBuilder
-            .fromHttpUrl("https://api.watchmode.com/v1/")
+            .fromHttpUrl(WATCHMODE_API_BASE_URL)
             .pathSegment("title", id, "details")
             .queryParam("apiKey", apiKey);
 
