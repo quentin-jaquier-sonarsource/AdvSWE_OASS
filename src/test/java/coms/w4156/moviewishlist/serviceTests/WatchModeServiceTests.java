@@ -182,7 +182,7 @@ public class WatchModeServiceTests {
      * that is available on all services.
      */
     @Test
-    public void testAvailable() {
+    void testAvailable() {
         Source[] allSources = new Source[] { netflix, amazonPrime, vuduRent };
 
         Mockito
@@ -198,7 +198,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not free source.
      */
     @Test
-    public void testGetFreeWithSubSourcesById() {
+    void testGetFreeWithSubSourcesById() {
         // Let's say that movie 1 is available to buy on Vudu and to stream on
         // Netflix
 
@@ -228,7 +228,7 @@ public class WatchModeServiceTests {
      * will return an empty array.
      */
     @Test
-    public void testGetFreeWithSubSourcesByIdNoneReturned() {
+    void testGetFreeWithSubSourcesByIdNoneReturned() {
         // Let's say that movie 2 is only available on sources for renting and
         // buying
 
@@ -258,7 +258,7 @@ public class WatchModeServiceTests {
      * returns an empty array.
      */
     @Test
-    public void testGetFreeWithSubSourcesByIdNoneReturned2() {
+    void testGetFreeWithSubSourcesByIdNoneReturned2() {
         // Let's say that movie 3 isn't available anywhere.
 
         Source[] movie3Sources = new Source[] {};
@@ -281,7 +281,7 @@ public class WatchModeServiceTests {
      * that all streaming sites are returned.
      */
     @Test
-    public void testGetFreeWithSubSourcesAllSub() {
+    void testGetFreeWithSubSourcesAllSub() {
         String movie3URL = wms.makeURL("3");
 
         Mockito
@@ -305,7 +305,7 @@ public class WatchModeServiceTests {
      * that all buy sites are returned.
      */
     @Test
-    public void testGetFreeWithSubAllSources() {
+    void testGetFreeWithSubAllSources() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
@@ -331,7 +331,7 @@ public class WatchModeServiceTests {
      * a movie can be rented or bought.
      */
     @Test
-    public void testGetFreeWithSubAllRentBuy() {
+    void testGetFreeWithSubAllRentBuy() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
@@ -361,7 +361,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not buy source
      */
     @Test
-    public void testGetBuySourcesById() {
+    void testGetBuySourcesById() {
         /** Let's say that movie 1 is available to buy on Vudu and to stream on
          * Netflix
          */
@@ -389,7 +389,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when all sources are of type buy
      */
     @Test
-    public void testGetBuySourcesByIdAllBuy() {
+    void testGetBuySourcesByIdAllBuy() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -416,7 +416,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when no sources are of type buy
      */
     @Test
-    public void testGetBuySourcesByIdNoBuy() {
+    void testGetBuySourcesByIdNoBuy() {
         /** Let's say that movie 1 is available only to stream on subscription
          * platforms */
 
@@ -436,7 +436,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when movie isn't available anywhere
      */
     @Test
-    public void testGetBuySourcesByIdNoBuy2() {
+    void testGetBuySourcesByIdNoBuy2() {
         Source[] noSources = {};
         String movie1URL = wms.makeURL("1");
 
@@ -454,7 +454,7 @@ public class WatchModeServiceTests {
      * Test that we can filter buy sources from all sources
      */
     @Test
-    public void testGetBuySourcesByIdAllSources() {
+    void testGetBuySourcesByIdAllSources() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -485,7 +485,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not buy source
      */
     @Test
-    public void testGetRentSourcesById() {
+    void testGetRentSourcesById() {
         /** Let's say that movie 1 is available to rent on Vudu and to stream on
          * Netflix
          */
@@ -513,7 +513,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when all sources are of type Rent
      */
     @Test
-    public void testGetRentSourcesByIdAllRent() {
+    void testGetRentSourcesByIdAllRent() {
         /** Let's say that movie 1 is available only to Rent
          */
 
@@ -540,7 +540,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when no sources are of type Rent
      */
     @Test
-    public void testGetRentSourcesByIdNoRent() {
+    void testGetRentSourcesByIdNoRent() {
         /** Let's say that movie 1 is available only to stream on subscription
          * platforms */
 
@@ -560,7 +560,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when movie isn't available anywhere
      */
     @Test
-    public void testGetRentSourcesByIdNoRent2() {
+    void testGetRentSourcesByIdNoRent2() {
         Source[] noSources = {};
         String movie1URL = wms.makeURL("1");
 
@@ -578,7 +578,7 @@ public class WatchModeServiceTests {
      * Test that we can filter Rent sources from all sources
      */
     @Test
-    public void testGetRentSourcesByIdAllSources() {
+    void testGetRentSourcesByIdAllSources() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -604,7 +604,7 @@ public class WatchModeServiceTests {
 
     /******************START Test Uniqueness of Sources************************/
     @Test
-    public void testGetFreeWithSubSourcesByIdRepeat() {
+    void testGetFreeWithSubSourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -629,7 +629,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testGetRentSourcesByIdRepeat() {
+    void testGetRentSourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -654,7 +654,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testGetBuySourcesByIdRepeat() {
+    void testGetBuySourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -681,7 +681,7 @@ public class WatchModeServiceTests {
 
     /******************START TITLE DETAIL TESTS********************************/
     @Test
-    public void testTitleDetailNoSources() {
+    void testTitleDetailNoSources() {
         /** Let's say that movie 1 is available only to buy
          */
         String titleId = "72";
@@ -704,7 +704,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testTitleDetailNullIncludeSources() {
+    void testTitleDetailNullIncludeSources() {
         // Should function the same as above now that we check for nulls
         String titleId = "72";
         Boolean includeSources = null;
@@ -726,7 +726,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testTitleDetailIncludeSources() {
+    void testTitleDetailIncludeSources() {
         // Check we wired up the true case to work properly as well
         String titleId = "72";
         Boolean includeSources = true;
@@ -749,7 +749,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testGetAllNetworks() {
+    void testGetAllNetworks() {
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
                 .pathSegment("networks")
