@@ -95,8 +95,9 @@ public class WatchModeServiceTests {
     public static void setUp() {
         // Init all services that subscription based.
 
-        netflix = new Source();
-        netflix.setName(NETFLIX_NAME);
+        netflix = new Source(56, NETFLIX_NAME, SUBSCRIPTION_TYPE,
+                "US", "ios", "androidUrl", "webUrl",
+                "Format:HD", 20.0, 4, 40);
 
         amazonPrime = new Source();
         amazonPrime.setName(AMAZON_PRIME_NAME);
