@@ -26,6 +26,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @ExtendWith(MockitoExtension.class)
 public class WatchModeServiceTests {
 
+    public static final String WATCHMODE_API_BASE_URL =
+            "https://api.watchmode.com/v1/";
     private final String skyfallId = "1350564";
 
     private static Source netflix;
@@ -674,7 +676,7 @@ public class WatchModeServiceTests {
         Boolean includeSources = false;
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .fromHttpUrl(WATCHMODE_API_BASE_URL)
                 .pathSegment("title", titleId, "details")
                 .queryParam("apiKey", apiKey);
 
@@ -696,7 +698,7 @@ public class WatchModeServiceTests {
         Boolean includeSources = null;
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .fromHttpUrl(WATCHMODE_API_BASE_URL)
                 .pathSegment("title", titleId, "details")
                 .queryParam("apiKey", apiKey);
 
@@ -718,7 +720,7 @@ public class WatchModeServiceTests {
         Boolean includeSources = true;
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl("https://api.watchmode.com/v1/")
+                .fromHttpUrl(WATCHMODE_API_BASE_URL)
                 .pathSegment("title", titleId, "details")
                 .queryParam("apiKey", apiKey);
         builder = builder.queryParam("append_to_response", "sources");
