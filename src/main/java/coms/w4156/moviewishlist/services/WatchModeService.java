@@ -31,12 +31,12 @@ public class WatchModeService {
     /**
      * A test ID for the movie Skyfall.
      */
-    private final String skyfallId = "1350564";
+    private static final String skyfallId = "1350564";
 
     /**
      * The base endpoint for making queries about movie sources.
      */
-    private final String watchModeSourceBaseEndpoint =
+    private static final String watchModeSourceBaseEndpoint =
         "https://api.watchmode.com/v1/title/";
 
     /**
