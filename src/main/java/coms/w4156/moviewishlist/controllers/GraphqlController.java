@@ -99,7 +99,7 @@ public class GraphqlController {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
-            return null;
+            return Optional.empty();
         }
 
         Optional<Profile> profile = profileService.findById(Long.parseLong(id));
@@ -107,7 +107,7 @@ public class GraphqlController {
             !profile.isPresent() ||
             profile.get().getClientId() != client.get().getId()
         ) {
-            return null;
+            return Optional.empty();
         }
 
         return profile;

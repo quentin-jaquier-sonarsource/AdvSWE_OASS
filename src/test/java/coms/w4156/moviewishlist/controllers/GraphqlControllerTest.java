@@ -3,6 +3,7 @@ package coms.w4156.moviewishlist.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Movie;
@@ -190,6 +191,42 @@ class GraphqlControllerTest {
             .satisfies(p -> {
                 assertNotEquals(2, p.getId());
             });
+    }
+
+    @WithMockUser
+    @Test
+    void profileByIdClientNotPresent() {
+        Profile profile = Profile
+                .builder()
+                .id(Long.valueOf(6))
+                .name("profile6")
+                .client(client)
+                .build();
+
+
+        Mockito
+                .when(profileService.findById(Long.valueOf(6)))
+                .thenReturn(Optional.ofNullable(profile));
+
+        // Mock the client not existing
+        Mockito
+                .when(clientService.findByEmail("user"))
+                .thenReturn(Optional.empty());
+
+        String query =
+                """
+                query {
+                  profileById(id: 6) {
+                    id
+                  }
+                }
+                """;
+
+        graphQlTester
+                .document(query)
+                .execute()
+                .path("profileById")
+                .valueIsNull();
     }
 
     @Test
