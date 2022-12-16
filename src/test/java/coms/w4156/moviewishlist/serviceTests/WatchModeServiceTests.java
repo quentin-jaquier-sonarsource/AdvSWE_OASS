@@ -2,9 +2,15 @@ package coms.w4156.moviewishlist.serviceTests;
 
 import static coms.w4156.moviewishlist.utils.StreamingConstants.*;
 
+import coms.w4156.moviewishlist.models.watchMode.TitleDetail;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResponse;
+import coms.w4156.moviewishlist.models.watchMode.TitleSearchResult;
+import coms.w4156.moviewishlist.models.watchMode.WatchModeNetwork;
 import coms.w4156.moviewishlist.services.Source;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -20,10 +26,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class WatchModeServiceTests {
-
     private final String skyfallId = "1350564";
 
     private static Source netflix;
@@ -46,6 +52,17 @@ public class WatchModeServiceTests {
     private static Source[] allBuy;
     private static Source[] rentAndBuySources;
     private static Source[] allSources;
+
+    private static TitleDetail matrixTitleDetail;
+
+    private static WatchModeNetwork hboNetwork;
+    private static WatchModeNetwork shoNetwork;
+    private static WatchModeNetwork[] allNetworks;
+
+    private static TitleSearchResult titleSearchResult;
+    private static List<TitleSearchResult> titleSearchResultList;
+
+    private static TitleSearchResponse matrixTitleSearchResponse;
 
     @Value("${apiKey}")
     private String apiKey;
@@ -83,8 +100,9 @@ public class WatchModeServiceTests {
     public static void setUp() {
         // Init all services that subscription based.
 
-        netflix = new Source();
-        netflix.setName(NETFLIX_NAME);
+        netflix = new Source(56, NETFLIX_NAME, SUBSCRIPTION_TYPE,
+                "US", "ios", "androidUrl", "webUrl",
+                "Format:HD", 20.0, 4, 40);
 
         amazonPrime = new Source();
         amazonPrime.setName(AMAZON_PRIME_NAME);
@@ -153,6 +171,30 @@ public class WatchModeServiceTests {
         allSources = concatArrays(rentAndBuySources, allSub);
 
         allSources = concatArrays(rentAndBuySources, allSub);
+
+        // Start title detail
+        matrixTitleDetail = new TitleDetail();
+        matrixTitleDetail.setTitle("The Matrix");
+
+        // Setup the networks
+        hboNetwork = new WatchModeNetwork(72, "HBO", "USA", 27);
+        shoNetwork = new WatchModeNetwork(141, "SHO", "USA", 141);
+        allNetworks = new WatchModeNetwork[] {hboNetwork, shoNetwork};
+
+        titleSearchResult = new TitleSearchResult();
+        titleSearchResult.setId(56L);
+        titleSearchResult.setName("The Matrix");
+        titleSearchResult.setYear(1999);
+        titleSearchResult.setTmdbId(43L);
+        titleSearchResult.setType("Buy");
+        titleSearchResult.setRelevance(9.99);
+        titleSearchResult.setTmdbType("Blue");
+        titleSearchResult.setImageUrl("imageurl");
+
+        titleSearchResultList = new ArrayList<>();
+        titleSearchResultList.add(titleSearchResult);
+        matrixTitleSearchResponse = new TitleSearchResponse(titleSearchResultList);
+
     }
 
     /**
@@ -160,7 +202,7 @@ public class WatchModeServiceTests {
      * that is available on all services.
      */
     @Test
-    public void testAvailable() {
+    void testAvailable() {
         Source[] allSources = new Source[] { netflix, amazonPrime, vuduRent };
 
         Mockito
@@ -176,7 +218,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not free source.
      */
     @Test
-    public void testGetFreeWithSubSourcesById() {
+    void testGetFreeWithSubSourcesById() {
         // Let's say that movie 1 is available to buy on Vudu and to stream on
         // Netflix
 
@@ -206,7 +248,7 @@ public class WatchModeServiceTests {
      * will return an empty array.
      */
     @Test
-    public void testGetFreeWithSubSourcesByIdNoneReturned() {
+    void testGetFreeWithSubSourcesByIdNoneReturned() {
         // Let's say that movie 2 is only available on sources for renting and
         // buying
 
@@ -236,7 +278,7 @@ public class WatchModeServiceTests {
      * returns an empty array.
      */
     @Test
-    public void testGetFreeWithSubSourcesByIdNoneReturned2() {
+    void testGetFreeWithSubSourcesByIdNoneReturned2() {
         // Let's say that movie 3 isn't available anywhere.
 
         Source[] movie3Sources = new Source[] {};
@@ -259,7 +301,7 @@ public class WatchModeServiceTests {
      * that all streaming sites are returned.
      */
     @Test
-    public void testGetFreeWithSubSourcesAllSub() {
+    void testGetFreeWithSubSourcesAllSub() {
         String movie3URL = wms.makeURL("3");
 
         Mockito
@@ -283,7 +325,7 @@ public class WatchModeServiceTests {
      * that all buy sites are returned.
      */
     @Test
-    public void testGetFreeWithSubAllSources() {
+    void testGetFreeWithSubAllSources() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
@@ -309,7 +351,7 @@ public class WatchModeServiceTests {
      * a movie can be rented or bought.
      */
     @Test
-    public void testGetFreeWithSubAllRentBuy() {
+    void testGetFreeWithSubAllRentBuy() {
         String movie000000URL = wms.makeURL("000000");
 
         Mockito
@@ -339,7 +381,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not buy source
      */
     @Test
-    public void testGetBuySourcesById() {
+    void testGetBuySourcesById() {
         /** Let's say that movie 1 is available to buy on Vudu and to stream on
          * Netflix
          */
@@ -367,7 +409,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when all sources are of type buy
      */
     @Test
-    public void testGetBuySourcesByIdAllBuy() {
+    void testGetBuySourcesByIdAllBuy() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -394,7 +436,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when no sources are of type buy
      */
     @Test
-    public void testGetBuySourcesByIdNoBuy() {
+    void testGetBuySourcesByIdNoBuy() {
         /** Let's say that movie 1 is available only to stream on subscription
          * platforms */
 
@@ -414,7 +456,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when movie isn't available anywhere
      */
     @Test
-    public void testGetBuySourcesByIdNoBuy2() {
+    void testGetBuySourcesByIdNoBuy2() {
         Source[] noSources = {};
         String movie1URL = wms.makeURL("1");
 
@@ -432,7 +474,7 @@ public class WatchModeServiceTests {
      * Test that we can filter buy sources from all sources
      */
     @Test
-    public void testGetBuySourcesByIdAllSources() {
+    void testGetBuySourcesByIdAllSources() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -463,7 +505,7 @@ public class WatchModeServiceTests {
      * Test that we can filter at least one not buy source
      */
     @Test
-    public void testGetRentSourcesById() {
+    void testGetRentSourcesById() {
         /** Let's say that movie 1 is available to rent on Vudu and to stream on
          * Netflix
          */
@@ -491,7 +533,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when all sources are of type Rent
      */
     @Test
-    public void testGetRentSourcesByIdAllRent() {
+    void testGetRentSourcesByIdAllRent() {
         /** Let's say that movie 1 is available only to Rent
          */
 
@@ -518,7 +560,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when no sources are of type Rent
      */
     @Test
-    public void testGetRentSourcesByIdNoRent() {
+    void testGetRentSourcesByIdNoRent() {
         /** Let's say that movie 1 is available only to stream on subscription
          * platforms */
 
@@ -538,7 +580,7 @@ public class WatchModeServiceTests {
      * Test that we can filter when movie isn't available anywhere
      */
     @Test
-    public void testGetRentSourcesByIdNoRent2() {
+    void testGetRentSourcesByIdNoRent2() {
         Source[] noSources = {};
         String movie1URL = wms.makeURL("1");
 
@@ -556,7 +598,7 @@ public class WatchModeServiceTests {
      * Test that we can filter Rent sources from all sources
      */
     @Test
-    public void testGetRentSourcesByIdAllSources() {
+    void testGetRentSourcesByIdAllSources() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -582,7 +624,7 @@ public class WatchModeServiceTests {
 
     /******************START Test Uniqueness of Sources************************/
     @Test
-    public void testGetFreeWithSubSourcesByIdRepeat() {
+    void testGetFreeWithSubSourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -607,7 +649,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testGetRentSourcesByIdRepeat() {
+    void testGetRentSourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -632,7 +674,7 @@ public class WatchModeServiceTests {
     }
 
     @Test
-    public void testGetBuySourcesByIdRepeat() {
+    void testGetBuySourcesByIdRepeat() {
         /** Let's say that movie 1 is available only to buy
          */
 
@@ -656,4 +698,120 @@ public class WatchModeServiceTests {
         }
     }
     /*******************END Test Uniqueness of Sources*************************/
+
+    /******************START TITLE DETAIL TESTS********************************/
+    @Test
+    void testTitleDetailNoSources() {
+        /** Let's say that movie 1 is available only to buy
+         */
+        String titleId = "72";
+        Boolean includeSources = false;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    void testTitleDetailNullIncludeSources() {
+        // Should function the same as above now that we check for nulls
+        String titleId = "72";
+        Boolean includeSources = null;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    void testTitleDetailIncludeSources() {
+        // Check we wired up the true case to work properly as well
+        String titleId = "72";
+        Boolean includeSources = true;
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("title", titleId, "details")
+                .queryParam("apiKey", apiKey);
+        builder = builder.queryParam("append_to_response", "sources");
+
+        var uri = builder.build().toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleDetail.class))
+                .thenReturn(new ResponseEntity<TitleDetail>(matrixTitleDetail, HttpStatus.OK));
+
+        TitleDetail returnedDetail = wms.getTitleDetail(titleId, includeSources);
+
+        Assertions.assertEquals(returnedDetail, matrixTitleDetail);
+    }
+
+    @Test
+    void testGetTitlesBySearch() {
+        String searchQuery = "Matrix";
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("autocomplete-search")
+                .queryParam("apiKey", apiKey)
+                .queryParam("search_value", searchQuery)
+                .queryParam("search_type", 2)
+                .build()
+                .toUri();
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, TitleSearchResponse.class))
+                .thenReturn(new ResponseEntity<TitleSearchResponse>(
+                        matrixTitleSearchResponse, HttpStatus.OK));
+
+        TitleSearchResponse returnedResponse = wms.getTitlesBySearch(searchQuery);
+
+        Assertions.assertEquals(matrixTitleSearchResponse, returnedResponse);
+    }
+
+    @Test
+    void testGetAllNetworks() {
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(WatchModeService.WATCHMODE_API_BASE_URL)
+                .pathSegment("networks")
+                .queryParam("apiKey", apiKey)
+                .queryParam("regions", "US")
+                .build()
+                .toUri();
+
+
+        Mockito
+                .when(restTemplate.getForEntity(uri, WatchModeNetwork[].class))
+                .thenReturn(new ResponseEntity<WatchModeNetwork[]>(allNetworks, HttpStatus.OK));
+
+        List<WatchModeNetwork> returnedNetworks = wms.getAllNetworks();
+        List<WatchModeNetwork> origNetworks = Arrays.asList(allNetworks);
+
+        // Assert that they are subsets of each other and are the same size
+        // Need the size constraint because they are not sets but are lists
+        Assertions.assertEquals(returnedNetworks.size(), origNetworks.size());
+        Assertions.assertTrue(returnedNetworks.containsAll(origNetworks));
+        Assertions.assertTrue(origNetworks.containsAll(returnedNetworks));
+    }
 }
