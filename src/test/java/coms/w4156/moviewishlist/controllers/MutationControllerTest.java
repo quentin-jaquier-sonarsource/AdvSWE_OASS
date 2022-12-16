@@ -2,8 +2,6 @@ package coms.w4156.moviewishlist.controllers;
 
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.security.jwt.JwtTokenUtil;
-import coms.w4156.moviewishlist.services.*;
-import org.junit.jupiter.api.BeforeAll;
 import coms.w4156.moviewishlist.services.ClientService;
 import coms.w4156.moviewishlist.services.MovieService;
 import coms.w4156.moviewishlist.services.ProfileService;
