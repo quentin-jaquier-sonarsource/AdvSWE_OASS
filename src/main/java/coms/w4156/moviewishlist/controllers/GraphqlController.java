@@ -75,7 +75,6 @@ public class GraphqlController {
     @QueryMapping
     public Collection<Profile> profiles(final Authentication authentication) {
         String clientEmail = authentication.getName();
-        System.out.println("ADRIEN: authorities = " + authentication.getAuthorities().toString());
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
             return new ArrayList<Profile>();

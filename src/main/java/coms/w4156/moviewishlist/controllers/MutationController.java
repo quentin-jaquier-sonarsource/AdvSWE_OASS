@@ -80,6 +80,29 @@ public class MutationController {
     }
 
     /**
+     * Create an admin. Can only be used before any other client is created.
+     *
+     * @param email - Email of the admin
+     * @return the JWT of the admin
+     */
+    @MutationMapping
+    public String createAdmin(@Argument final String email) {
+        UserDetails clientDetails;
+
+        long count = clientService.getRepository().count();
+
+        if (count != 0) {
+            return "";
+        }
+
+        clientDetails = clientService.createAdminAndReturnDetails(email);
+
+        final String token = jwtUtility.generateToken(clientDetails);
+
+        return token;
+    }
+
+    /**
      * Update a client with the given ID.
      * @param id - ID of the client to update
      * @param email - New email ID of the client
@@ -102,13 +125,13 @@ public class MutationController {
     @PreAuthorize("hasRole('ROLE_admin')")
     @MutationMapping
     public Optional<Client> addRoleToClient(
-        @Argument final String clientID,
+        @Argument final String email,
         @Argument final String roleName
     ) {
         Role role = roleService.findByName(roleName);
 
         return clientService
-            .findById(Long.parseLong(roleName))
+            .findByEmail(email)
             .map(c -> {
                 c.addRole(role);
                 return clientService.update(c);

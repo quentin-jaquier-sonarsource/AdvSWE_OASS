@@ -1,6 +1,5 @@
 package coms.w4156.moviewishlist.models;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import coms.w4156.moviewishlist.services.RoleService;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -89,9 +89,26 @@ public class ClientService
         roles.add(basicClientRole);
 
         Client client = new Client(email, roles);
-        System.out.println("ADRIEN: before saving");
         this.getRepository().save(client);
-        System.out.println("ADRIEN: after saving");
+
+        UserDetails userDetails = this.loadUserByUsername(client.getEmail());
+
+        return userDetails;
+    }
+
+     /**
+     * Create an admin and return the details for it.
+     *
+     * @param email - The email of the new admin
+     * @return The details for the new admin
+     */
+    public UserDetails createAdminAndReturnDetails(final String email) {
+        Set<Role> roles = new HashSet<Role>();
+        Role basicClientRole = roleService.findByName("admin");
+        roles.add(basicClientRole);
+
+        Client client = new Client(email, roles);
+        this.getRepository().save(client);
 
         UserDetails userDetails = this.loadUserByUsername(client.getEmail());
 
