@@ -83,7 +83,7 @@ public class MovieTests {
 
         Movie matrix = new Movie();
 
-        Assertions.assertEquals(List.of(), matrix.getRatings());
+        Assertions.assertEquals(null, matrix.getRatings());
     }
 
     @Test
