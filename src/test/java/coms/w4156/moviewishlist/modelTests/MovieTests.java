@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieTests {
+class MovieTests {
 
     @Test
     void testToString() {
@@ -38,7 +38,7 @@ public class MovieTests {
         Movie matrix = new Movie(42L, wishlists, "The Matrix", genres, 1999, 144, 100);
         Movie matrix2 = new Movie(42L, wishlists, "The Matrix", genres, 1999, 144, 100);
 
-        Assertions.assertTrue(matrix.equals(matrix2));
+        Assertions.assertEquals(matrix, matrix2);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class MovieTests {
         Movie matrix = new Movie(42L, wishlists, "The Matrix", genres, 1999, 144, 100);
         Movie matrix2 = new Movie(43L, wishlists, "The Matrix", genres, 1999, 144, 100);
 
-        Assertions.assertFalse(matrix.equals(matrix2));
+        Assertions.assertNotEquals(matrix, matrix2);
     }
 
     @Test
