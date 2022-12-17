@@ -23,7 +23,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientServiceTests {
+class ClientServiceTests {
 
     @InjectMocks
     private ClientService clientService;
