@@ -174,7 +174,7 @@ mvn test
 
 Here are the results of the latest test run:
 
-![**SUCCESS**: 14 Tests. 0 Failures. 0 Skipped](/Documentation/Test-Result-Screenshots/latest.png)
+![**SUCCESS**: 14 Tests. 0 Failures. 0 Skipped](/Documentation/Test-Result-Screenshots/latest1.png)
 
 ## Documentation
 
