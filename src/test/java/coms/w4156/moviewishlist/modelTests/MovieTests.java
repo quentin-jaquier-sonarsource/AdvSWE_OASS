@@ -57,6 +57,21 @@ class MovieTests {
     }
 
     @Test
+    void testBigConstructorNullWishlist() {
+        Wishlist wishlist1 = new Wishlist();
+        Wishlist wishlist2 = new Wishlist();
+        List<Wishlist> wishlists = List.of(wishlist1, wishlist2);
+
+        List<String> genres = List.of("Sci-Fi", "Action");
+
+
+        Movie matrix = new Movie(42L, List.of(), "The Matrix", genres, 1999, 144, 100);
+        Movie matrix2 = new Movie(42L, null, "The Matrix", genres, 1999, 144, 100);
+
+        Assertions.assertEquals(matrix, matrix2);
+    }
+
+    @Test
     void testGetWishlists() {
         Wishlist wishlist1 = new Wishlist();
         Wishlist wishlist2 = new Wishlist();
@@ -74,6 +89,7 @@ class MovieTests {
     void testGetWishlistsNull() {
 
         Movie matrix = new Movie();
+        matrix.setWishlists(null);
 
         Assertions.assertEquals(List.of(), matrix.getWishlists());
     }
