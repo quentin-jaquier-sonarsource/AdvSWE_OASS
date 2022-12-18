@@ -52,4 +52,30 @@ class WishlistServiceTest {
         Assertions.assertEquals(ret.size(), wishlists.size());
 
     }
+
+    @Test
+    void getAllForClientFailTest() {
+        Client c = Client.builder().id(Long.parseLong("1"))
+                .email("x@test.com").build();
+        Profile p = Profile.builder().client(c).id(Long.parseLong("2")).build();
+
+        Client c2 = Client.builder().id(Long.parseLong("2"))
+                .email("x@test.com").build();
+        Profile p2 = Profile.builder().client(c2).id(Long.parseLong("1")).build();
+
+
+        List<Wishlist> wishlists = new ArrayList<>();
+
+        wishlists.add(Wishlist.builder().id(Long.parseLong("3")).profile(p).name("test wishlist 1").build());
+       // wishlists.add(Wishlist.builder().id(Long.parseLong("4")).profile(p2).name("test wishlist 3").build());
+
+        Mockito
+                .when(wishlistRepository.findAll())
+                .thenReturn(wishlists);
+
+        List<Wishlist> ret = wishlistService.getAll();
+        Assertions.assertNotNull(ret);
+        Assertions.assertFalse(ret.size() != wishlists.size());
+
+    }
 }
