@@ -30,6 +30,7 @@ public class Profile implements ModelInterface<Long> {
 
     @Id
     @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 

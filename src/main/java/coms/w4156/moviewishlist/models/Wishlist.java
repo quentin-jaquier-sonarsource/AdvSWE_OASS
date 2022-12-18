@@ -1,6 +1,8 @@
 package coms.w4156.moviewishlist.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -71,7 +73,7 @@ public class Wishlist implements ModelInterface<Long> {
     )
     @Setter
     @Getter
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>();
 
     /**
      * Constructor to create a new Wishlist Object.
