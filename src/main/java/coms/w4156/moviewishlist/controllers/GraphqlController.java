@@ -14,13 +14,10 @@ import coms.w4156.moviewishlist.services.ProfileService;
 import coms.w4156.moviewishlist.services.RatingService;
 import coms.w4156.moviewishlist.services.WatchModeService;
 import coms.w4156.moviewishlist.services.WishlistService;
+import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.DataFetchingFieldSelectionSet;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -60,9 +57,13 @@ public class GraphqlController {
      * @return The Client object
      */
     @QueryMapping
-    public Optional<Client> client(final Authentication authentication) {
+    public Client client(final Authentication authentication) {
         String clientEmail = authentication.getName();
-        return clientService.findByEmail(clientEmail);
+        Optional<Client> client = clientService.findByEmail(clientEmail);
+        if (client.isPresent()) {
+            return client.get();
+        }
+        throw new GraphQLException("ACCESS DENIED: You are not logged in.");
     }
 
     /**
@@ -76,7 +77,7 @@ public class GraphqlController {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
         if (!client.isPresent()) {
-            return new ArrayList<Profile>();
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         Collection<Profile> profiles = profileService.getAllForClient(
@@ -99,8 +100,8 @@ public class GraphqlController {
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return Optional.empty();
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         Optional<Profile> profile = profileService.findById(Long.parseLong(id));
@@ -108,40 +109,11 @@ public class GraphqlController {
             !profile.isPresent() ||
             profile.get().getClientId() != client.get().getId()
         ) {
-            return Optional.empty();
+            throw new GraphQLException("NOT FOUND: Profile with given id.");
         }
 
         return profile;
     }
-
-    // /**
-    //  * Fetch a profile by name.
-    //  *
-    //  * @param name - The name of the profile
-    //  * @param authentication - The authentication object
-    //  * @return The Profile object
-    //  */
-    //    @QueryMapping
-    //    public Optional<Profile> profileByName(
-    //        @Argument final String name,
-    //        final Authentication authentication
-    //    ) {
-    //        String clientEmail = authentication.getName();
-    //        Optional<Client> client = clientService.findByEmail(clientEmail);
-    //        if (!client.isPresent()) {
-    //            return null;
-    //        }
-    //
-    //        Optional<Profile> profile = profileService.findByName(name);
-    //        if (
-    //            !profile.isPresent() ||
-    //            profile.get().getClientId() != client.get().getId()
-    //        ) {
-    //            return null;
-    //        }
-    //
-    //        return profile;
-    //    }
 
     /**
      * Fetch all ratings in the database.
@@ -154,8 +126,8 @@ public class GraphqlController {
     public Collection<Rating> ratings(final Authentication authentication) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return new ArrayList<Rating>();
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         return ratingService.getAllForClient(client.get().getId());
@@ -176,16 +148,16 @@ public class GraphqlController {
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         Optional<Rating> rating = ratingService.findById(id);
         if (
-            !rating.isPresent() ||
+            rating.isEmpty() ||
             rating.get().getClientId() != client.get().getId()
         ) {
-            return null;
+            throw new GraphQLException("NOT FOUND: Rating with given ID.");
         }
 
         return rating;
@@ -206,18 +178,18 @@ public class GraphqlController {
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         Optional<Profile> profile = profileService.findById(
             Long.parseLong(profileId)
         );
         if (
-            !profile.isPresent() ||
+            profile.isEmpty() ||
             profile.get().getClientId() != client.get().getId()
         ) {
-            return null;
+            throw new GraphQLException("NOT FOUND: Profile with given ID.");
         }
 
         return ratingService.getAllForProfileId(Long.parseLong(profileId));
@@ -238,8 +210,8 @@ public class GraphqlController {
     ) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         return ratingService.getByMovieIdForClient(
@@ -259,14 +231,6 @@ public class GraphqlController {
     }
 
     /**
-     * Fetch a movie by Id.
-     *
-     * @param id - The id of the movie
-     * @return The Movie object
-     */
-
-
-    /**
      * Fetch a movie by genre.
      *
      * @param id - The id of the wishlist.
@@ -278,7 +242,6 @@ public class GraphqlController {
         @Argument final String id,
         @Argument final String genre
     ) {
-        System.out.println("wishlist id is: " + id);
         return wishlistService
             .findById(Long.parseLong(id))
             .get()
@@ -353,14 +316,6 @@ public class GraphqlController {
     }
 
     /**
-     * Get the details for this title using the /title API.
-     * @param searchResult - The search result to get the details for.
-     * @param env - The GraphQL environment
-     * @return - The title details
-     */
-
-
-    /**
      * Get all WatchMode networks.
      *
      * @return List of Profile objects
@@ -408,16 +363,6 @@ public class GraphqlController {
     }
 
     /**
-     * Get title details by id.
-     *
-     * @param titledetail - The TitleDetail object
-     * @param env - The DataFetchingEnvironment
-     *
-     * @return Details of the Title
-     */
-
-
-    /**
      * Fetch all wishlists.
      *
      * @param authentication - The authentication object
@@ -427,18 +372,10 @@ public class GraphqlController {
     public Collection<Wishlist> wishlists(final Authentication authentication) {
         String clientEmail = authentication.getName();
         Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return new ArrayList<Wishlist>();
+        if (client.isEmpty()) {
+            throw new GraphQLException("ACCESS DENIED: You are not logged in.");
         }
 
         return wishlistService.getAllForClient(client.get().getId());
     }
-
-    /**
-     * Fetch a wishlist by id.
-     *
-     * @param id - The id of the wishlist
-     * @param authentication - The authentication object
-     * @return The Wishlist object
-     */
 }

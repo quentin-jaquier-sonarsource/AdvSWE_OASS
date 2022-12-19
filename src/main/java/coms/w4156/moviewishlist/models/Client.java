@@ -2,7 +2,6 @@ package coms.w4156.moviewishlist.models;
 
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -64,7 +62,7 @@ public class Client implements ModelInterface<Long> {
     private Set<Role> roles;
 
     /**
-     * Create a new Client object
+     * Create a new Client object.
      * @param id - ID of the client
      * @param email - email of the client
      * @param profiles - The list of profiles serviced by this client
@@ -84,10 +82,10 @@ public class Client implements ModelInterface<Long> {
 
     /**
      * Create a new Client object with the given email and roles.
-     * @param email
-     * @param roles
+     * @param email - email of the client
+     * @param roles - roles for the client
      */
-    public Client(final String email, Set<Role> roles) {
+    public Client(final String email, final Set<Role> roles) {
         this.email = email;
         this.roles = roles;
     }
@@ -104,7 +102,11 @@ public class Client implements ModelInterface<Long> {
         return profiles;
     }
 
-    public void addRole(Role role) {
+    /**
+     * Add role to the client.
+     * @param role
+     */
+    public void addRole(final Role role) {
         this.roles.add(role);
     }
 }

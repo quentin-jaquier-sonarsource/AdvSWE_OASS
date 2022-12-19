@@ -1,10 +1,9 @@
 package coms.w4156.moviewishlist.modelTests;
 
 import coms.w4156.moviewishlist.models.watchMode.WatchModeSource;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 /**
  * Tests all the POJO stuff. ToString, Equals, Getter/Setter.
@@ -15,7 +14,10 @@ class WatchModeSourceTests {
     void testToString() {
         WatchModeSource watchModeSource = new WatchModeSource();
 
-        Assertions.assertEquals("WatchModeSource(id=null, name=null, type=null, region=null, iosUrl=null, androidUrl=null, webUrl=null, format=null, price=null, seasons=null, episodes=null)", watchModeSource.toString());
+        Assertions.assertEquals(
+            "WatchModeSource(id=null, name=null, type=null, region=null, iosUrl=null, androidUrl=null, webUrl=null, format=null, price=null, seasons=null, episodes=null)",
+            watchModeSource.toString()
+        );
     }
 
     @Test
@@ -110,7 +112,6 @@ class WatchModeSourceTests {
     @Test
     void testGetSetSeasons() {
         WatchModeSource watchModeSource = new WatchModeSource();
-        String name = "Name";
         Optional<Integer> seasons = Optional.of(90);
         watchModeSource.setSeasons(seasons);
 
@@ -120,13 +121,9 @@ class WatchModeSourceTests {
     @Test
     void testGetSetEpisodes() {
         WatchModeSource watchModeSource = new WatchModeSource();
-        String name = "Name";
         Optional<Integer> seasons = Optional.empty();
         watchModeSource.setEpisodes(seasons);
 
         Assertions.assertEquals(seasons, watchModeSource.getEpisodes());
     }
-
-
-
 }

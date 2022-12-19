@@ -3,11 +3,9 @@ package coms.w4156.moviewishlist.modelTests;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Wishlist;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class ProfileTests {
 
@@ -15,7 +13,10 @@ class ProfileTests {
     void testToString() {
         Profile profile = new Profile();
 
-        Assertions.assertEquals("Profile(id=null, name=null, wishlists=null, client=null, ratings=null)", profile.toString());
+        Assertions.assertEquals(
+            "Profile(id=null, name=null, wishlists=null, client=null, ratings=null)",
+            profile.toString()
+        );
     }
 
     @Test
@@ -79,10 +80,12 @@ class ProfileTests {
 
         Profile profile = new Profile(name, wishlists, client);
 
-        List <Long> ret = profile.getWishlistIds();
+        List<Long> ret = profile.getWishlistIds();
 
-        Assertions.assertTrue(ids.size() == ret.size() && ret.containsAll(ids) && ids.containsAll(ret));
-
+        Assertions.assertTrue(
+            ids.size() == ret.size() &&
+            ret.containsAll(ids) &&
+            ids.containsAll(ret)
+        );
     }
-
 }

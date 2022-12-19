@@ -5,14 +5,17 @@ import coms.w4156.moviewishlist.models.Profile;
 import coms.w4156.moviewishlist.models.Rating;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.parameters.P;
 
 class RatingsTests {
+
     @Test
     void testToString() {
         Rating rating = new Rating();
 
-        Assertions.assertEquals("Rating(id=null, profile=null, movie=null, review=null, rating=null)", rating.toString());
+        Assertions.assertEquals(
+            "Rating(id=null, profile=null, movie=null, review=null, rating=null)",
+            rating.toString()
+        );
     }
 
     @Test
@@ -49,7 +52,6 @@ class RatingsTests {
 
     @Test
     void testGetProfileId() {
-
         long profId = 42L;
         Profile profile = Profile.builder().id(profId).build();
         long hostId = 1616666L;
@@ -64,7 +66,6 @@ class RatingsTests {
 
     @Test
     void testGetMovieId() {
-
         long profId = 42L;
         Profile profile = Profile.builder().id(profId).build();
         long hostId = 1616666L;

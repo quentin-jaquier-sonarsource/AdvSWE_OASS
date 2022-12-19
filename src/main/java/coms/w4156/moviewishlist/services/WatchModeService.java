@@ -27,7 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class WatchModeService {
 
     public static final String WATCHMODE_API_BASE_URL =
-            "https://api.watchmode.com/v1/";
+        "https://api.watchmode.com/v1/";
     /**
      * A test ID for the movie Skyfall.
      */
