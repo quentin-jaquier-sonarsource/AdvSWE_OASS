@@ -222,8 +222,9 @@ reports.
 
 ## Authentication
 The authentication is handled using JSON Web Tokens; here is how it works:
-- a client needs to hit the `/new-client/` endpoint with his email to be added to the database; he will receive his own JWT in the response
+- a client needs to hit the `createClient` endpoint with his email to be added to the database; he will receive his own JWT in the response
 - on every subsequent request, the client has to add the `Authorization: Bearer <JWT>` header so that he can be authenticated. If he fails to do so or the JWT is not valid, he will receive a `403` error
+- clients have roles which give them access to certain endpoints. For now, there are three roles: `client` which grants basic access, `rating` which grants access to rating endpoints, and `admin`, which grants access to admin endpoints used for updating clients
 
 ## Client
 To run the client, read the instructions in `client/README.md`
@@ -233,8 +234,8 @@ To run the client, read the instructions in `client/README.md`
 There are a variety of ways a client could utilize our service.
 
 1. An app that uses ML to recommend users movies to watch based on their interests.
-   - Such an app might allow users to make watchlists and then based on those 
-watchlists it would recommend more movies in that vein for users to watch. 
+   - Such an app might allow users to make watchlists and then based on those
+watchlists it would recommend more movies in that vein for users to watch.
    - In this use case, the profile ID would correspond to a user ID.
    - The app would use our service to group watchlists with users, take care of
 CRUD operations on those watchlists, and get information on the movies in the
