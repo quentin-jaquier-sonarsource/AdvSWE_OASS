@@ -1,14 +1,19 @@
 package coms.w4156.moviewishlist.models;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,28 +58,38 @@ public class Client implements ModelInterface<Long> {
     @Setter
     private List<Profile> profiles;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    private Set<Role> roles;
+
     /**
-     * Create a new Client object.
+     * Create a new Client object
      * @param id - ID of the client
      * @param email - email of the client
      * @param profiles - The list of profiles serviced by this client
+     * @param roles - The roles of the client for authorization purposes
      */
     public Client(
         final Long id,
         final String email,
-        final List<Profile> profiles
+        final List<Profile> profiles,
+        final Set<Role> roles
     ) {
         this.id = id;
         this.email = email;
         this.profiles = profiles;
+        this.roles = roles;
     }
 
     /**
-     * Create a new Client object with a given email.
+     * Create a new Client object with the given email and roles.
      * @param email
+     * @param roles
      */
-    public Client(final String email) {
+    public Client(final String email, Set<Role> roles) {
         this.email = email;
+        this.roles = roles;
     }
 
     /**
@@ -87,5 +102,9 @@ public class Client implements ModelInterface<Long> {
             return List.of();
         }
         return profiles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

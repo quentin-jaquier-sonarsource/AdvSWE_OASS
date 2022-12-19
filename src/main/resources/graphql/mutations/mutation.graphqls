@@ -1,9 +1,15 @@
 type Mutation {
-    # Create a new Client for the API
-    createClient(email: String!): Client!
+    # Create a new Client with the role ROLE_client for the API
+    createClient(email: String!): String
+
+    # Create a new Client with the role ROLE_admin. Can only be called once.
+    createAdmin(email: String!): String
 
     # Update a client's email
     updateClient(id: ID!, email: String!): Client!
+
+    # Add a role to a client (for admins only)
+    addRoleToClient(email: String!, roleName: String!): Client
 
     # Delete a client
     deleteClient(id: ID!): Client!
