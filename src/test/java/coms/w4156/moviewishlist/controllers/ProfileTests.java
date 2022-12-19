@@ -19,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -215,7 +214,7 @@ public class ProfileTests {
     void profileNotBelongToClient() {
 
         Wishlist wl = new Wishlist();
-        Client c = new Client("New User");
+        Client c = Client.builder().email("New User").build();
         c.setId(6L);
 
         // Profile belonging to different client than the one signed in
