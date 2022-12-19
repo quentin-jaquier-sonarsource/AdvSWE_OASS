@@ -13,7 +13,7 @@ class ClientTests {
     void testToString() {
         Client client = new Client();
 
-        Assertions.assertEquals("Client(id=null, email=null, profiles=[])", client.toString());
+        Assertions.assertEquals("Client(id=null, email=null, profiles=[], roles=null)", client.toString());
     }
 
     @Test
