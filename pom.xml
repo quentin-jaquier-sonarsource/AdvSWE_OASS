@@ -108,6 +108,7 @@
         <dependency>
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql-test</artifactId>
+            <scope>test</scope>
             <version>1.0.2</version>
         </dependency>
 
@@ -183,6 +184,19 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.graphql-java-kickstart</groupId>-->
+<!--            <artifactId>graphql-spring-boot-starter</artifactId>-->
+<!--            <version>6.0.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.graphql-java-kickstart</groupId>-->
+<!--            <artifactId>graphql-spring-boot-starter-test</artifactId>-->
+<!--            <version>6.0.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
 

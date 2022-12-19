@@ -264,10 +264,7 @@ public class GraphqlController {
      * @param id - The id of the movie
      * @return The Movie object
      */
-    @QueryMapping
-    public Optional<Movie> movieById(@Argument final Long id) {
-        return movieService.findById(id);
-    }
+
 
     /**
      * Fetch a movie by genre.
@@ -361,47 +358,7 @@ public class GraphqlController {
      * @param env - The GraphQL environment
      * @return - The title details
      */
-    @SchemaMapping(typeName = "TitleSearchResult", field = "details")
-    public TitleDetail getDetails(
-        final TitleSearchResult searchResult,
-        final DataFetchingEnvironment env
-    ) {
-        Set<String> knownFields = Set.of(
-            "id",
-            "title",
-            "type",
-            "year",
-            "tmdbId",
-            "tmdbType",
-            "poster"
-        );
 
-        long unknownFields = env
-            .getSelectionSet()
-            .getFields()
-            .stream()
-            .filter(el -> !knownFields.contains(el.getName()))
-            .count();
-
-        Boolean includeSources = env.getSelectionSet().contains("sources");
-
-        if (unknownFields > 0) {
-            return watchModeService.getTitleDetail(
-                searchResult.getId().toString(),
-                includeSources
-            );
-        }
-
-        TitleDetail detail = new TitleDetail();
-        detail.setId(searchResult.getId());
-        detail.setTitle(searchResult.getName());
-        detail.setType(searchResult.getType());
-        detail.setYear(searchResult.getYear());
-        detail.setTmdbId(searchResult.getTmdbId());
-        detail.setTmdbType(searchResult.getTmdbType());
-        detail.setPoster(searchResult.getImageUrl());
-        return detail;
-    }
 
     /**
      * Get all WatchMode networks.
@@ -458,37 +415,7 @@ public class GraphqlController {
      *
      * @return Details of the Title
      */
-    @SchemaMapping(typeName = "TitleDetail", field = "similarTitles")
-    public List<TitleDetail> similarTitles(
-        final TitleDetail titledetail,
-        final DataFetchingEnvironment env
-    ) {
-        DataFetchingFieldSelectionSet selectionSet = env.getSelectionSet();
 
-        if (
-            selectionSet.contains("id") && selectionSet.getFields().size() == 1
-        ) {
-            return titledetail
-                .getSimilarTitlesIds()
-                .stream()
-                .map(id -> {
-                    TitleDetail detail = new TitleDetail();
-                    detail.setId(id);
-                    return detail;
-                })
-                .toList();
-        }
-
-        Boolean hasSources = env.getSelectionSet().contains("sources");
-
-        return titledetail
-            .getSimilarTitlesIds()
-            .stream()
-            .map(id ->
-                watchModeService.getTitleDetail(id.toString(), hasSources)
-            )
-            .toList();
-    }
 
     /**
      * Fetch all wishlists.
@@ -514,31 +441,4 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return The Wishlist object
      */
-    @QueryMapping
-    public Optional<Wishlist> wishlistById(
-        @Argument final String id,
-        final Authentication authentication
-    ) {
-        String clientEmail = authentication.getName();
-        Optional<Client> client = clientService.findByEmail(clientEmail);
-        if (!client.isPresent()) {
-            return null;
-        }
-
-        Optional<Wishlist> wishlist = wishlistService.findById(
-            Long.parseLong(id)
-        );
-        if (!wishlist.isPresent()) {
-            return null;
-        }
-
-        Profile profile = profileService
-            .findById(wishlist.get().getProfileId())
-            .get();
-        if (profile.getClientId() != client.get().getId()) {
-            return null;
-        }
-
-        return wishlist;
-    }
 }

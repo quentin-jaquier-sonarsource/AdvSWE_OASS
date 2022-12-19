@@ -23,6 +23,8 @@ import coms.w4156.moviewishlist.services.WishlistService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.With;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -970,5 +972,36 @@ class GraphqlControllerTest {
             .satisfies(retResults -> {
                 assertEquals(results, retResults);
             });
+    }
+
+
+    @Test
+    @WithMockUser
+    void ratingsWhenClientNotPresent() {
+//        Client dummy = new Client("dummyclient@abc.com");
+
+        String query =
+                """
+                    query{
+                      ratings{
+                        review,
+                        rating,
+                        profile{
+                          name
+                        },
+                        movie{
+                          title,
+                          criticScore
+                        }
+                      }
+                    }
+                    """;
+        graphQlTester
+                .document(query)
+                .execute()
+                .path("ratings")
+                .entityList(Rating.class)
+                .hasSize(0);
+
     }
 }
