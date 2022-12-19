@@ -4,7 +4,6 @@ import coms.w4156.moviewishlist.exceptions.ClientAlreadyExistsException;
 import coms.w4156.moviewishlist.models.Client;
 import coms.w4156.moviewishlist.models.Role;
 import coms.w4156.moviewishlist.repositories.ClientRepository;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
