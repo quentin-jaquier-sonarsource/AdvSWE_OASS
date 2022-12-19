@@ -149,7 +149,7 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return List of ratings objects
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @QueryMapping
     public Collection<Rating> ratings(final Authentication authentication) {
         String clientEmail = authentication.getName();
@@ -168,7 +168,7 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return Ratings objects
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @QueryMapping
     public Optional<Rating> ratingById(
         @Argument final Long id,
@@ -198,7 +198,7 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return Ratings objects
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @QueryMapping
     public Collection<Rating> ratingsByProfile(
         @Argument final String profileId,
@@ -230,7 +230,7 @@ public class GraphqlController {
      * @param authentication - The authentication object
      * @return List of Ratings objects
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @QueryMapping
     public Collection<Rating> ratingsByMovie(
         @Argument final String movieId,

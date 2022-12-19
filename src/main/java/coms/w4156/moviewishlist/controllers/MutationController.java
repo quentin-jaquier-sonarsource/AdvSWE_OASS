@@ -422,7 +422,7 @@ public class MutationController {
      * @param authentication The authentication object
      * @return the new ratings object
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @MutationMapping
     public Rating createRating(
         @Argument final String profileId,
@@ -474,7 +474,7 @@ public class MutationController {
      * @param authentication The authentication object
      * @return the updated ratings object
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @MutationMapping
     public Optional<Rating> updateRating(
         @Argument final String id,
@@ -524,7 +524,7 @@ public class MutationController {
      * @param authentication The authentication object
      * @return the deleted Rating object
      */
-    // @PreAuthorize("hasRole('ROLE_rating')")
+    @PreAuthorize("hasRole('ROLE_rating')")
     @MutationMapping
     public Optional<Rating> deleteRating(
         @Argument final String id,
