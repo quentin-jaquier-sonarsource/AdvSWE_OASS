@@ -78,7 +78,7 @@ class MutationControllerTest {
     @WithMockUser
     void createClientTest() {
 
-        Client tempClient = new Client("user2");
+        Client tempClient = new Client("user2", new HashSet<Role>());
         Mockito.when(clientService.create(tempClient)).thenReturn(tempClient);
 
         String q = """
